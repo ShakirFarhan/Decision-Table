@@ -1,0 +1,54 @@
+.ag-theme-alpine {
+  position: relative;
+  width: 1100px;
+  height: 100%;
+  --ag-foreground-color: #282c35;
+  --ag-background-color: #fafafa;
+  --ag-header-foreground-color: #282c35;
+  --ag-header-column-resize-handle-color: rgb(126, 46, 132);
+  --ag-header-height: 65px;
+  --ag-header-column-separator-width: 2px;
+  --ag-font-size: 17px;
+  --ag-font-family: monospace;
+  --ag-header-column-separator-display: block;
+  --ag-header-column-separator-height: 100%;
+  --ag-header-column-separator-width: 0px;
+  --ag-header-column-separator-color: #868686;
+  --ag-header-column-resize-handle-display: block;
+  --ag-header-column-resize-handle-height: 100%;
+  --ag-header-column-resize-handle-width: 1px;
+  --ag-header-column-resize-handle-color: #868686;
+  --ag-header-cell-moving-background-color: #868686;
+  z-index: 1;
+  --ag-row-hover-color: none;
+  overflow: visible;
+}
+.ag-center-cols-clipper,
+.ag-center-cols-viewport {
+  overflow: visible;
+  z-index: 0;
+  position: relative;
+}
+.ag-theme-alpine::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.ag-theme-alpine .ag-header {
+  height: 57px;
+}
+
+.column-header {
+  background-color: #f5f5f5;
+}
+.column-header:hover {
+  border: 1px solid #2f54eb;
+  cursor: pointer;
+  background-color: black;
+}
+.ag-theme-alpine .ag-cell:hover {
+  background-color: #ffff;
+}
