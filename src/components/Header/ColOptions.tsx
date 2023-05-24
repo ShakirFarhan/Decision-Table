@@ -6,7 +6,7 @@ interface colInterface {
 }
 function ColOptions({ handleOptions, id, setOptionsVisible }: colInterface) {
   return (
-    <div className="h-fit fixed top-[50%] left-[50%] flex flex-col gap-y-[-40px] bg-[#fff] shadow-xl -translate-y-1/2 -translate-x-1/2">
+    <div className="h-fit fixed top-[14%]  flex flex-col gap-y-[-40px] bg-[#fff] shadow-xl -translate-y-1/2 -translate-x-1/2 z-50">
       {optionsData.map((data) => {
         return (
           <p

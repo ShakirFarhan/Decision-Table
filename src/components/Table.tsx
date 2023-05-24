@@ -85,6 +85,7 @@ const Table = () => {
         cellValue: params.value,
       }),
     },
+    
   ]);
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
@@ -205,6 +206,14 @@ const Table = () => {
     //   headerClass: 'column-header',
     // });
   };
+
+  useEffect(() => {
+    if (whenColumnDefs.length < 2){
+      console.log(whenColumnDefs.length)
+      handleAddWhenCol()
+    }
+  }, [])
+
 
   // Function used when we want to edit the details of column header
   const handleEditCol = (
