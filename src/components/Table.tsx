@@ -52,6 +52,9 @@ const Table = () => {
       }),
     },
   ]);
+
+
+  
   // store when block column data
   const [whenColumnDefs, setWhenColumnDefs] = useState<columnInterface[]>([
     {
@@ -87,6 +90,19 @@ const Table = () => {
     },
     
   ]);
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      if (whenColumnDefs.length < 2) {
+        console.log(whenColumnDefs.length);
+        handleAddWhenCol();
+      }
+    }
+  }, []);
+  
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
     () => ({
@@ -207,12 +223,7 @@ const Table = () => {
     // });
   };
 
-  useEffect(() => {
-    if (whenColumnDefs.length < 2){
-      console.log(whenColumnDefs.length)
-      handleAddWhenCol()
-    }
-  }, [])
+  
 
 
   // Function used when we want to edit the details of column header
