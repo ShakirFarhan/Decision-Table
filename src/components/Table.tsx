@@ -91,13 +91,17 @@ const Table = () => {
     
   ]);
 
+
+  // using this to stop re-render of this below use effect
   const isFirstRender = useRef(true);
 
+
+  // this one will create a column without any value of header name and it's type
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       if (whenColumnDefs.length < 2) {
-        console.log(whenColumnDefs.length);
+        // this function is calling to add column at first render
         handleAddWhenCol();
       }
     }
