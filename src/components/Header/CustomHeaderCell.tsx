@@ -7,6 +7,8 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import ColOptions from './ColOptions';
 import TypesOptions from './TypesOptions';
 // import { useStore } from '../../store';
+
+// Customized component for column header
 const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   label,
   children,
@@ -30,7 +32,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
     setPinned((data) => {
       return !data;
     });
-    handlePin(id, pinned, setPinned);
+    handlePin(id);
     // setPinnedColumn(id);// zustand logic
   };
   if (userColumn) {

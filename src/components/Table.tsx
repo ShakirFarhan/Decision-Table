@@ -19,14 +19,14 @@ const Table = () => {
     // editWhenCol,
   } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
-  const [thenColumnDefs, setThenColumnDefs] = useState<any[]>([
+  const [thenColumnDefs, setThenColumnDefs] = useState<columnInterface[]>([
     {
       id: '1',
       headerName: 'Id',
       field: 'id',
       type: 'number',
-      sortable: true,
       headerComponent: () => (
+        // Customized Column Header
         <CustomHeaderCell
           label="Id"
           type="number"
@@ -37,10 +37,12 @@ const Table = () => {
           handleOptions={handleOptions}
         />
       ),
-      headerClass: 'column-header',
-      cellRendererFramework: CustomCell,
+      headerClass: 'column-header', // every column header has this class
+      cellRendererFramework: CustomCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
       cellRendererParams: (params: any) => ({
+        // to control its behavior and appearance.
         onEdit: () => {
+          // User defined function
           params.api.startEditingCell({
             rowIndex: params.node.rowIndex,
             colKey: params.column.colId,
@@ -50,9 +52,9 @@ const Table = () => {
       }),
     },
   ]);
-
+  // store when block column data
   const [whenColumnDefs, setWhenColumnDefs] = useState<columnInterface[]>([]);
-
+  //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
     () => ({
       resizable: true,
@@ -63,6 +65,8 @@ const Table = () => {
     }),
     []
   );
+
+  // Function used to add columns in then block
   const handleAddThenCol = (): void => {
     setThenColumnDefs([
       ...thenColumnDefs,
@@ -96,6 +100,10 @@ const Table = () => {
       },
     ]);
   };
+
+  // Function used to add columns in then block
+  // In this function, the first thing we do is add a new column with an unique id common for id and field, and rest of the properties as empty.
+  // After that, the handleEditCol function will be activated when the user clicks on that column once more to edit the column header information.
   const handleAddWhenCol = (): void => {
     setWhenColumnDefs((data: any) => {
       const newIndex = uuid();
@@ -165,10 +173,13 @@ const Table = () => {
     //   headerClass: 'column-header',
     // });
   };
+
+  // Function used when we want to edit the details of column header
+
   const handleEditCol = (
-    colId: string,
-    newHeaderName: string,
-    newFieldName: string
+    colId: string, // id of the selected column
+    newHeaderName: string, // new header name provided by the user
+    newTypeName: string // new type ex: string,number...
   ) => {
     if (colId) {
       setWhenColumnDefs((data: any) => {
@@ -180,11 +191,11 @@ const Table = () => {
           updatedColumnDefs[index] = {
             ...updatedColumnDefs[index],
             headerName: newHeaderName,
-            type: newFieldName,
+            type: newTypeName,
             headerComponent: () => (
               <CustomHeaderCell
                 label={newHeaderName}
-                type={newFieldName}
+                type={newTypeName}
                 id={colId}
                 userColumn={true}
                 onColumnChange={handleEditCol}
@@ -246,8 +257,8 @@ const Table = () => {
       //   }
     }
   };
-
-  const handlePin = (id: string, pinned: boolean, setPinned: any): void => {
+  // function used to pin a column
+  const handlePin = (id: string): void => {
     setWhenColumnDefs((data: any) => {
       const updatedColumnDefs = [...data];
       const index = updatedColumnDefs.findIndex((col) => col.id === id);
@@ -256,10 +267,11 @@ const Table = () => {
         ...column,
         pinned: column.pinned ? undefined : 'left',
       };
-      setPinned('Yess');
+
       return updatedColumnDefs;
     });
   };
+
   const handleOptions = useCallback(
     (id: string, selectedOption: string): void => {
       if (selectedOption.includes('remove')) {
@@ -273,7 +285,8 @@ const Table = () => {
         });
       } else if (selectedOption.includes('a-z')) {
         gridRef.current?.columnApi?.applyColumnState({
-          state: [{ colId: id, sort: 'asc' }],
+          // Api provided to perform sorting on the column data
+          state: [{ colId: id, sort: 'asc' }], // here colId - represents which column need to be sorted and sort - whether it is ascending or descending
           defaultState: { sort: null },
         });
       } else if (selectedOption.includes('z-a')) {
@@ -339,8 +352,7 @@ const Table = () => {
             columnDefs={whenColumnDefs}
             defaultColDef={defaultColDef}
             className="ag-theme-alpine"
-            onCellValueChanged={handleCellValueChanged}
-            groupHeaderHeight={100}
+            onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
           />
         </div>
         <div className="flex-1 h-[270px]">

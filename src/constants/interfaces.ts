@@ -33,10 +33,9 @@ export interface columnHeaderProps {
   onColumnChange: (
     colId: string,
     newHeaderName: string,
-    newFieldName: string
-    // id: string
+    newTypeName: string
   ) => void;
-  handlePin: (id: string, pinned: boolean, setPinned: any) => void;
+  handlePin: (id: string) => void;
   setWhenColumnDefs?: Dispatch<SetStateAction<columnInterface[]>>;
   newCol?: boolean;
   handleOptions: (id: string, task: string) => void;
