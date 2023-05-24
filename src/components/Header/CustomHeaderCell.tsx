@@ -6,6 +6,7 @@ import { columnHeaderProps } from '../../constants/interfaces';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import ColOptions from './ColOptions';
 import TypesOptions from './TypesOptions';
+// import { useStore } from '../../store';
 const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   label,
   children,
@@ -19,7 +20,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   const [modalActive, setModalActive] = useState(false);
   const [pinned, setPinned] = useState(true);
   const [optionsVisible, setOptionsVisible] = useState(false);
-
+  // const { setPinnedColumn } = useStore((store) => store);
   const handleModal = () => {
     setModalActive((data) => {
       return !data;
@@ -30,6 +31,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
       return !data;
     });
     handlePin(id, pinned, setPinned);
+    // setPinnedColumn(id);// zustand logic
   };
   if (userColumn) {
     return (

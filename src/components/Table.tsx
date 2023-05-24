@@ -1,16 +1,24 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import './css/table.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import CustomHeaderCell from './Header/CustomHeaderCell';
-import './css/table.css';
 import CustomCell from './Cell/CustomCell';
 import { columnInterface } from '../constants/interfaces';
 import uuid from 'react-uuid';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useStore } from '../store';
-function Table() {
-  const { addRow, whenRowData, thenRowData } = useStore((store) => store);
+const Table = () => {
+  const {
+    addRow,
+    whenRowData,
+    thenRowData,
+    // setWhenColDefs,
+    whenColDefs,
+    // editWhenCol,
+  } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
-  console.log('Hello');
   const [thenColumnDefs, setThenColumnDefs] = useState<any[]>([
     {
       id: '1',
@@ -47,7 +55,7 @@ function Table() {
 
   const defaultColDef = useMemo(
     () => ({
-      // resizable: true,
+      resizable: true,
       sortable: true,
       filter: true,
       editable: true,
@@ -88,50 +96,6 @@ function Table() {
       },
     ]);
   };
-  const handleEditCol = (
-    colId: string,
-    newHeaderName: string,
-    newFieldName: string
-  ): void => {
-    if (colId) {
-      setWhenColumnDefs((data: any) => {
-        const updatedColumnDefs = [...data];
-        const index = updatedColumnDefs.findIndex((col) => col.id === colId);
-        if (index !== -1) {
-          const existingCellRendererParams =
-            updatedColumnDefs[index].cellRendererParams;
-          updatedColumnDefs[index] = {
-            ...updatedColumnDefs[index],
-            headerName: newHeaderName,
-            type: newFieldName,
-            headerComponent: () => (
-              <CustomHeaderCell
-                label={newHeaderName}
-                type={newFieldName}
-                id={colId}
-                userColumn={true}
-                onColumnChange={handleEditCol}
-                handlePin={handlePin}
-                handleOptions={handleOptions}
-              />
-            ),
-            cellRendererParams: (params: any) => ({
-              ...existingCellRendererParams(params),
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
-            }),
-          };
-        }
-
-        return updatedColumnDefs;
-      });
-    }
-  };
-
   const handleAddWhenCol = (): void => {
     setWhenColumnDefs((data: any) => {
       const newIndex = uuid();
@@ -169,6 +133,118 @@ function Table() {
       ];
       return updated;
     });
+    // Zustand State code to add Column
+    // const newIndex = uuid();
+    // setWhenColDefs({
+    //   id: newIndex,
+    //   headerName: '',
+    //   field: newIndex,
+    //   type: '',
+    //   sortable: true,
+    //   headerComponent: () => (
+    //     <CustomHeaderCell
+    //       label=""
+    //       type=""
+    //       id={newIndex}
+    //       userColumn={true}
+    //       onColumnChange={handleEditCol}
+    //       handlePin={handlePin}
+    //       handleOptions={handleOptions}
+    //     />
+    //   ),
+    //   cellRendererFramework: CustomCell,
+    //   cellRendererParams: (params: any) => ({
+    //     onEdit: () => {
+    //       params.api.startEditingCell({
+    //         rowIndex: params.node.rowIndex,
+    //         colKey: params.column.colId,
+    //       });
+    //     },
+    //     cellValue: params.value,
+    //   }),
+    //   headerClass: 'column-header',
+    // });
+  };
+  const handleEditCol = (
+    colId: string,
+    newHeaderName: string,
+    newFieldName: string
+  ) => {
+    if (colId) {
+      setWhenColumnDefs((data: any) => {
+        const updatedColumnDefs = [...data];
+        const index = updatedColumnDefs.findIndex((col) => col.id === colId);
+        if (index !== -1) {
+          const existingCellRendererParams =
+            updatedColumnDefs[index].cellRendererParams;
+          updatedColumnDefs[index] = {
+            ...updatedColumnDefs[index],
+            headerName: newHeaderName,
+            type: newFieldName,
+            headerComponent: () => (
+              <CustomHeaderCell
+                label={newHeaderName}
+                type={newFieldName}
+                id={colId}
+                userColumn={true}
+                onColumnChange={handleEditCol}
+                handlePin={handlePin}
+                handleOptions={handleOptions}
+              />
+            ),
+            cellRendererParams: (params: any) => ({
+              ...existingCellRendererParams(params),
+              onEdit: () => {
+                params.api.startEditingCell({
+                  rowIndex: params.node.rowIndex,
+                  colKey: params.column.colId,
+                });
+              },
+            }),
+          };
+        }
+
+        return updatedColumnDefs;
+      });
+
+      // Zustand state Code
+      //   const updatedColumnDefs = [...whenColDefs];
+      //   console.log(updatedColumnDefs);
+      //   const index = updatedColumnDefs.findIndex((col) => col.id === colId);
+      //   console.log(index);
+      //   if (index !== -1) {
+      //     console.log('Here');
+      //     const existingCellRendererParams =
+      //       updatedColumnDefs[index].cellRendererParams;
+      //     updatedColumnDefs[index] = {
+      //       ...updatedColumnDefs[index],
+      //       headerName: newHeaderName,
+      //       type: newFieldName,
+      //       headerComponent: () => (
+      //         <CustomHeaderCell
+      //           label={newHeaderName}
+      //           type={newFieldName}
+      //           id={colId}
+      //           userColumn={true}
+      //           onColumnChange={handleEditCol}
+      //           handlePin={handlePin}
+      //           handleOptions={handleOptions}
+      //         />
+      //       ),
+      //       cellRendererParams: (params: any) => ({
+      //         ...existingCellRendererParams(params),
+      //         onEdit: () => {
+      //           params.api.startEditingCell({
+      //             rowIndex: params.node.rowIndex,
+      //             colKey: params.column.colId,
+      //           });
+      //         },
+      //       }),
+      //     };
+      //     // console.log(updatedColumnDefs);
+      //     editWhenCol(updatedColumnDefs);
+      //   }
+    }
   };
 
   const handlePin = (id: string, pinned: boolean, setPinned: any): void => {
@@ -223,9 +299,30 @@ function Table() {
   const handleCellValueChanged = (params: any) => {
     params.api.stopEditing();
   };
+  useEffect(() => {
+    console.log(whenColDefs);
+  }, [whenColDefs]);
+  useEffect(() => {
+    window.addEventListener('error', (e) => {
+      if (e.message === 'ResizeObserver loop limit exceeded') {
+        console.log('catch');
+        const resizeObserverErrDiv = document.getElementById(
+          'webpack-dev-server-client-overlay-div'
+        );
+        const resizeObserverErr = document.getElementById(
+          'webpack-dev-server-client-overlay'
+        );
+        if (resizeObserverErr) {
+          resizeObserverErr.setAttribute('style', 'display: none');
+        }
+        if (resizeObserverErrDiv) {
+          resizeObserverErrDiv.setAttribute('style', 'display: none');
+        }
+      }
+    });
+  }, []);
   return (
     <div className="flex flex-col">
-      {/* <button onClick={sortByAthleteAsc}>sort</button> */}
       <div className="scroll-wrapper w-full flex overflow-x-scroll">
         <div className="flex-1 h-[270px]">
           <div className="flex items-center gap-x-[5.5px] mb-[10px]">
@@ -238,11 +335,11 @@ function Table() {
           <AgGridReact
             ref={gridRef}
             rowData={whenRowData}
+            // columnDefs={whenColDefs} //zustand state column array
             columnDefs={whenColumnDefs}
             defaultColDef={defaultColDef}
             className="ag-theme-alpine"
             onCellValueChanged={handleCellValueChanged}
-            // onCellDoubleClicked={handleDoubleTap}
             groupHeaderHeight={100}
           />
         </div>
@@ -272,6 +369,5 @@ function Table() {
       </button>
     </div>
   );
-}
-
+};
 export default Table;
