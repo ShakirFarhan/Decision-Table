@@ -52,8 +52,61 @@ const Table = () => {
       }),
     },
   ]);
+
+
+  
   // store when block column data
-  const [whenColumnDefs, setWhenColumnDefs] = useState<columnInterface[]>([]);
+  const [whenColumnDefs, setWhenColumnDefs] = useState<columnInterface[]>([
+    {
+      id: '1',
+      headerName: 'Id',
+      field: 'id',
+      type: 'number',
+      headerComponent: () => (
+        // Customized Column Header
+        <CustomHeaderCell
+          label="Id"
+          type="number"
+          id="id"
+          userColumn={true}
+          onColumnChange={handleEditCol}
+          handlePin={handlePin}
+          handleOptions={handleOptions}
+        />
+      ),
+      headerClass: 'column-header', // every column header has this class
+      cellRendererFramework: CustomCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
+      cellRendererParams: (params: any) => ({
+        // to control its behavior and appearance.
+        onEdit: () => {
+          // User defined function
+          params.api.startEditingCell({
+            rowIndex: params.node.rowIndex,
+            colKey: params.column.colId,
+          });
+        },
+        cellValue: params.value,
+      }),
+    },
+    
+  ]);
+
+
+  // using this to stop re-render of this below use effect
+  const isFirstRender = useRef(true);
+
+
+  // this one will create a column without any value of header name and it's type
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      if (whenColumnDefs.length < 2) {
+        // this function is calling to add column at first render
+        handleAddWhenCol();
+      }
+    }
+  }, []);
+  
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
     () => ({
@@ -174,8 +227,10 @@ const Table = () => {
     // });
   };
 
-  // Function used when we want to edit the details of column header
+  
 
+
+  // Function used when we want to edit the details of column header
   const handleEditCol = (
     colId: string, // id of the selected column
     newHeaderName: string, // new header name provided by the user
@@ -265,12 +320,13 @@ const Table = () => {
       const column = updatedColumnDefs[index];
       updatedColumnDefs[index] = {
         ...column,
-        pinned: column.pinned ? undefined : 'left',
+        pinned: 'left', // Set pinned property to 'left' unconditionally
       };
 
       return updatedColumnDefs;
     });
   };
+
 
   const handleOptions = useCallback(
     (id: string, selectedOption: string): void => {
@@ -312,9 +368,13 @@ const Table = () => {
   const handleCellValueChanged = (params: any) => {
     params.api.stopEditing();
   };
+
+
   useEffect(() => {
     console.log(whenColDefs);
   }, [whenColDefs]);
+
+
   useEffect(() => {
     window.addEventListener('error', (e) => {
       if (e.message === 'ResizeObserver loop limit exceeded') {
@@ -334,9 +394,12 @@ const Table = () => {
       }
     });
   }, []);
+
+
+
   return (
     <div className="flex flex-col">
-      <div className="scroll-wrapper w-full flex overflow-x-scroll">
+      <div className="scroll-wrapper w-full flex ">
         <div className="flex-1 h-[270px]">
           <div className="flex items-center gap-x-[5.5px] mb-[10px]">
             <span className="text-[15.7px] tracking-wide">When</span>
@@ -372,7 +435,7 @@ const Table = () => {
         </div>
       </div>
       <button
-        className="width-[60px] w-fit font-semibold"
+        className="width-[60px] m-12  w-fit font-semibold"
         onClick={() => {
           addRow(whenColumnDefs, thenColumnDefs);
         }}
