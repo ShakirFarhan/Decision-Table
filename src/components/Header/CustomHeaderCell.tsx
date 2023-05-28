@@ -19,14 +19,11 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   handleOptions,
 }) => {
   const [pinned, setPinned] = useState(true);
-  // const { setPinnedColumn } = useStore((store) => store);
-
   const handlePinning = () => {
     setPinned((data) => {
       return !data;
     });
     handlePin(id);
-    // setPinnedColumn(id);// zustand logic
   };
   if (userColumn) {
     return (
