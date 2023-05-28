@@ -3,7 +3,7 @@ import { columnInterface, rowType } from './constants/interfaces';
 import { devtools } from 'zustand/middleware';
 
 export interface zustandStoreInterface {
-  whenRowData: rowType[];
+  whenRowData: any[];
   whenColDefs: columnInterface[];
   thenRowData: rowType[];
   thenColData: columnInterface[];
@@ -12,6 +12,9 @@ export interface zustandStoreInterface {
   addRow: (whenColData: any, thenColData: any) => void;
   setWhenColDefs: (whenColData: any) => void;
   editWhenCol: (updatedDef: any) => void;
+  duplicateRule: (id: number) => void;
+  deleteRule: (id: number) => void;
+  clearRule: (id: number) => void;
 }
 
 export const useStore = create<
@@ -25,6 +28,30 @@ export const useStore = create<
     thenRowData: [],
     pinnedColumn: null,
 
+    duplicateRule: (id) =>
+      set((store) => ({
+        whenRowData: [
+          ...store.whenRowData,
+          { ...store.whenRowData[id - 1], any: store.whenRowData.length + 1 },
+        ],
+      })),
+    clearRule: (id) =>
+      set((store) => ({
+        whenRowData: store.whenRowData.map((data) => {
+          if (data.any === id) {
+            return {
+              any: data.any,
+              [data]: '',
+            };
+          }
+          return data;
+        }),
+      })),
+
+    deleteRule: (id) =>
+      set((store) => ({
+        whenRowData: store.whenRowData.filter((data) => data.any !== id),
+      })),
     setWhenColDefs: (whenColData) =>
       set(
         (store) => ({
@@ -38,7 +65,12 @@ export const useStore = create<
         whenRowData: [
           ...store.whenRowData,
           Object.fromEntries(
-            whenColDeta.map((header: any) => [header.field, ''])
+            whenColDeta.map((header: any, index: number) => {
+              if (header.field === 'any') {
+                return [header.field, store.whenRowData.length + 1];
+              }
+              return [header.field, ''];
+            })
           ),
         ],
         thenRowData: [
@@ -60,7 +92,6 @@ export const useStore = create<
       set((store) => ({
         whenColDefs: store.whenColDefs.map((col) => {
           if (col.id === colId) {
-            console.log('yayy');
             store.pinnedColumn = colId;
             return {
               ...col,

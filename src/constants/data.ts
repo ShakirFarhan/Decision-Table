@@ -81,3 +81,22 @@ export const optionsData = [
     function: 'Remove Output Column',
   },
 ];
+
+export const rowOptions = [
+  {
+    key: 'settings',
+    header: 'Settings',
+  },
+  {
+    key: 'duplicate',
+    header: 'Duplicate',
+  },
+  {
+    key: 'clear',
+    header: 'Clear Rule',
+  },
+  {
+    key: 'delete',
+    header: 'Delete Rule',
+  },
+];

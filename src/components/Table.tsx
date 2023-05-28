@@ -9,6 +9,7 @@ import { columnInterface } from '../constants/interfaces';
 import uuid from 'react-uuid';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useStore } from '../store';
+import AnyColCell from './Cell/AnyColCell';
 const Table = () => {
   const {
     addRow,
@@ -25,6 +26,7 @@ const Table = () => {
       headerName: 'Id',
       field: 'id',
       type: 'number',
+
       headerComponent: () => (
         // Customized Column Header
         <CustomHeaderCell
@@ -53,29 +55,30 @@ const Table = () => {
     },
   ]);
 
-
-  
   // store when block column data
-  const [whenColumnDefs, setWhenColumnDefs] = useState<columnInterface[]>([
+  const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
     {
-      id: '1',
-      headerName: 'Id',
-      field: 'id',
-      type: 'number',
+      id: 'any-col',
+      headerName: 'Any',
+      field: 'any',
+      type: '',
+      maxWidth: 86,
+      minWidth: 80,
+      // rowDrag: true,
       headerComponent: () => (
         // Customized Column Header
         <CustomHeaderCell
-          label="Id"
-          type="number"
-          id="id"
-          userColumn={true}
+          label="Any"
+          type=""
+          id="any-col"
+          userColumn={false}
           onColumnChange={handleEditCol}
           handlePin={handlePin}
           handleOptions={handleOptions}
         />
       ),
       headerClass: 'column-header', // every column header has this class
-      cellRendererFramework: CustomCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
+      cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
       cellRendererParams: (params: any) => ({
         // to control its behavior and appearance.
         onEdit: () => {
@@ -88,29 +91,12 @@ const Table = () => {
         cellValue: params.value,
       }),
     },
-    
   ]);
 
-
-  // using this to stop re-render of this below use effect
-  const isFirstRender = useRef(true);
-
-
-  // this one will create a column without any value of header name and it's type
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      if (whenColumnDefs.length < 2) {
-        // this function is calling to add column at first render
-        handleAddWhenCol();
-      }
-    }
-  }, []);
-  
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
     () => ({
-      resizable: true,
+      // resizable: true,
       sortable: true,
       filter: true,
       editable: true,
@@ -168,6 +154,7 @@ const Table = () => {
           field: newIndex,
           type: '',
           sortable: true,
+          // rowDrag: true,
           headerComponent: () => (
             <CustomHeaderCell
               label=""
@@ -226,9 +213,6 @@ const Table = () => {
     //   headerClass: 'column-header',
     // });
   };
-
-  
-
 
   // Function used when we want to edit the details of column header
   const handleEditCol = (
@@ -327,7 +311,6 @@ const Table = () => {
     });
   };
 
-
   const handleOptions = useCallback(
     (id: string, selectedOption: string): void => {
       if (selectedOption.includes('remove')) {
@@ -369,11 +352,9 @@ const Table = () => {
     params.api.stopEditing();
   };
 
-
   useEffect(() => {
     console.log(whenColDefs);
   }, [whenColDefs]);
-
 
   useEffect(() => {
     window.addEventListener('error', (e) => {
@@ -394,8 +375,19 @@ const Table = () => {
       }
     });
   }, []);
+  // using this to stop re-render of this below use effect
+  const isFirstRender = useRef(true);
 
-
+  // this one will create a column without any value of header name and it's type
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      if (whenColumnDefs.length < 2) {
+        // this function is calling to add column at first render
+        handleAddWhenCol();
+      }
+    }
+  }, [whenColumnDefs.length]);
 
   return (
     <div className="flex flex-col">
@@ -435,7 +427,7 @@ const Table = () => {
         </div>
       </div>
       <button
-        className="width-[60px] m-12  w-fit font-semibold"
+        className=" w-[70px] mx-3 mt-12"
         onClick={() => {
           addRow(whenColumnDefs, thenColumnDefs);
         }}
