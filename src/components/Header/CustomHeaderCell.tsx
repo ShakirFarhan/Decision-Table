@@ -18,6 +18,8 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   handlePin,
   handleOptions,
 }) => {
+
+
   const [pinned, setPinned] = useState(true);
   // const { setPinnedColumn } = useStore((store) => store);
 
@@ -61,7 +63,9 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
                       : 'h-[13.5px] w-[15px] fill-[#2f54eb]'
                   }
                 />
-                <ColOptions handleOptions={handleOptions} id={id} />
+                {id !== 'id' ? <ColOptions handleOptions={handleOptions} id={id} /> : null}
+                
+                
               </div>
 
               <Popover

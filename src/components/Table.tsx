@@ -19,6 +19,7 @@ const Table = () => {
     // editWhenCol,
   } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
+  console.log({whenRowData})
   const [thenColumnDefs, setThenColumnDefs] = useState<columnInterface[]>([
     {
       id: '1',
@@ -54,6 +55,8 @@ const Table = () => {
   ]);
 
 
+
+
   
   // store when block column data
   const [whenColumnDefs, setWhenColumnDefs] = useState<columnInterface[]>([
@@ -80,6 +83,7 @@ const Table = () => {
         // to control its behavior and appearance.
         onEdit: () => {
           // User defined function
+
           params.api.startEditingCell({
             rowIndex: params.node.rowIndex,
             colKey: params.column.colId,
@@ -90,6 +94,7 @@ const Table = () => {
     },
     
   ]);
+
 
 
   // using this to stop re-render of this below use effect
@@ -331,7 +336,6 @@ const Table = () => {
   const handleOptions = useCallback(
     (id: string, selectedOption: string): void => {
       if (selectedOption.includes('remove')) {
-        console.log('Got it');
         setWhenColumnDefs((prevData) => {
           const updatedData = prevData.filter((col) => {
             console.log(col.id, id);
@@ -366,6 +370,19 @@ const Table = () => {
   );
 
   const handleCellValueChanged = (params: any) => {
+
+    console.log({params})
+    const newValue = params.newValue;
+    const oldValue = params.oldValue;
+    const columnId = params.column.colId;
+    const rowIndex = params.node.rowIndex;
+
+
+    console.log('Cell value changed:');
+    console.log('Column ID:', columnId);
+    console.log('Row Index:', rowIndex);
+    console.log('Old Value:', oldValue);
+    console.log('New Value:', newValue);
     params.api.stopEditing();
   };
 
@@ -435,7 +452,7 @@ const Table = () => {
         </div>
       </div>
       <button
-        className="width-[60px] m-12  w-fit font-semibold"
+        className="width-[60px] mt-12 ml-2  w-fit font-semibold"
         onClick={() => {
           addRow(whenColumnDefs, thenColumnDefs);
         }}
