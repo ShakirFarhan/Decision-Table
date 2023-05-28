@@ -14,8 +14,6 @@ const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [editingValue, setEditingValue] = useState(cellValue);
 
-  // console.log(whenRowData);
-
 
   const handleEdit = (event: any) => {
     setAnchorEl(event.currentTarget);
