@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import { MdOutlineModeEditOutline } from 'react-icons/md';
 import Popover from '@mui/material/Popover';
-import { TextField, FormControl, InputLabel, MenuItem, Select, Box } from '@mui/material';
-import { options } from './celloptions';
-
+import EditIcon from '../../assets/Edit.svg';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Box,
+} from '@mui/material';
+import { cellOptions } from '../../constants/data';
+import '../css/table.css';
 interface IProps {
   onEdit: (params: any) => void;
   cellValue?: string;
@@ -13,14 +20,15 @@ interface IProps {
 const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [editingValue, setEditingValue] = useState(cellValue);
-
+  const [hovering, setHovering] = useState(false);
 
   const handleEdit = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = (data: any) => {
-    cellValue = editingValue
+    console.log(data);
+    cellValue = editingValue;
     onEdit(data);
     setAnchorEl(null);
   };
@@ -34,19 +42,29 @@ const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
   const handleChangeOption = (event: any) => {
     setSelectedOption(event.target.value);
   };
+  const handleMouseEnter = () => {
+    setHovering(true);
+  };
 
+  const handleMouseLeave = () => {
+    setHovering(false);
+  };
   const open = Boolean(anchorEl);
   const id = open ? 'popover-edit-cell' : undefined;
 
   return (
-    <div style={{ position: 'relative' }}>
-      <div className="flex items-center justify-between h-[40px] select-none"
-      >
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="relative"
+    >
+      <div className="flex items-center justify-between h-[40px] select-none">
         <span>{cellValue}</span>
-        <button onClick={handleEdit}>
-          <MdOutlineModeEditOutline className="w-[18px] h-[18px]" />
-        </button>
-
+        {hovering && (
+          <button onClick={handleEdit}>
+            <img className="w-[18px] h-[18px] mr-4" src={EditIcon} />
+          </button>
+        )}
       </div>
       <Popover
         id={id}
@@ -61,9 +79,9 @@ const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
           vertical: 'top',
           horizontal: 'left',
         }}
-        style={{position:"absolute", left:"-125px", top:"15px"}}
+        style={{ position: 'absolute', left: '-125px', top: '15px' }}
       >
-        <div style={{ padding: '15px', paddingTop: "20px" }}>
+        <div style={{ padding: '15px', paddingTop: '20px' }}>
           <FormControl fullWidth>
             <InputLabel id="dropdown-label">Select an option</InputLabel>
             <Select
@@ -72,19 +90,19 @@ const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
               value={selectedOption}
               onChange={handleChangeOption}
             >
-              {options && options.map((item: any, index: any) => {
-                return <MenuItem value={item.id} key={index}>{item.value}</MenuItem>
-              }) }
+              {cellOptions &&
+                cellOptions.map((item: any, index: any) => {
+                  return (
+                    <MenuItem value={item.id} key={index}>
+                      {item.value}
+                    </MenuItem>
+                  );
+                })}
             </Select>
           </FormControl>
 
           <Box marginTop="1rem"></Box>
-          <TextField
-            value={editingValue}
-            onChange={handleChange}
-            fullWidth
-          />
-        
+          <TextField value={editingValue} onChange={handleChange} fullWidth />
         </div>
       </Popover>
     </div>

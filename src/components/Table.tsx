@@ -10,6 +10,12 @@ import uuid from 'react-uuid';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
+import DragIcon from '../assets/drag.svg';
+import { GridOptions, RowNode } from 'ag-grid-community';
+
+interface CustomGridOptions extends GridOptions {
+  getRowDragIcon?: (params: { node: RowNode }) => HTMLElement;
+}
 const Table = () => {
   const {
     addRow,
@@ -20,7 +26,7 @@ const Table = () => {
     // editWhenCol,
   } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
-  console.log({whenRowData})
+
   const [thenColumnDefs, setThenColumnDefs] = useState<columnInterface[]>([
     {
       id: '1',
@@ -58,6 +64,51 @@ const Table = () => {
 
   // store when block column data
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
+    // Grouped column
+    // {
+    //   id: 'hit',
+    //   headerName: 'Hit Ratio',
+    //   headerClass: 'hit',
+    //   children: [
+    //     {
+    //       id: 'any-col',
+    //       headerName: 'Any',
+    //       field: 'any',
+    //       type: '',
+    //       maxWidth: 86,
+    //       minWidth: 80,
+    //       pinned: 'left',
+    //       // rowDrag: true,
+    //       headerComponent: () => (
+    //         // Customized Column Header
+    //         <CustomHeaderCell
+    //           label="Any"
+    //           type=""
+    //           id="any-col"
+    //           userColumn={false}
+    //           onColumnChange={handleEditCol}
+    //           handlePin={handlePin}
+    //           handleOptions={handleOptions}
+    //         />
+    //       ),
+    //       headerClass: 'column-header', // every column header has this class
+    //       cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
+    //       cellRendererParams: (params: any) => ({
+    //         // to control its behavior and appearance.
+    //         onEdit: () => {
+    //           // User defined function
+
+    //           params.api.startEditingCell({
+    //             rowIndex: params.node.rowIndex,
+    //             colKey: params.column.colId,
+    //           });
+    //         },
+    //         cellValue: params.value,
+    //       }),
+    //     },
+    //   ],
+    // },
+    // Single column
     {
       id: 'any-col',
       headerName: 'Any',
@@ -65,7 +116,8 @@ const Table = () => {
       type: '',
       maxWidth: 86,
       minWidth: 80,
-      // rowDrag: true,
+      pinned: 'left',
+      rowDrag: true,
       headerComponent: () => (
         // Customized Column Header
         <CustomHeaderCell
@@ -111,6 +163,7 @@ const Table = () => {
   const handleAddThenCol = (): void => {
     setThenColumnDefs([
       ...thenColumnDefs,
+
       {
         id: `default`,
         headerName: 'default',
@@ -318,7 +371,6 @@ const Table = () => {
       if (selectedOption.includes('remove')) {
         setWhenColumnDefs((prevData) => {
           const updatedData = prevData.filter((col) => {
-            console.log(col.id, id);
             return col.id !== id;
           });
           return updatedData;
@@ -337,9 +389,9 @@ const Table = () => {
       } else if (selectedOption.includes('duplicate')) {
         setWhenColumnDefs((prevData) => {
           const updatedColDefs: any = [...prevData];
-          console.log(updatedColDefs);
+
           const index = updatedColDefs.findIndex((col: any) => col.id === id);
-          console.log(index, id);
+
           const selectedColumn = updatedColDefs[index];
           updatedColDefs.push(selectedColumn);
           return updatedColDefs;
@@ -350,13 +402,11 @@ const Table = () => {
   );
 
   const handleCellValueChanged = (params: any) => {
-
-    console.log({params})
+    console.log({ params });
     const newValue = params.newValue;
     const oldValue = params.oldValue;
     const columnId = params.column.colId;
     const rowIndex = params.node.rowIndex;
-
 
     console.log('Cell value changed:');
     console.log('Column ID:', columnId);
@@ -365,7 +415,20 @@ const Table = () => {
     console.log('New Value:', newValue);
     params.api.stopEditing();
   };
+  const gridOptions: CustomGridOptions = {
+    // Other grid options...
+    getRowDragIcon: (params) => {
+      // Create a custom icon element using FontAwesome
+      const iconElement = document.createElement('span');
+      const icon = document.createElement('i');
+      icon.classList.add('fa');
+      icon.classList.add('fa-arrows-alt');
+      iconElement.appendChild(icon);
 
+      // Return the custom icon element
+      return iconElement;
+    },
+  };
   useEffect(() => {
     console.log(whenColDefs);
   }, [whenColDefs]);
@@ -406,7 +469,7 @@ const Table = () => {
   return (
     <div className="flex flex-col">
       <div className="scroll-wrapper w-full flex ">
-        <div className="flex-1 h-[270px]">
+        <div className="flex-1 h-[270px] ">
           <div className="flex items-center gap-x-[5.5px] mb-[10px]">
             <span className="text-[15.7px] tracking-wide">When</span>
             <AiFillPlusCircle
@@ -421,7 +484,10 @@ const Table = () => {
             columnDefs={whenColumnDefs}
             defaultColDef={defaultColDef}
             className="ag-theme-alpine"
+            gridOptions={gridOptions}
             onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
+            rowDragManaged={true}
+            animateRows={true}
           />
         </div>
         <div className="flex-1 h-[270px]">
