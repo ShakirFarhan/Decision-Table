@@ -236,37 +236,6 @@ const Table = () => {
       ];
       return updated;
     });
-    // Zustand State code to add Column
-    // const newIndex = uuid();
-    // setWhenColDefs({
-    //   id: newIndex,
-    //   headerName: '',
-    //   field: newIndex,
-    //   type: '',
-    //   sortable: true,
-    //   headerComponent: () => (
-    //     <CustomHeaderCell
-    //       label=""
-    //       type=""
-    //       id={newIndex}
-    //       userColumn={true}
-    //       onColumnChange={handleEditCol}
-    //       handlePin={handlePin}
-    //       handleOptions={handleOptions}
-    //     />
-    //   ),
-    //   cellRendererFramework: CustomCell,
-    //   cellRendererParams: (params: any) => ({
-    //     onEdit: () => {
-    //       params.api.startEditingCell({
-    //         rowIndex: params.node.rowIndex,
-    //         colKey: params.column.colId,
-    //       });
-    //     },
-    //     cellValue: params.value,
-    //   }),
-    //   headerClass: 'column-header',
-    // });
   };
 
   // Function used when we want to edit the details of column header
@@ -311,44 +280,6 @@ const Table = () => {
 
         return updatedColumnDefs;
       });
-
-      // Zustand state Code
-      //   const updatedColumnDefs = [...whenColDefs];
-      //   console.log(updatedColumnDefs);
-      //   const index = updatedColumnDefs.findIndex((col) => col.id === colId);
-      //   console.log(index);
-      //   if (index !== -1) {
-      //     console.log('Here');
-      //     const existingCellRendererParams =
-      //       updatedColumnDefs[index].cellRendererParams;
-      //     updatedColumnDefs[index] = {
-      //       ...updatedColumnDefs[index],
-      //       headerName: newHeaderName,
-      //       type: newFieldName,
-      //       headerComponent: () => (
-      //         <CustomHeaderCell
-      //           label={newHeaderName}
-      //           type={newFieldName}
-      //           id={colId}
-      //           userColumn={true}
-      //           onColumnChange={handleEditCol}
-      //           handlePin={handlePin}
-      //           handleOptions={handleOptions}
-      //         />
-      //       ),
-      //       cellRendererParams: (params: any) => ({
-      //         ...existingCellRendererParams(params),
-      //         onEdit: () => {
-      //           params.api.startEditingCell({
-      //             rowIndex: params.node.rowIndex,
-      //             colKey: params.column.colId,
-      //           });
-      //         },
-      //       }),
-      //     };
-      //     // console.log(updatedColumnDefs);
-      //     editWhenCol(updatedColumnDefs);
-      //   }
     }
   };
   // function used to pin a column
@@ -402,17 +333,6 @@ const Table = () => {
   );
 
   const handleCellValueChanged = (params: any) => {
-    console.log({ params });
-    const newValue = params.newValue;
-    const oldValue = params.oldValue;
-    const columnId = params.column.colId;
-    const rowIndex = params.node.rowIndex;
-
-    console.log('Cell value changed:');
-    console.log('Column ID:', columnId);
-    console.log('Row Index:', rowIndex);
-    console.log('Old Value:', oldValue);
-    console.log('New Value:', newValue);
     params.api.stopEditing();
   };
   const gridOptions: CustomGridOptions = {

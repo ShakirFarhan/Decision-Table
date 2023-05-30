@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Popover from '@mui/material/Popover';
-import EditIcon from '../../assets/Edit.svg';
+import editIcon from '../../assets/Edit.svg';
 import {
   TextField,
   FormControl,
@@ -8,28 +8,31 @@ import {
   MenuItem,
   Select,
   Box,
+  Button,
 } from '@mui/material';
+import { useStore } from '../../store';
 import { cellOptions } from '../../constants/data';
-import '../css/table.css';
+
 interface IProps {
   onEdit: (params: any) => void;
   cellValue?: string;
   id?: any;
+  column?: any;
+  node?: any;
 }
 
-const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [editingValue, setEditingValue] = useState(cellValue);
-  const [hovering, setHovering] = useState(false);
+const CustomCell: React.FC<IProps> = (props) => {
+  const { whenRowData, editRowData } = useStore((store) => store);
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [editingValue, setEditingValue] = useState(props.cellValue);
+  const [hovering, setHovering] = useState(false);
   const handleEdit = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = (data: any) => {
-    console.log(data);
-    cellValue = editingValue;
-    onEdit(data);
+    editRowData(props.node.rowIndex, props.column.colId, editingValue);
     setAnchorEl(null);
   };
 
@@ -51,20 +54,18 @@ const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
   };
   const open = Boolean(anchorEl);
   const id = open ? 'popover-edit-cell' : undefined;
-
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Submit');
+    editRowData(props.node.rowIndex, props.column.colId, editingValue);
+  };
   return (
-    <div
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className="relative"
-    >
-      <div className="flex items-center justify-between h-[40px] select-none">
-        <span>{cellValue}</span>
-        {hovering && (
-          <button onClick={handleEdit}>
-            <img className="w-[18px] h-[18px] mr-4" src={EditIcon} />
-          </button>
-        )}
+    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div className="flex items-center justify-between h-[40px] select-none px-3">
+        <span>{props.cellValue}</span>
+        <button onClick={handleEdit}>
+          {hovering && <img src={editIcon} className="w-[18px] h-[18px]" />}
+        </button>
       </div>
       <Popover
         id={id}
@@ -82,27 +83,30 @@ const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
         style={{ position: 'absolute', left: '-125px', top: '15px' }}
       >
         <div style={{ padding: '15px', paddingTop: '20px' }}>
-          <FormControl fullWidth>
-            <InputLabel id="dropdown-label">Select an option</InputLabel>
-            <Select
-              labelId="dropdown-label"
-              id="dropdown"
-              value={selectedOption}
-              onChange={handleChangeOption}
-            >
-              {cellOptions &&
-                cellOptions.map((item: any, index: any) => {
-                  return (
-                    <MenuItem value={item.id} key={index}>
-                      {item.value}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
-          </FormControl>
+          <form onSubmit={handleSubmit}>
+            <FormControl fullWidth>
+              <InputLabel id="dropdown-label">Select an option</InputLabel>
+              <Select
+                labelId="dropdown-label"
+                id="dropdown"
+                value={selectedOption}
+                onChange={handleChangeOption}
+              >
+                {cellOptions &&
+                  cellOptions.map((item: any, index: any) => {
+                    return (
+                      <MenuItem value={item.id} key={index}>
+                        {item.value}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+            </FormControl>
 
-          <Box marginTop="1rem"></Box>
-          <TextField value={editingValue} onChange={handleChange} fullWidth />
+            <Box marginTop="1rem"></Box>
+            <TextField value={editingValue} onChange={handleChange} fullWidth />
+            <Button type="submit"></Button>
+          </form>
         </div>
       </Popover>
     </div>
