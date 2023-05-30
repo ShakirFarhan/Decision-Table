@@ -15,8 +15,8 @@ interface IProps {
 }
 
 const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
-  const [hovering, setHovering] = useState(false);
   const { duplicateRule, deleteRule, clearRule } = useStore((store) => store);
+  const [hovering, setHovering] = useState(false);
   const handleMouseEnter = () => {
     setHovering(true);
   };
@@ -30,7 +30,7 @@ const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="flex items-center justify-between h-[40px] gap-x-0"
+        className="flex items-center justify-between h-[40px] gap-x-0 css-class"
       >
         <button className="hover:bg-[#f0f5ff] h-[40px] px-1">
           <CgMenuGridO color="#bfbfbf" />

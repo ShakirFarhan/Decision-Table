@@ -100,3 +100,33 @@ export const rowOptions = [
     header: 'Delete Rule',
   },
 ];
+export const cellOptions = [
+  { id: 'any', value: 'Any' },
+  { id: 'equals', value: 'Equals' },
+  { id: 'notEquals', value: 'Does not equal' },
+  { id: 'greaterThan', value: 'Greater than' },
+  { id: 'lessThan', value: 'Less than' },
+  { id: 'greaterThanOrEqual', value: 'Greater than or equal to' },
+  { id: 'lessThanOrEqual', value: 'Less than or equal to' },
+  { id: 'between', value: 'Between' },
+  { id: 'isEven', value: 'Is even' },
+  { id: 'isOdd', value: 'Is Odd' },
+  { id: 'isNegative', value: 'Is negative' },
+  { id: 'isZero', value: 'Is Zero' },
+  { id: 'isNotZero', value: 'Is not zero' },
+  { id: 'isMultipleOf', value: 'Is a multiple of' },
+  { id: 'isNotMultipleOf', value: 'Is not a multiple of' },
+];
+export const hitRatioOptions = [
+  { id: 'any', value: 'Any' },
+  { id: 'unique', value: 'Unique' },
+  { id: 'first', value: 'First' },
+  { id: 'priority', value: 'Priority' },
+  { id: 'collect', value: 'Collect' },
+  { id: 'collectsum', value: 'Collect (Sum)' },
+  { id: 'collectmin', value: 'Collect (Min)' },
+  { id: 'collectmax', value: 'Collect (Max)' },
+  { id: 'collectcount', value: 'Collect (Count)' },
+  { id: 'ruleorder', value: 'Rule order' },
+  { id: 'outputorder', value: 'Output order' },
+];
