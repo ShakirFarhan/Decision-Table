@@ -3,25 +3,32 @@ import { MdOutlineModeEditOutline } from 'react-icons/md';
 import Popover from '@mui/material/Popover';
 import { TextField, FormControl, InputLabel, MenuItem, Select, Box } from '@mui/material';
 import { options } from './celloptions';
+import { useStore } from '../../store';
 
 interface IProps {
   onEdit: (params: any) => void;
   cellValue?: string;
   id?: any;
+  column?: any;
+  node?: any;
 }
 
-const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [editingValue, setEditingValue] = useState(cellValue);
+const CustomCell: React.FC<IProps> = (props) => {
 
+  const {
+    whenRowData,
+    editRowData,
+  } = useStore((store) => store);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [editingValue, setEditingValue] = useState(props.cellValue);
 
   const handleEdit = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = (data: any) => {
-    cellValue = editingValue
-    onEdit(data);
+    editRowData(props.node.rowIndex, props.column.colId, editingValue);
     setAnchorEl(null);
   };
 
@@ -42,7 +49,7 @@ const CustomCell: React.FC<IProps> = ({ onEdit, cellValue }) => {
     <div style={{ position: 'relative' }}>
       <div className="flex items-center justify-between h-[40px] select-none"
       >
-        <span>{cellValue}</span>
+        <span>{props.cellValue}</span>
         <button onClick={handleEdit}>
           <MdOutlineModeEditOutline className="w-[18px] h-[18px]" />
         </button>
