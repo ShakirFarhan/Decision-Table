@@ -153,7 +153,7 @@ const Table = () => {
       // resizable: true,
       sortable: true,
       filter: true,
-      editable: true,
+      editable: false,
       flex: 1,
     }),
     []

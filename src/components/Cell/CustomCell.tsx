@@ -9,30 +9,36 @@ import {
   Select,
   Box,
   Button,
+  Chip,
 } from '@mui/material';
 import { useStore } from '../../store';
 import { cellOptions } from '../../constants/data';
 
 interface IProps {
   onEdit: (params: any) => void;
-  cellValue?: string;
+  cellValue?: any;
   id?: any;
   column?: any;
   node?: any;
+  value?: any;
 }
 
 const CustomCell: React.FC<IProps> = (props) => {
-  const { whenRowData, editRowData } = useStore((store) => store);
-
+  const {editRowData } = useStore((store) => store);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [editingValue, setEditingValue] = useState(props.cellValue);
+  const [editingValue, setEditingValue] = useState(props && props.cellValue && props.cellValue.value);
+  const [selectedOption, setSelectedOption] = useState(props && props.cellValue && props.cellValue.type);
   const [hovering, setHovering] = useState(false);
   const handleEdit = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = (data: any) => {
-    editRowData(props.node.rowIndex, props.column.colId, editingValue);
+    const cellValueNew = {
+      type: selectedOption,
+      value: editingValue
+    }
+    editRowData(props.node.rowIndex, props.column.colId, cellValueNew);
     setAnchorEl(null);
   };
 
@@ -40,7 +46,6 @@ const CustomCell: React.FC<IProps> = (props) => {
     setEditingValue(event.target.value);
   };
 
-  const [selectedOption, setSelectedOption] = useState('');
 
   const handleChangeOption = (event: any) => {
     setSelectedOption(event.target.value);
@@ -56,15 +61,19 @@ const CustomCell: React.FC<IProps> = (props) => {
   const id = open ? 'popover-edit-cell' : undefined;
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Submit');
-    editRowData(props.node.rowIndex, props.column.colId, editingValue);
+    const cellValueNew = {
+      type: selectedOption,
+      value: editingValue
+    }
+    editRowData(props.node.rowIndex, props.column.colId, cellValueNew);
   };
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="flex items-center justify-between h-[40px] select-none px-3">
-        <span>{props.cellValue}</span>
+        {props && props.cellValue &&  <Chip label={props.cellValue.type}/>}
+        <span>{props && props.cellValue && props.cellValue.value}</span>
         <button onClick={handleEdit}>
-          {hovering && <img src={editIcon} className="w-[18px] h-[18px]" />}
+          {hovering && <img src={editIcon} className="w-[18px] h-[18px]" alt='' />}
         </button>
       </div>
       <Popover
