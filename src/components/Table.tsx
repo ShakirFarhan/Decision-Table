@@ -117,7 +117,7 @@ const Table = () => {
       maxWidth: 86,
       minWidth: 80,
       pinned: 'left',
-      rowDrag: true,
+      // rowDrag: true,
       headerComponent: () => (
         // Customized Column Header
         <CustomHeaderCell
@@ -322,8 +322,13 @@ const Table = () => {
           const updatedColDefs: any = [...prevData];
 
           const index = updatedColDefs.findIndex((col: any) => col.id === id);
+          const newid = uuid();
 
-          const selectedColumn = updatedColDefs[index];
+          const selectedColumn = {
+            ...updatedColDefs[index],
+            id: newid,
+            field: newid,
+          };
           updatedColDefs.push(selectedColumn);
           return updatedColDefs;
         });
