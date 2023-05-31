@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import Popover from '@mui/material/Popover';
 import editIcon from '../../assets/Edit.svg';
+import '../css/customCell.css';
 import {
   TextField,
   FormControl,
@@ -24,10 +25,14 @@ interface IProps {
 }
 
 const CustomCell: React.FC<IProps> = (props) => {
-  const {editRowData } = useStore((store) => store);
+  const { editRowData } = useStore((store) => store);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [editingValue, setEditingValue] = useState(props && props.cellValue && props.cellValue.value);
-  const [selectedOption, setSelectedOption] = useState(props && props.cellValue && props.cellValue.type);
+  const [editingValue, setEditingValue] = useState(
+    props && props.cellValue && props.cellValue.value
+  );
+  const [selectedOption, setSelectedOption] = useState(
+    props && props.cellValue && props.cellValue.type
+  );
   const [hovering, setHovering] = useState(false);
   const handleEdit = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -36,8 +41,8 @@ const CustomCell: React.FC<IProps> = (props) => {
   const handleClose = (data: any) => {
     const cellValueNew = {
       type: selectedOption,
-      value: editingValue
-    }
+      value: editingValue,
+    };
     editRowData(props.node.rowIndex, props.column.colId, cellValueNew);
     setAnchorEl(null);
   };
@@ -45,7 +50,6 @@ const CustomCell: React.FC<IProps> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditingValue(event.target.value);
   };
-
 
   const handleChangeOption = (event: any) => {
     setSelectedOption(event.target.value);
@@ -63,17 +67,21 @@ const CustomCell: React.FC<IProps> = (props) => {
     e.preventDefault();
     const cellValueNew = {
       type: selectedOption,
-      value: editingValue
-    }
+      value: editingValue,
+    };
     editRowData(props.node.rowIndex, props.column.colId, cellValueNew);
   };
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <div className="flex items-center justify-between h-[40px] select-none px-3">
-        {props && props.cellValue &&  <Chip label={props.cellValue.type}/>}
+      <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
+        <div className="rounded-0 bg-[#f5f5f5] text-[#595959] font-semibold tracking-[1px] text-[11px] h-[27px] px-2 flex items-center cellType">
+          {props && props.cellValue && <span>{props.cellValue.type}</span>}
+        </div>
         <span>{props && props.cellValue && props.cellValue.value}</span>
-        <button onClick={handleEdit}>
-          {hovering && <img src={editIcon} className="w-[18px] h-[18px]" alt='' />}
+        <button className="absolute right-4" onClick={handleEdit}>
+          {hovering && (
+            <img src={editIcon} className="w-[18px] h-[18px]" alt="" />
+          )}
         </button>
       </div>
       <Popover
