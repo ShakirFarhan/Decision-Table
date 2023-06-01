@@ -100,22 +100,40 @@ export const rowOptions = [
     header: 'Delete Rule',
   },
 ];
+// export const cellOptions = [
+//   { id: 'any', value: 'Any' },
+//   { id: 'equals', value: 'Equals' },
+//   { id: 'notEquals', value: 'Does not equal' },
+//   { id: 'greaterThan', value: 'Greater than' },
+//   { id: 'lessThan', value: 'Less than' },
+//   { id: 'greaterThanOrEqual', value: 'Greater than or equal to' },
+//   { id: 'lessThanOrEqual', value: 'Less than or equal to' },
+//   { id: 'between', value: 'Between' },
+//   { id: 'isEven', value: 'Is even' },
+//   { id: 'isOdd', value: 'Is Odd' },
+//   { id: 'isNegative', value: 'Is negative' },
+//   { id: 'isZero', value: 'Is Zero' },
+//   { id: 'isNotZero', value: 'Is not zero' },
+//   { id: 'isMultipleOf', value: 'Is a multiple of' },
+//   { id: 'isNotMultipleOf', value: 'Is not a multiple of' },
+// ];
+
 export const cellOptions = [
-  { id: 'any', value: 'Any' },
-  { id: 'equals', value: 'Equals' },
-  { id: 'notEquals', value: 'Does not equal' },
-  { id: 'greaterThan', value: 'Greater than' },
-  { id: 'lessThan', value: 'Less than' },
-  { id: 'greaterThanOrEqual', value: 'Greater than or equal to' },
-  { id: 'lessThanOrEqual', value: 'Less than or equal to' },
-  { id: 'between', value: 'Between' },
-  { id: 'isEven', value: 'Is even' },
-  { id: 'isOdd', value: 'Is Odd' },
-  { id: 'isNegative', value: 'Is negative' },
-  { id: 'isZero', value: 'Is Zero' },
-  { id: 'isNotZero', value: 'Is not zero' },
-  { id: 'isMultipleOf', value: 'Is a multiple of' },
-  { id: 'isNotMultipleOf', value: 'Is not a multiple of' },
+  { id: 'Any', value: 'Any' },
+  { id: 'Equals', value: 'Equals' },
+  { id: '≠', value: 'Does not equal' },
+  { id: '>', value: 'Greater than' },
+  { id: '<', value: 'Less than' },
+  { id: '≥', value: 'Greater than or equal to' },
+  { id: '≤', value: 'Less than or equal to' },
+  { id: 'Between', value: 'Between' },
+  { id: 'IsEven', value: 'Is even' },
+  { id: 'IsOdd', value: 'Is Odd' },
+  { id: 'IsNegative', value: 'Is negative' },
+  { id: 'IsZero', value: 'Is Zero' },
+  { id: 'IsNotZero', value: 'Is not zero' },
+  { id: 'IsMultipleOf', value: 'Is a multiple of' },
+  { id: 'IsNotMultipleOf', value: 'Is not a multiple of' },
 ];
 export const hitRatioOptions = [
   { id: 'any', value: 'Any' },
@@ -130,3 +148,10 @@ export const hitRatioOptions = [
   { id: 'ruleorder', value: 'Rule order' },
   { id: 'outputorder', value: 'Output order' },
 ];
+export function containsSpecialValue(option: string) {
+  const specialChars = ['>', '<', '≥', '≤'];
+  if (specialChars.includes(option)) {
+    return true;
+  }
+  return false;
+}
