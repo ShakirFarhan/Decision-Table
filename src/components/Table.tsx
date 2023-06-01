@@ -64,51 +64,6 @@ const Table = () => {
 
   // store when block column data
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
-    // Grouped column
-    // {
-    //   id: 'hit',
-    //   headerName: 'Hit Ratio',
-    //   headerClass: 'hit',
-    //   children: [
-    //     {
-    //       id: 'any-col',
-    //       headerName: 'Any',
-    //       field: 'any',
-    //       type: '',
-    //       maxWidth: 86,
-    //       minWidth: 80,
-    //       pinned: 'left',
-    //       // rowDrag: true,
-    //       headerComponent: () => (
-    //         // Customized Column Header
-    //         <CustomHeaderCell
-    //           label="Any"
-    //           type=""
-    //           id="any-col"
-    //           userColumn={false}
-    //           onColumnChange={handleEditCol}
-    //           handlePin={handlePin}
-    //           handleOptions={handleOptions}
-    //         />
-    //       ),
-    //       headerClass: 'column-header', // every column header has this class
-    //       cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
-    //       cellRendererParams: (params: any) => ({
-    //         // to control its behavior and appearance.
-    //         onEdit: () => {
-    //           // User defined function
-
-    //           params.api.startEditingCell({
-    //             rowIndex: params.node.rowIndex,
-    //             colKey: params.column.colId,
-    //           });
-    //         },
-    //         cellValue: params.value,
-    //       }),
-    //     },
-    //   ],
-    // },
-    // Single column
     {
       id: 'any-col',
       headerName: 'Any',

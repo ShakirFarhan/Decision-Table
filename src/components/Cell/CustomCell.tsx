@@ -70,8 +70,8 @@ const CustomCell: React.FC<IProps> = (props) => {
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="flex items-center justify-between h-[40px] select-none px-3">
-        {props && props.cellValue &&  <Chip label={props.cellValue.type}/>}
-        <span>{props && props.cellValue && props.cellValue.value}</span>
+        {props && props.cellValue && props.cellValue.type !== ""  && <Chip label={props.cellValue.type}/>}
+        <span>{props && props.cellValue && props.cellValue && props.cellValue.value}</span>
         <button onClick={handleEdit}>
           {hovering && <img src={editIcon} className="w-[18px] h-[18px]" alt='' />}
         </button>
