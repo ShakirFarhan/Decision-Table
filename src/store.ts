@@ -5,7 +5,7 @@ import { devtools } from 'zustand/middleware';
 export interface zustandStoreInterface {
   whenRowData: any[];
   whenColDefs: columnInterface[];
-  thenRowData: rowType[];
+  thenRowData: any[];
   thenColData: columnInterface[];
   pinnedColumn: any;
   setPinnedColumn: (colId: string) => void;
@@ -76,8 +76,8 @@ export const useStore = create<
           ...store.whenRowData,
           Object.fromEntries(
             whenColDeta.map((header: any, index: number) => {
-              if (header.field === 'any') {
-                return [header.field, store.whenRowData.length + 1];
+              if (header.id === 'hit') {
+                return ['any', store.whenRowData.length + 1];
               }
               return [header.field, ''];
             })
