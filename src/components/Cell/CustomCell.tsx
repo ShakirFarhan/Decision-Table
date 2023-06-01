@@ -74,9 +74,11 @@ const CustomCell: React.FC<IProps> = (props) => {
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
-        <div className="rounded-0 bg-[#f5f5f5] text-[#595959] font-semibold tracking-[1px] text-[11px] h-[27px] px-2 flex items-center cellType">
-          {props && props.cellValue && <span>{props.cellValue.type}</span>}
-        </div>
+        {props && props.cellValue && props.cellValue.type && (
+          <div className="rounded-0 bg-[#f5f5f5] text-[#595959] font-semibold tracking-[1px] text-[11px] h-[27px] px-2 flex items-center cellType">
+            <span>{props.cellValue.type}</span>
+          </div>
+        )}
         <span>{props && props.cellValue && props.cellValue.value}</span>
         <button className="absolute right-4" onClick={handleEdit}>
           {hovering && (

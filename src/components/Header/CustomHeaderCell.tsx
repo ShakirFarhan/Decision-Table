@@ -33,18 +33,18 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
           {(popupState: any) => (
             <div className="w-[100%] h-[100%] flex items-center px-3 bg-[#f5f5f5] hover:bg-[#ffff]">
               <button {...bindTrigger(popupState)} className="w-full h-full">
-                <div className="flex flex-col items-start justify-start gap-y-3 cursor-pointer">
+                <div className="flex flex-col items-start justify-start gap-y-2 cursor-pointer">
                   {!label || label === '' ? (
-                    <span className="font-semibold text-[15px] text-[#595959]">
+                    <span className="font-normal text-[13px] text-[#595959]">
                       Input
                     </span>
                   ) : (
-                    <span className="font-semibold text-[15px] text-[#595959] tracking-wider">
+                    <span className="font-normal text-[13px] text-[#595959] tracking-wide">
                       {label}
                     </span>
                   )}
 
-                  <span className="mr-2 text-[13px] font-semibold tracking-wide text-[#597EF7]">
+                  <span className="mr-2 text-[13px] font-normal tracking-wide text-[#597EF7]">
                     {type}
                   </span>
 
@@ -102,7 +102,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
             {...bindTrigger(popupState)}
             className="any-btn border-none w-full h-full outline-none flex items-center"
           >
-            <span className="text-[15px]">Any</span>
+            <span className="text-[13px] font-normal text-[#597EF7]">Any</span>
             <MdKeyboardArrowDown className="w-[18px]" />
           </button>
 
