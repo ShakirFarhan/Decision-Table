@@ -5,13 +5,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import CustomHeaderCell from './Header/CustomHeaderCell';
 import CustomCell from './Cell/CustomCell';
-import { columnInterface } from '../constants/interfaces';
+// import { columnInterface } from '../constants/interfaces';
 import uuid from 'react-uuid';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
-import DragIcon from '../assets/drag.svg';
+// import DragIcon from '../assets/drag.svg';
 import { GridOptions, RowNode } from 'ag-grid-community';
+import ButtonHeader from './Header/ButtonHeader';
 
 interface CustomGridOptions extends GridOptions {
   getRowDragIcon?: (params: { node: RowNode }) => HTMLElement;
@@ -27,123 +28,95 @@ const Table = () => {
   } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
 
-  const [thenColumnDefs, setThenColumnDefs] = useState<columnInterface[]>([
+  const [thenColumnDefs, setThenColumnDefs] = useState<any[]>([
     {
       id: '1',
-      headerName: 'Id',
-      field: 'id',
-      type: 'number',
 
-      headerComponent: () => (
-        // Customized Column Header
-        <CustomHeaderCell
-          label="Id"
-          type="number"
-          id="id"
-          userColumn={true}
-          onColumnChange={handleEditCol}
-          handlePin={handlePin}
-          handleOptions={handleOptions}
-        />
-      ),
-      headerClass: 'column-header', // every column header has this class
-      cellRendererFramework: CustomCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
-      cellRendererParams: (params: any) => ({
-        // to control its behavior and appearance.
-        onEdit: () => {
-          // User defined function
-          params.api.startEditingCell({
-            rowIndex: params.node.rowIndex,
-            colKey: params.column.colId,
-          });
+      // headerClass: 'column-header',
+      headerClass: 'ag-header-cell',
+      children: [
+        {
+          headerName: 'Id',
+          field: 'id',
+          type: 'number',
+          headerComponent: () => (
+            // Customized Column Header
+            <CustomHeaderCell
+              label="Id"
+              type="number"
+              id="id"
+              userColumn={true}
+              onColumnChange={handleEditCol}
+              handlePin={handlePin}
+              handleOptions={handleOptions}
+            />
+          ),
+          headerClass: 'column-header', // every column header has this class
+          cellRendererFramework: CustomCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
+          cellRendererParams: (params: any) => ({
+            // to control its behavior and appearance.
+            onEdit: () => {
+              // User defined function
+              params.api.startEditingCell({
+                rowIndex: params.node.rowIndex,
+                colKey: params.column.colId,
+              });
+            },
+            cellValue: params.value,
+          }),
         },
-        cellValue: params.value,
-      }),
+      ],
+      headerGroupComponent: () => (
+        <ButtonHeader name="Then" onClick={handleAddThenCol} />
+      ),
     },
   ]);
 
   // store when block column data
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
     // Grouped column
-    // {
-    //   id: 'hit',
-    //   headerName: 'Hit Ratio',
-    //   headerClass: 'hit',
-    //   children: [
-    //     {
-    //       id: 'any-col',
-    //       headerName: 'Any',
-    //       field: 'any',
-    //       type: '',
-    //       maxWidth: 86,
-    //       minWidth: 80,
-    //       pinned: 'left',
-    //       // rowDrag: true,
-    //       headerComponent: () => (
-    //         // Customized Column Header
-    //         <CustomHeaderCell
-    //           label="Any"
-    //           type=""
-    //           id="any-col"
-    //           userColumn={false}
-    //           onColumnChange={handleEditCol}
-    //           handlePin={handlePin}
-    //           handleOptions={handleOptions}
-    //         />
-    //       ),
-    //       headerClass: 'column-header', // every column header has this class
-    //       cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
-    //       cellRendererParams: (params: any) => ({
-    //         // to control its behavior and appearance.
-    //         onEdit: () => {
-    //           // User defined function
-
-    //           params.api.startEditingCell({
-    //             rowIndex: params.node.rowIndex,
-    //             colKey: params.column.colId,
-    //           });
-    //         },
-    //         cellValue: params.value,
-    //       }),
-    //     },
-    //   ],
-    // },
-    // Single column
     {
-      id: 'any-col',
-      headerName: 'Any',
-      field: 'any',
-      type: '',
-      maxWidth: 86,
-      minWidth: 80,
-      pinned: 'left',
-      // rowDrag: true,
-      headerComponent: () => (
-        // Customized Column Header
-        <CustomHeaderCell
-          label="Any"
-          type=""
-          id="any-col"
-          userColumn={false}
-          onColumnChange={handleEditCol}
-          handlePin={handlePin}
-          handleOptions={handleOptions}
-        />
-      ),
-      headerClass: 'column-header', // every column header has this class
-      cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
-      cellRendererParams: (params: any) => ({
-        // to control its behavior and appearance.
-        onEdit: () => {
-          // User defined function
+      id: 'hit',
+      headerName: 'Hit Ratio',
+      headerClass: 'top-column-header',
+      children: [
+        {
+          id: 'any-col',
+          headerName: 'Any',
+          field: 'any',
+          type: '',
+          maxWidth: 86,
+          minWidth: 80,
+          pinned: 'left',
+          // rowDrag: true,
+          headerComponent: () => (
+            // Customized Column Header
+            <CustomHeaderCell
+              label="Any"
+              type=""
+              id="any-col"
+              userColumn={false}
+              onColumnChange={handleEditCol}
+              handlePin={handlePin}
+              handleOptions={handleOptions}
+            />
+          ),
+          headerClass: 'column-header', // every column header has this class
+          cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
+          cellRendererParams: (params: any) => ({
+            // to control its behavior and appearance.
+            onEdit: () => {
+              // User defined function
 
-          params.api.startEditingCell({
-            rowIndex: params.node.rowIndex,
-            colKey: params.column.colId,
-          });
+              params.api.startEditingCell({
+                rowIndex: params.node.rowIndex,
+                colKey: params.column.colId,
+              });
+            },
+            cellValue: params.value,
+          }),
         },
-        cellValue: params.value,
-      }),
+      ],
     },
   ]);
 
@@ -340,6 +313,7 @@ const Table = () => {
   const handleCellValueChanged = (params: any) => {
     params.api.stopEditing();
   };
+
   const gridOptions: CustomGridOptions = {
     // Other grid options...
     getRowDragIcon: (params) => {
@@ -413,6 +387,8 @@ const Table = () => {
             onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
             rowDragManaged={true}
             animateRows={true}
+            groupHeaderHeight={42}
+            headerHeight={65}
           />
         </div>
         <div className="flex-1 h-[270px]">
@@ -428,6 +404,8 @@ const Table = () => {
             columnDefs={thenColumnDefs}
             defaultColDef={defaultColDef}
             className="ag-theme-alpine"
+            groupHeaderHeight={42}
+            headerHeight={65}
           />
         </div>
       </div>
