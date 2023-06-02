@@ -73,12 +73,14 @@ const Table = () => {
   ]);
 
   // store when block column data
+  const firstIndex = uuid()
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
     // Grouped column
     {
       id: 'hit',
       headerName: 'Hit Ratio',
       headerClass: 'top-column-header',
+      
       children: [
         {
           id: 'any-col',
@@ -118,7 +120,50 @@ const Table = () => {
         },
       ],
     },
+    {
+      id: 'input',
+      headerClass: 'top-column-header',
+      children: [
+        {
+          id: firstIndex,
+          headerName: '',
+          field: firstIndex,
+          type: '',
+          sortable: true,
+          // rowDrag: true,
+          headerComponent: () => (
+            <CustomHeaderCell
+              label=""
+              type=""
+              id={firstIndex}
+              userColumn={true}
+              onColumnChange={handleEditCol}
+              handlePin={handlePin}
+              handleOptions={handleOptions}
+            />
+          ),
+          cellRendererFramework: CustomCell,
+          cellRendererParams: (params: any) => ({
+            onEdit: () => {
+              params.api.startEditingCell({
+                rowIndex: params.node.rowIndex,
+                colKey: params.column.colId,
+              });
+            },
+            cellValue: params.value,
+          }),
+          headerClass: 'column-header',
+        }
+      ],
+      headerGroupComponent: () => (
+        <ButtonHeader name="When" onClick={handleAddWhenCol} />
+      )
+    }
+
   ]);
+
+
+  console.log({whenColumnDefs})
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
@@ -217,15 +262,54 @@ const Table = () => {
     newHeaderName: string, // new header name provided by the user
     newTypeName: string // new type ex: string,number...
   ) => {
+
     if (colId) {
       setWhenColumnDefs((data: any) => {
+        console.log({ colId })
         const updatedColumnDefs = [...data];
-        const index = updatedColumnDefs.findIndex((col) => col.id === colId);
-        if (index !== -1) {
+        console.log({updatedColumnDefs})
+        const index1 = updatedColumnDefs.findIndex((col) => col.id === colId);
+        const index2 = updatedColumnDefs.find((col) => col.children.findIndex((col2: { id: string; }) => col2.id === colId));
+        console.log(index1)
+        console.log({index2})
+        if (index1 !== -1) {
           const existingCellRendererParams =
-            updatedColumnDefs[index].cellRendererParams;
-          updatedColumnDefs[index] = {
-            ...updatedColumnDefs[index],
+            updatedColumnDefs[index1].cellRendererParams;
+
+          console.log(existingCellRendererParams);
+          updatedColumnDefs[index1] = {
+            ...updatedColumnDefs[index1],
+            headerName: newHeaderName,
+            type: newTypeName,
+            headerComponent: () => (
+              <CustomHeaderCell
+                label={newHeaderName}
+                type={newTypeName}
+                id={colId}
+                userColumn={true}
+                onColumnChange={handleEditCol}
+                handlePin={handlePin}
+                handleOptions={handleOptions}
+              />
+            ),
+            cellRendererParams: (params: any) => ({
+              ...existingCellRendererParams(params),
+              onEdit: () => {
+                params.api.startEditingCell({
+                  rowIndex: params.node.rowIndex,
+                  colKey: params.column.colId,
+                });
+              },
+            }),
+          };
+        }else if(index2 !== -1){
+          const existingCellRendererParams =
+            updatedColumnDefs.find(col => col.children[index2]);
+          console.log({ col: existingCellRendererParams })
+
+          console.log(existingCellRendererParams);
+          updatedColumnDefs[index1] = {
+            ...updatedColumnDefs[index1],
             headerName: newHeaderName,
             type: newTypeName,
             headerComponent: () => (
@@ -369,13 +453,13 @@ const Table = () => {
     <div className="flex flex-col">
       <div className="scroll-wrapper w-full flex ">
         <div className="flex-1 h-[270px] ">
-          <div className="flex items-center gap-x-[5.5px] mb-[10px]">
+          {/* <div className="flex items-center gap-x-[5.5px] mb-[10px]">
             <span className="text-[15.7px] tracking-wide">When</span>
             <AiFillPlusCircle
               onClick={handleAddWhenCol}
               className="fill-[grey] hover:cursor-pointer"
             />
-          </div>
+          </div> */}
           <AgGridReact
             ref={gridRef}
             rowData={whenRowData}
@@ -392,13 +476,13 @@ const Table = () => {
           />
         </div>
         <div className="flex-1 h-[270px]">
-          <div className="flex items-center gap-x-[5.5px] mb-[10px]">
+          {/* <div className="flex items-center gap-x-[5.5px] mb-[10px]">
             <span className="text-[15.7px] tracking-wide">Then</span>
             <AiFillPlusCircle
               onClick={handleAddThenCol}
               className="fill-[grey] hover:cursor-pointer"
             />
-          </div>
+          </div> */}
           <AgGridReact
             rowData={thenRowData}
             columnDefs={thenColumnDefs}
