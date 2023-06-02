@@ -24,7 +24,11 @@ export const useStore = create<
 >(
   devtools((set) => ({
     whenColDefs: [],
-    whenRowData: [],
+    whenRowData: [
+      {
+        button: 'Add Rule',
+      },
+    ],
     thenColData: [],
     thenRowData: [],
     pinnedColumn: null,
@@ -71,25 +75,34 @@ export const useStore = create<
         return { whenRowData: updatedRowData };
       }),
     addRow: (whenColDeta, thenColData) =>
-      set((store) => ({
-        whenRowData: [
-          ...store.whenRowData,
-          Object.fromEntries(
-            whenColDeta.map((header: any, index: number) => {
-              if (header.id === 'hit') {
-                return ['any', store.whenRowData.length + 1];
-              }
-              return [header.field, ''];
-            })
-          ),
-        ],
-        thenRowData: [
-          ...store.thenRowData,
-          Object.fromEntries(
-            thenColData.map((header: any) => [header.field, ''])
-          ),
-        ],
-      })),
+      set((store) => {
+        const newWhenRowData = [...store.whenRowData];
+        const newThenRowData = [...store.thenRowData];
+
+        const newRowData = Object.fromEntries(
+          whenColDeta.map((header: any, index: number) => {
+            if (header.id === 'hit') {
+              return ['any', store.whenRowData.length];
+            }
+            return [header.field, ''];
+          })
+        );
+
+        // Inserting the new row at the second-to-last position
+        newWhenRowData.splice(newWhenRowData.length - 1, 0, newRowData);
+
+        const newThenRow = Object.fromEntries(
+          thenColData.map((header: any) => [header.field, ''])
+        );
+
+        newThenRowData.push(newThenRow);
+
+        return {
+          ...store,
+          whenRowData: newWhenRowData,
+          thenRowData: newThenRowData,
+        };
+      }),
     editWhenCol: (updatedDef) =>
       set(
         (store) => ({
