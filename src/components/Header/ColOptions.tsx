@@ -45,7 +45,6 @@ function ColOptions({ handleOptions, id }: colInterface) {
                     <p
                       className="text-[12px] m-0 px-[7px] py-[5px] hover:bg-[antiquewhite] cursor-pointer"
                       onClick={() => {
-                        console.log('pressed');
                         handleOptions(id, data.key);
                         // setOpen(false);
                       }}

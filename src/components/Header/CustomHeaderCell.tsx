@@ -41,7 +41,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
       <PopupState variant="popover" popupId="demo-popup-popover">
         {(popupState: any) => (
           <div
-            className="w-[100%] h-[100%] border-r-[0.5px] border-l-[0.1px] border-y-2 border-[#e7e7e7] hover:border-[1.5px] hover:border-[#597EF7] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[#ffff]"
+            className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[#e7e7e7] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[#597EF7] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[#ffff]"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -113,7 +113,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
     // <div className="h-full w-full">
     <PopupState variant="popover" popupId="demo-popup-popover">
       {(popupState: any) => (
-        <div className="w-[100%] h-[100%] border-r-[0px] border-l-[0.1px] border-y-2 border-[#e7e7e7] hover:border-[1.5px] hover:border-[#597EF7] flex items-center pl-4 bg-[#f5f5f5] hover:bg-[#ffff]">
+        <div className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[#e7e7e7] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[#597EF7] flex items-center pl-5 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[#ffff]">
           <button
             {...bindTrigger(popupState)}
             className="any-btn border-none w-full h-full outline-none flex items-center"

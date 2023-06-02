@@ -5,7 +5,12 @@ type props = {
 };
 function ButtonHeader({ name, onClick }: props) {
   return (
-    <div onClick={onClick} className="w-full h-full pt-[10px] pl-3">
+    <div
+      onClick={onClick}
+      className={`w-full h-full pt-[10px] ${
+        name === 'When' ? '-pl-3' : 'pl-0'
+      }`}
+    >
       <div className="flex items-center gap-x-[5.5px] mb-[10px]">
         <span className="text-[14px] font-semibold tracking-wide text-[#595959]">
           {name}
