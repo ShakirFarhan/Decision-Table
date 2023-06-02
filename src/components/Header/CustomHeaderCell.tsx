@@ -20,18 +20,31 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   handleOptions,
 }) => {
   const [pinned, setPinned] = useState(true);
+  const [hover, setHover] = useState(false);
   const handlePinning = () => {
     setPinned((data) => {
       return !data;
     });
     handlePin(id);
   };
+
+  const handleMouseEnter = () => {
+    setHover(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHover(false);
+  };
   if (userColumn) {
     return (
       // <div className="h-full w-full">
       <PopupState variant="popover" popupId="demo-popup-popover">
         {(popupState: any) => (
-          <div className="w-[100%] h-[100%] border-r-[0.5px] border-l-[0.1px] border-y-2 border-[#e7e7e7] hover:border-[1.5px] hover:border-[#597EF7] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[#ffff]">
+          <div
+            className="w-[100%] h-[100%] border-r-[0.5px] border-l-[0.1px] border-y-2 border-[#e7e7e7] hover:border-[1.5px] hover:border-[#597EF7] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[#ffff]"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             <button {...bindTrigger(popupState)} className="w-full h-full">
               <div className="flex flex-col items-start justify-start gap-y-2 cursor-pointer">
                 {!label || label === '' ? (
@@ -52,20 +65,22 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
               </div>
             </button>
 
-            <div className="absolute top-[6px] right-[5px] flex items-center gap-x-[7.5px] z-[99999]">
-              <RxHamburgerMenu className="h-[17px] w-[14px]" />
-              <BsPinAngleFill
-                onClick={handlePinning}
-                className={
-                  pinned
-                    ? 'h-[13.5px] w-[15px] fill-[grey]'
-                    : 'h-[13.5px] w-[15px] fill-[#2f54eb]'
-                }
-              />
-              {id !== 'id' ? (
-                <ColOptions handleOptions={handleOptions} id={id} />
-              ) : null}
-            </div>
+            {hover && label && (
+              <div className="absolute top-[6px] right-[5px] flex items-center gap-x-[7.5px] z-[99999]">
+                <RxHamburgerMenu className="h-[17px] w-[14px]" />
+                <BsPinAngleFill
+                  onClick={handlePinning}
+                  className={
+                    pinned
+                      ? 'h-[13.5px] w-[15px] fill-[grey]'
+                      : 'h-[13.5px] w-[15px] fill-[#2f54eb]'
+                  }
+                />
+                {id !== 'id' ? (
+                  <ColOptions handleOptions={handleOptions} id={id} />
+                ) : null}
+              </div>
+            )}
 
             <Popover
               {...bindPopover(popupState)}

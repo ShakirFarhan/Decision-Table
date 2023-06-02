@@ -23,7 +23,6 @@ const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
   const handleMouseLeave = () => {
     setHovering(false);
   };
-  // const handleClickSettings = () => {};
   return (
     <>
       <div
