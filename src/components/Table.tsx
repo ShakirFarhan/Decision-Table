@@ -7,12 +7,12 @@ import CustomHeaderCell from './Header/CustomHeaderCell';
 import CustomCell from './Cell/CustomCell';
 // import { columnInterface } from '../constants/interfaces';
 import uuid from 'react-uuid';
-import { AiFillPlusCircle } from 'react-icons/ai';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 // import DragIcon from '../assets/drag.svg';
 import { GridOptions, RowNode } from 'ag-grid-community';
 import ButtonHeader from './Header/ButtonHeader';
+import { AiFillPlusCircle } from 'react-icons/ai';
 
 interface CustomGridOptions extends GridOptions {
   getRowDragIcon?: (params: { node: RowNode }) => HTMLElement;
@@ -73,7 +73,7 @@ const Table = () => {
   ]);
 
   // store when block column data
-  const firstIndex = uuid()
+  // const firstIndex = uuid()
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
     // Grouped column
     {
@@ -120,50 +120,49 @@ const Table = () => {
         },
       ],
     },
-    {
-      id: 'input',
-      headerClass: 'top-column-header',
-      children: [
-        {
-          id: firstIndex,
-          headerName: '',
-          field: firstIndex,
-          type: '',
-          sortable: true,
-          // rowDrag: true,
-          headerComponent: () => (
-            <CustomHeaderCell
-              label=""
-              type=""
-              id={firstIndex}
-              userColumn={true}
-              onColumnChange={handleEditCol}
-              handlePin={handlePin}
-              handleOptions={handleOptions}
-            />
-          ),
-          cellRendererFramework: CustomCell,
-          cellRendererParams: (params: any) => ({
-            onEdit: () => {
-              params.api.startEditingCell({
-                rowIndex: params.node.rowIndex,
-                colKey: params.column.colId,
-              });
-            },
-            cellValue: params.value,
-          }),
-          headerClass: 'column-header',
-        }
-      ],
-      headerGroupComponent: () => (
-        <ButtonHeader name="When" onClick={handleAddWhenCol} />
-      )
-    }
+    // {
+    //   id: 'input',
+    //   headerClass: 'top-column-header',
+    //   children: [
+    //     {
+    //       id: firstIndex,
+    //       headerName: '',
+    //       field: firstIndex,
+    //       type: '',
+    //       sortable: true,
+    //       // rowDrag: true,
+    //       headerComponent: () => (
+    //         <CustomHeaderCell
+    //           label=""
+    //           type=""
+    //           id={firstIndex}
+    //           userColumn={true}
+    //           onColumnChange={handleEditCol}
+    //           handlePin={handlePin}
+    //           handleOptions={handleOptions}
+    //         />
+    //       ),
+    //       cellRendererFramework: CustomCell,
+    //       cellRendererParams: (params: any) => ({
+    //         onEdit: () => {
+    //           params.api.startEditingCell({
+    //             rowIndex: params.node.rowIndex,
+    //             colKey: params.column.colId,
+    //           });
+    //         },
+    //         cellValue: params.value,
+    //       }),
+    //       headerClass: 'column-header',
+    //     }
+    //   ],
+    //   headerGroupComponent: () => (
+    //     <ButtonHeader name="When" onClick={handleAddWhenCol} />
+    //   )
+    // }
 
   ]);
 
 
-  console.log({whenColumnDefs})
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
@@ -451,15 +450,15 @@ const Table = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="scroll-wrapper w-full flex ">
+      <div className="scroll-wrapper w-full flex">
         <div className="flex-1 h-[270px] ">
-          {/* <div className="flex items-center gap-x-[5.5px] mb-[10px]">
+          <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-2 left-[6rem]">
             <span className="text-[15.7px] tracking-wide">When</span>
             <AiFillPlusCircle
               onClick={handleAddWhenCol}
               className="fill-[grey] hover:cursor-pointer"
             />
-          </div> */}
+          </div>
           <AgGridReact
             ref={gridRef}
             rowData={whenRowData}
