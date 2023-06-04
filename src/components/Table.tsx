@@ -10,6 +10,7 @@ import uuid from 'react-uuid';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
+import { AiFillPlusCircle } from 'react-icons/ai';
 
 const Table = () => {
   const {
@@ -66,7 +67,9 @@ const Table = () => {
   ]);
 
   // store when block column data
-  const firstIndex = uuid();
+
+  // const firstIndex = uuid()
+
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
     // Grouped column
     {
@@ -114,50 +117,50 @@ const Table = () => {
         },
       ],
     },
-    {
-      id: 'input',
-      // lockPosition: 'left',
-      // headerClass: 'top-column-header',
-      children: [
-        {
-          id: firstIndex,
-          headerName: '',
-          field: firstIndex,
-          type: '',
-          sortable: true,
 
-          // rowDrag: true,
-          headerComponent: () => (
-            <CustomHeaderCell
-              label=""
-              type=""
-              id={firstIndex}
-              userColumn={true}
-              onColumnChange={handleEditCol}
-              handlePin={handlePin}
-              handleOptions={handleOptions}
-            />
-          ),
-          cellRendererFramework: CustomCell,
-          cellRendererParams: (params: any) => ({
-            onEdit: () => {
-              params.api.startEditingCell({
-                rowIndex: params.node.rowIndex,
-                colKey: params.column.colId,
-              });
-            },
-            cellValue: params.value,
-            id: 'first-col',
-            handleAddRow: handleAddRow,
-          }),
-          headerClass: 'column-header',
-        },
-      ],
-      headerGroupComponent: () => (
-        <ButtonHeader name="When" onClick={handleAddWhenCol} />
-      ),
-    },
+    // {
+    //   id: 'input',
+    //   headerClass: 'top-column-header',
+    //   children: [
+    //     {
+    //       id: firstIndex,
+    //       headerName: '',
+    //       field: firstIndex,
+    //       type: '',
+    //       sortable: true,
+    //       // rowDrag: true,
+    //       headerComponent: () => (
+    //         <CustomHeaderCell
+    //           label=""
+    //           type=""
+    //           id={firstIndex}
+    //           userColumn={true}
+    //           onColumnChange={handleEditCol}
+    //           handlePin={handlePin}
+    //           handleOptions={handleOptions}
+    //         />
+    //       ),
+    //       cellRendererFramework: CustomCell,
+    //       cellRendererParams: (params: any) => ({
+    //         onEdit: () => {
+    //           params.api.startEditingCell({
+    //             rowIndex: params.node.rowIndex,
+    //             colKey: params.column.colId,
+    //           });
+    //         },
+    //         cellValue: params.value,
+    //       }),
+    //       headerClass: 'column-header',
+    //     }
+    //   ],
+    //   headerGroupComponent: () => (
+    //     <ButtonHeader name="When" onClick={handleAddWhenCol} />
+    //   )
+    // }
+
   ]);
+
+
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
@@ -428,6 +431,7 @@ const Table = () => {
   }, [whenColumnDefs.length]);
 
   return (
+
     <div className="flex flex-col h-full">
       <div className="scroll-wrapper w-fit flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
         <div className="flex-1 h-full">
