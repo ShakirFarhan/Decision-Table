@@ -34,12 +34,20 @@ export const useStore = create<
     pinnedColumn: null,
 
     duplicateRule: (id) =>
-      set((store) => ({
-        whenRowData: [
-          ...store.whenRowData,
-          { ...store.whenRowData[id - 1], any: store.whenRowData.length + 1 },
-        ],
-      })),
+      set((store) => {
+        const whenRowData = [...store.whenRowData];
+        const duplicatedRow = {
+          ...whenRowData[id - 1],
+          any: store.whenRowData.length,
+        };
+        whenRowData.splice(whenRowData.length - 1, 0, duplicatedRow);
+
+        return {
+          ...store,
+          whenRowData,
+        };
+      }),
+
     clearRule: (id) =>
       set((store) => ({
         whenRowData: store.whenRowData.map((data) => {

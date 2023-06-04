@@ -157,10 +157,7 @@ const Table = () => {
     //     <ButtonHeader name="When" onClick={handleAddWhenCol} />
     //   )
     // }
-
   ]);
-
-
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
@@ -245,6 +242,8 @@ const Table = () => {
               });
             },
             cellValue: params.value,
+            id: whenColumnDefs.length === 1 ? 'first-col' : '',
+            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
           }),
           headerClass: 'column-header',
         },
@@ -358,10 +357,31 @@ const Table = () => {
     (id: string, selectedOption: string): void => {
       if (selectedOption.includes('remove')) {
         setWhenColumnDefs((prevData) => {
-          const updatedData = prevData.filter((col) => {
-            return col.id !== id;
-          });
-          return updatedData;
+          const updatedCols = [...prevData];
+          const selectedCol = updatedCols.findIndex((col) => col.id === id);
+
+          let filteredCols: any;
+          // if (updatedCols.length >= 3) {
+          if (selectedCol === 1) {
+            updatedCols[2] = {
+              ...updatedCols[2],
+              cellRendererParams: (params: any) => ({
+                onEdit: () => {
+                  params.api.startEditingCell({
+                    rowIndex: params.node.rowIndex,
+                    colKey: params.column.colId,
+                  });
+                },
+                cellValue: params.value,
+                id: 'first-col',
+                handleAddRow: handleAddRow,
+              }),
+            };
+          }
+          filteredCols = updatedCols.filter((col) => col.id !== id);
+          // }
+
+          return filteredCols;
         });
       } else if (selectedOption.includes('a-z')) {
         gridRef.current?.columnApi?.applyColumnState({
@@ -391,7 +411,7 @@ const Table = () => {
         });
       }
     },
-    []
+    [whenColumnDefs]
   );
 
   const handleCellValueChanged = (params: any) => {
@@ -431,7 +451,6 @@ const Table = () => {
   }, [whenColumnDefs.length]);
 
   return (
-
     <div className="flex flex-col h-full">
       <div className="scroll-wrapper w-fit flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
         <div className="flex-1 h-full">
