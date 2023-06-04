@@ -435,6 +435,13 @@ const Table = () => {
     <div className="flex flex-col h-full">
       <div className="scroll-wrapper w-fit flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
         <div className="flex-1 h-full">
+          <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-7 left-[6rem]">
+            <span className="text-[15.7px] tracking-wide">When</span>
+            <AiFillPlusCircle
+              onClick={handleAddWhenCol}
+              className="fill-[grey] hover:cursor-pointer"
+            />
+          </div>
           <AgGridReact
             ref={gridRef}
             rowData={whenRowData}
