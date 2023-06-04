@@ -9,14 +9,9 @@ import CustomCell from './Cell/CustomCell';
 import uuid from 'react-uuid';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
-// import DragIcon from '../assets/drag.svg';
-import { GridOptions, RowNode } from 'ag-grid-community';
 import ButtonHeader from './Header/ButtonHeader';
 import { AiFillPlusCircle } from 'react-icons/ai';
 
-interface CustomGridOptions extends GridOptions {
-  getRowDragIcon?: (params: { node: RowNode }) => HTMLElement;
-}
 const Table = () => {
   const {
     addRow,
@@ -31,7 +26,6 @@ const Table = () => {
   const [thenColumnDefs, setThenColumnDefs] = useState<any[]>([
     {
       id: '1',
-
       // headerClass: 'column-header',
       headerClass: 'ag-header-cell',
       children: [
@@ -73,14 +67,16 @@ const Table = () => {
   ]);
 
   // store when block column data
+
   // const firstIndex = uuid()
+
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
     // Grouped column
     {
       id: 'hit',
       headerName: 'Hit Ratio',
       headerClass: 'top-column-header',
-      
+
       children: [
         {
           id: 'any-col',
@@ -90,6 +86,7 @@ const Table = () => {
           maxWidth: 86,
           minWidth: 80,
           pinned: 'left',
+          lockPosition: 'left',
           // rowDrag: true,
           headerComponent: () => (
             // Customized Column Header
@@ -120,6 +117,7 @@ const Table = () => {
         },
       ],
     },
+
     // {
     //   id: 'input',
     //   headerClass: 'top-column-header',
@@ -254,28 +252,28 @@ const Table = () => {
       return updated;
     });
   };
-
+  const handleAddRow = () => {
+    addRow(whenColumnDefs, thenColumnDefs);
+  };
   // Function used when we want to edit the details of column header
   const handleEditCol = (
     colId: string, // id of the selected column
     newHeaderName: string, // new header name provided by the user
     newTypeName: string // new type ex: string,number...
   ) => {
-
     if (colId) {
       setWhenColumnDefs((data: any) => {
-        console.log({ colId })
         const updatedColumnDefs = [...data];
-        console.log({updatedColumnDefs})
+
         const index1 = updatedColumnDefs.findIndex((col) => col.id === colId);
-        const index2 = updatedColumnDefs.find((col) => col.children.findIndex((col2: { id: string; }) => col2.id === colId));
-        console.log(index1)
-        console.log({index2})
+        const index2 = updatedColumnDefs.find((col) =>
+          col.children.findIndex((col2: { id: string }) => col2.id === colId)
+        );
+
         if (index1 !== -1) {
           const existingCellRendererParams =
             updatedColumnDefs[index1].cellRendererParams;
 
-          console.log(existingCellRendererParams);
           updatedColumnDefs[index1] = {
             ...updatedColumnDefs[index1],
             headerName: newHeaderName,
@@ -301,12 +299,11 @@ const Table = () => {
               },
             }),
           };
-        }else if(index2 !== -1){
-          const existingCellRendererParams =
-            updatedColumnDefs.find(col => col.children[index2]);
-          console.log({ col: existingCellRendererParams })
+        } else if (index2 !== -1) {
+          const existingCellRendererParams = updatedColumnDefs.find(
+            (col) => col.children[index2]
+          );
 
-          console.log(existingCellRendererParams);
           updatedColumnDefs[index1] = {
             ...updatedColumnDefs[index1],
             headerName: newHeaderName,
@@ -351,6 +348,10 @@ const Table = () => {
 
       return updatedColumnDefs;
     });
+  };
+  const gridOptions = {
+    // other grid options...
+    suppressDragLeaveHidesColumns: true,
   };
 
   const handleOptions = useCallback(
@@ -397,28 +398,9 @@ const Table = () => {
     params.api.stopEditing();
   };
 
-  const gridOptions: CustomGridOptions = {
-    // Other grid options...
-    getRowDragIcon: (params) => {
-      // Create a custom icon element using FontAwesome
-      const iconElement = document.createElement('span');
-      const icon = document.createElement('i');
-      icon.classList.add('fa');
-      icon.classList.add('fa-arrows-alt');
-      iconElement.appendChild(icon);
-
-      // Return the custom icon element
-      return iconElement;
-    },
-  };
-  useEffect(() => {
-    console.log(whenColDefs);
-  }, [whenColDefs]);
-
   useEffect(() => {
     window.addEventListener('error', (e) => {
       if (e.message === 'ResizeObserver loop limit exceeded') {
-        console.log('catch');
         const resizeObserverErrDiv = document.getElementById(
           'webpack-dev-server-client-overlay-div'
         );
@@ -449,16 +431,10 @@ const Table = () => {
   }, [whenColumnDefs.length]);
 
   return (
-    <div className="flex flex-col">
-      <div className="scroll-wrapper w-full flex">
-        <div className="flex-1 h-[270px] ">
-          <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-2 left-[6rem]">
-            <span className="text-[15.7px] tracking-wide">When</span>
-            <AiFillPlusCircle
-              onClick={handleAddWhenCol}
-              className="fill-[grey] hover:cursor-pointer"
-            />
-          </div>
+
+    <div className="flex flex-col h-full">
+      <div className="scroll-wrapper w-fit flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
+        <div className="flex-1 h-full">
           <AgGridReact
             ref={gridRef}
             rowData={whenRowData}
@@ -474,14 +450,7 @@ const Table = () => {
             headerHeight={65}
           />
         </div>
-        <div className="flex-1 h-[270px]">
-          {/* <div className="flex items-center gap-x-[5.5px] mb-[10px]">
-            <span className="text-[15.7px] tracking-wide">Then</span>
-            <AiFillPlusCircle
-              onClick={handleAddThenCol}
-              className="fill-[grey] hover:cursor-pointer"
-            />
-          </div> */}
+        <div className="flex-1 h-full">
           <AgGridReact
             rowData={thenRowData}
             columnDefs={thenColumnDefs}
@@ -492,14 +461,6 @@ const Table = () => {
           />
         </div>
       </div>
-      <button
-        className=" w-[70px] mx-3 mt-12"
-        onClick={() => {
-          addRow(whenColumnDefs, thenColumnDefs);
-        }}
-      >
-        Add Rule
-      </button>
     </div>
   );
 };
