@@ -13,7 +13,6 @@ import {
   Button,
   Chip,
 } from '@mui/material';
-import PlusIcon from '../../assets/plus-icon.svg';
 import { useStore } from '../../store';
 import { cellOptions, containsSpecialValue } from '../../constants/data';
 
