@@ -12,6 +12,7 @@ import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
 import { AiFillPlusCircle } from 'react-icons/ai';
 
+
 const Table = () => {
   const {
     addRow,
@@ -162,14 +163,24 @@ const Table = () => {
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
     () => ({
+      enableRowGroup: true,
+      enableValue: true,
+      enablePivot: true,
+      width:200,
       // resizable: true,
       sortable: true,
       filter: true,
       editable: false,
       flex: 1,
+      minWidth: 250,
     }),
     []
   );
+
+
+  const isFullWidthRow = useCallback((params: any) => {
+    return params.rowNode.data.fullWidth;
+  }, []);
 
   // Function used to add columns in then block
   const handleAddThenCol = (): void => {
@@ -450,10 +461,12 @@ const Table = () => {
     }
   }, [whenColumnDefs.length]);
 
+  
+
   return (
     <div className="flex flex-col h-full">
       <div className="scroll-wrapper w-fit flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
-        <div className="flex-1 h-full">
+        <div className="flex-1 h-full ag-theme-alpine">
           <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-7 left-[6rem]">
             <span className="text-[15.7px] tracking-wide">When</span>
             <AiFillPlusCircle
@@ -471,9 +484,11 @@ const Table = () => {
             gridOptions={gridOptions}
             onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
             rowDragManaged={true}
+            // domLayout={'autoHeight'}
             animateRows={true}
             groupHeaderHeight={42}
             headerHeight={65}
+            isFullWidthRow={isFullWidthRow}
           />
         </div>
         <div className="flex-1 h-full">
@@ -483,6 +498,7 @@ const Table = () => {
             defaultColDef={defaultColDef}
             className="ag-theme-alpine"
             groupHeaderHeight={42}
+            // domLayout={'autoHeight'}
             headerHeight={65}
           />
         </div>

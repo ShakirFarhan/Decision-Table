@@ -11,7 +11,6 @@ import {
   Select,
   Box,
   Button,
-  Chip,
 } from '@mui/material';
 import { useStore } from '../../store';
 import { cellOptions, containsSpecialValue } from '../../constants/data';
