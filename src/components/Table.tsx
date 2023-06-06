@@ -11,6 +11,7 @@ import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { BsPlusCircleFill } from 'react-icons/bs';
 
 
 const Table = () => {
@@ -77,15 +78,14 @@ const Table = () => {
       id: 'hit',
       headerName: 'Hit Ratio',
       headerClass: 'top-column-header',
-
       children: [
         {
           id: 'any-col',
           headerName: 'Any',
           field: 'any',
           type: '',
-          maxWidth: 86,
-          minWidth: 80,
+          maxWidth: 106,
+          minWidth: 100,
           pinned: 'left',
           lockPosition: 'left',
           // rowDrag: true,
@@ -113,6 +113,8 @@ const Table = () => {
                 colKey: params.column.colId,
               });
             },
+            id: whenColumnDefs.length === 1 ? 'first-col' : '',
+            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
             cellValue: params.value,
           }),
         },
@@ -232,6 +234,8 @@ const Table = () => {
           field: newIndex,
           type: '',
           sortable: true,
+          // maxWidth: 250,
+          // minWidth: 80,
           // rowDrag: true,
           headerComponent: () => (
             <CustomHeaderCell
@@ -246,6 +250,7 @@ const Table = () => {
           ),
           cellRendererFramework: CustomCell,
           cellRendererParams: (params: any) => ({
+
             onEdit: () => {
               params.api.startEditingCell({
                 rowIndex: params.node.rowIndex,
@@ -253,8 +258,6 @@ const Table = () => {
               });
             },
             cellValue: params.value,
-            id: whenColumnDefs.length === 1 ? 'first-col' : '',
-            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
           }),
           headerClass: 'column-header',
         },
@@ -262,6 +265,7 @@ const Table = () => {
       return updated;
     });
   };
+
   const handleAddRow = () => {
     addRow(whenColumnDefs, thenColumnDefs);
   };
@@ -466,8 +470,8 @@ const Table = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="scroll-wrapper w-fit flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
-        <div className="flex-1 h-full ag-theme-alpine">
-          <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-7 left-[6rem]">
+        <div className="flex-1 h-[50vh]">
+          <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-7 left-[7rem]">
             <span className="text-[15.7px] tracking-wide">When</span>
             <AiFillPlusCircle
               onClick={handleAddWhenCol}
@@ -491,13 +495,14 @@ const Table = () => {
             isFullWidthRow={isFullWidthRow}
           />
         </div>
-        <div className="flex-1 h-full">
+        <div className="flex-1 h-[50vh]">
           <AgGridReact
             rowData={thenRowData}
             columnDefs={thenColumnDefs}
             defaultColDef={defaultColDef}
             className="ag-theme-alpine"
             groupHeaderHeight={42}
+            
             // domLayout={'autoHeight'}
             headerHeight={65}
           />
