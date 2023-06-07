@@ -25,6 +25,7 @@ const Table = () => {
   } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
 
+
   const [thenColumnDefs, setThenColumnDefs] = useState<any[]>([
     {
       id: '1',
@@ -194,6 +195,7 @@ const Table = () => {
         headerName: 'default',
         field: 'default',
         type: 'any',
+        
         headerComponent: () => (
           <CustomHeaderCell
             label="Default"
@@ -235,7 +237,7 @@ const Table = () => {
           type: '',
           sortable: true,
           // maxWidth: 250,
-          // minWidth: 80,
+          // minWidth: 250,
           // rowDrag: true,
           headerComponent: () => (
             <CustomHeaderCell
@@ -469,9 +471,9 @@ const Table = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="scroll-wrapper w-fit flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
+      <div className="scroll-wrapper flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
         <div className="flex-1 h-[50vh]">
-          <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-7 left-[7rem]">
+          <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-7 left-[7rem] select-none">
             <span className="text-[15.7px] tracking-wide">When</span>
             <AiFillPlusCircle
               onClick={handleAddWhenCol}
@@ -479,12 +481,13 @@ const Table = () => {
             />
           </div>
           <AgGridReact
+            
             ref={gridRef}
             rowData={whenRowData}
             // columnDefs={whenColDefs} //zustand state column array
             columnDefs={whenColumnDefs}
             defaultColDef={defaultColDef}
-            className="ag-theme-alpine"
+            className={`ag-theme-alpine`}
             gridOptions={gridOptions}
             onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
             rowDragManaged={true}
@@ -500,7 +503,7 @@ const Table = () => {
             rowData={thenRowData}
             columnDefs={thenColumnDefs}
             defaultColDef={defaultColDef}
-            className="ag-theme-alpine"
+            className={`ag-theme-alpine`}
             groupHeaderHeight={42}
             
             // domLayout={'autoHeight'}
