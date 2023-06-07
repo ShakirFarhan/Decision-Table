@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 .ag-theme-alpine {
-  width: 1100px;
+  /* width: 1100px; */
   height: 100%;
   --ag-foreground-color: #282c35;
   --ag-background-color: #fafafa;
