@@ -18,6 +18,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   onColumnChange,
   handlePin,
   handleOptions,
+  
 }) => {
   const [pinned, setPinned] = useState(true);
   const [hover, setHover] = useState(false);
@@ -35,6 +36,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   const handleMouseLeave = () => {
     setHover(false);
   };
+ 
   if (userColumn) {
     return (
       // <div className="h-full w-full">
