@@ -19,9 +19,8 @@ const Table = () => {
     addRow,
     whenRowData,
     thenRowData,
-    // setWhenColDefs,
     whenColDefs,
-    // editWhenCol,
+
   } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
 
@@ -29,7 +28,6 @@ const Table = () => {
   const [thenColumnDefs, setThenColumnDefs] = useState<any[]>([
     {
       id: '1',
-      // headerClass: 'column-header',
       headerClass: 'ag-header-cell',
       children: [
         {
@@ -69,10 +67,6 @@ const Table = () => {
     },
   ]);
 
-  // store when block column data
-
-  // const firstIndex = uuid()
-
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
     // Grouped column
     {
@@ -89,9 +83,7 @@ const Table = () => {
           minWidth: 100,
           pinned: 'left',
           lockPosition: 'left',
-          // rowDrag: true,
           headerComponent: () => (
-            // Customized Column Header
             <CustomHeaderCell
               label="Any"
               type=""
@@ -122,45 +114,6 @@ const Table = () => {
       ],
     },
 
-    // {
-    //   id: 'input',
-    //   headerClass: 'top-column-header',
-    //   children: [
-    //     {
-    //       id: firstIndex,
-    //       headerName: '',
-    //       field: firstIndex,
-    //       type: '',
-    //       sortable: true,
-    //       // rowDrag: true,
-    //       headerComponent: () => (
-    //         <CustomHeaderCell
-    //           label=""
-    //           type=""
-    //           id={firstIndex}
-    //           userColumn={true}
-    //           onColumnChange={handleEditCol}
-    //           handlePin={handlePin}
-    //           handleOptions={handleOptions}
-    //         />
-    //       ),
-    //       cellRendererFramework: CustomCell,
-    //       cellRendererParams: (params: any) => ({
-    //         onEdit: () => {
-    //           params.api.startEditingCell({
-    //             rowIndex: params.node.rowIndex,
-    //             colKey: params.column.colId,
-    //           });
-    //         },
-    //         cellValue: params.value,
-    //       }),
-    //       headerClass: 'column-header',
-    //     }
-    //   ],
-    //   headerGroupComponent: () => (
-    //     <ButtonHeader name="When" onClick={handleAddWhenCol} />
-    //   )
-    // }
   ]);
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
@@ -169,13 +122,13 @@ const Table = () => {
       enableRowGroup: true,
       enableValue: true,
       enablePivot: true,
-      width:200,
+      width:300,
       // resizable: true,
       sortable: true,
       filter: true,
       editable: false,
       flex: 1,
-      minWidth: 250,
+      minWidth: 300,
     }),
     []
   );
@@ -195,7 +148,7 @@ const Table = () => {
         headerName: 'default',
         field: 'default',
         type: 'any',
-        
+        minWidth:400,
         headerComponent: () => (
           <CustomHeaderCell
             label="Default"
@@ -236,9 +189,7 @@ const Table = () => {
           field: newIndex,
           type: '',
           sortable: true,
-          // maxWidth: 250,
-          // minWidth: 250,
-          // rowDrag: true,
+
           headerComponent: () => (
             <CustomHeaderCell
               label=""
@@ -470,9 +421,9 @@ const Table = () => {
   
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="scroll-wrapper flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
-        <div className="flex-1 h-[50vh]">
+    <div className="flex flex-col min-w-[110%] max-w-[130%]">
+      <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[#e7e7e7]">
+        <div className="flex-1 w-full">
           <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-7 left-[7rem] select-none">
             <span className="text-[15.7px] tracking-wide">When</span>
             <AiFillPlusCircle
