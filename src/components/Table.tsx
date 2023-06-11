@@ -5,23 +5,20 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import CustomHeaderCell from './Header/CustomHeaderCell';
 import CustomCell from './Cell/CustomCell';
-// import { columnInterface } from '../constants/interfaces';
 import uuid from 'react-uuid';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { BsPlusCircleFill } from 'react-icons/bs';
-
+import { columnInterface, handleEditCol } from '../constants/interfaces';
 
 const Table = () => {
   const {
     addRow,
     whenRowData,
     thenRowData,
-    // setWhenColDefs,
     whenColDefs,
-    // editWhenCol,
+
   } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
 
@@ -29,10 +26,10 @@ const Table = () => {
   const [thenColumnDefs, setThenColumnDefs] = useState<any[]>([
     {
       id: '1',
-      // headerClass: 'column-header',
       headerClass: 'ag-header-cell',
       children: [
         {
+          
           headerName: 'Id',
           field: 'id',
           type: 'number',
@@ -69,99 +66,56 @@ const Table = () => {
     },
   ]);
 
-  // store when block column data
-
-  // const firstIndex = uuid()
-
-  const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
-    // Grouped column
-    {
-      id: 'hit',
-      headerName: 'Hit Ratio',
-      headerClass: 'top-column-header',
-      children: [
-        {
-          id: 'any-col',
-          headerName: 'Any',
-          field: 'any',
-          type: '',
-          maxWidth: 106,
-          minWidth: 100,
-          pinned: 'left',
-          lockPosition: 'left',
-          // rowDrag: true,
-          headerComponent: () => (
-            // Customized Column Header
-            <CustomHeaderCell
-              label="Any"
-              type=""
-              id="any-col"
-              userColumn={false}
-              onColumnChange={handleEditCol}
-              handlePin={handlePin}
-              handleOptions={handleOptions}
-            />
-          ),
-          headerClass: 'column-header', // every column header has this class
-          cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
-          cellRendererParams: (params: any) => ({
-            // to control its behavior and appearance.
-            onEdit: () => {
-              // User defined function
-
-              params.api.startEditingCell({
-                rowIndex: params.node.rowIndex,
-                colKey: params.column.colId,
-              });
-            },
-            id: whenColumnDefs.length === 1 ? 'first-col' : '',
-            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
-            cellValue: params.value,
-          }),
-        },
-      ],
-    },
-
-    // {
-    //   id: 'input',
-    //   headerClass: 'top-column-header',
-    //   children: [
-    //     {
-    //       id: firstIndex,
-    //       headerName: '',
-    //       field: firstIndex,
-    //       type: '',
-    //       sortable: true,
-    //       // rowDrag: true,
-    //       headerComponent: () => (
-    //         <CustomHeaderCell
-    //           label=""
-    //           type=""
-    //           id={firstIndex}
-    //           userColumn={true}
-    //           onColumnChange={handleEditCol}
-    //           handlePin={handlePin}
-    //           handleOptions={handleOptions}
-    //         />
-    //       ),
-    //       cellRendererFramework: CustomCell,
-    //       cellRendererParams: (params: any) => ({
-    //         onEdit: () => {
-    //           params.api.startEditingCell({
-    //             rowIndex: params.node.rowIndex,
-    //             colKey: params.column.colId,
-    //           });
-    //         },
-    //         cellValue: params.value,
-    //       }),
-    //       headerClass: 'column-header',
-    //     }
-    //   ],
-    //   headerGroupComponent: () => (
-    //     <ButtonHeader name="When" onClick={handleAddWhenCol} />
-    //   )
-    // }
-  ]);
+  // const [whenColumnDefs, setWhenColumnDefs] = useState<columnInterface[]>([
+    const [whenColumnDefs, setWhenColumnDefs] = useState<columnInterface[]>([
+      // Grouped column
+      {
+        id: 'hit',
+        headerName: 'Hit Ratio',
+        headerClass: 'top-column-header',
+  
+        children: [
+          {
+            id: 'any-col',
+            headerName: 'Any',
+            field: 'any',
+            type: '',
+            maxWidth: 86,
+            minWidth: 80,
+            pinned: 'left',
+            lockPosition: 'left',
+            // rowDrag: true,
+            headerComponent: () => (
+              // Customized Column Header
+              <CustomHeaderCell
+                label="Any"
+                type=""
+                id="any-col"
+                userColumn={false}
+                onColumnChange={handleEditCol}
+                handlePin={handlePin}
+                handleOptions={handleOptions}
+              />
+            ),
+            headerClass: 'column-header', // every column header has this class
+            cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
+            cellRendererParams: (params: any) => ({
+              // to control its behavior and appearance.
+              onEdit: () => {
+                // User defined function
+  
+                params.api.startEditingCell({
+                  rowIndex: params.node.rowIndex,
+                  colKey: params.column.colId,
+                });
+              },
+              cellValue: params.value,
+            }),
+          },
+        ],
+      },
+    ]);
+ 
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
   const defaultColDef = useMemo(
@@ -169,13 +123,13 @@ const Table = () => {
       enableRowGroup: true,
       enableValue: true,
       enablePivot: true,
-      width:200,
+      width:300,
       // resizable: true,
       sortable: true,
       filter: true,
       editable: false,
       flex: 1,
-      minWidth: 250,
+      minWidth: 300,
     }),
     []
   );
@@ -195,7 +149,7 @@ const Table = () => {
         headerName: 'default',
         field: 'default',
         type: 'any',
-        
+        minWidth:400,
         headerComponent: () => (
           <CustomHeaderCell
             label="Default"
@@ -222,6 +176,7 @@ const Table = () => {
     ]);
   };
 
+
   // Function used to add columns in then block
   // In this function, the first thing we do is add a new column with an unique id common for id and field, and rest of the properties as empty.
   // After that, the handleEditCol function will be activated when the user clicks on that column once more to edit the column header information.
@@ -236,8 +191,6 @@ const Table = () => {
           field: newIndex,
           type: '',
           sortable: true,
-          // maxWidth: 250,
-          // minWidth: 250,
           // rowDrag: true,
           headerComponent: () => (
             <CustomHeaderCell
@@ -248,11 +201,11 @@ const Table = () => {
               onColumnChange={handleEditCol}
               handlePin={handlePin}
               handleOptions={handleOptions}
+         
             />
           ),
           cellRendererFramework: CustomCell,
           cellRendererParams: (params: any) => ({
-
             onEdit: () => {
               params.api.startEditingCell({
                 rowIndex: params.node.rowIndex,
@@ -260,6 +213,8 @@ const Table = () => {
               });
             },
             cellValue: params.value,
+            id: whenColumnDefs.length === 1 ? 'first-col' : '',
+            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
           }),
           headerClass: 'column-header',
         },
@@ -272,10 +227,10 @@ const Table = () => {
     addRow(whenColumnDefs, thenColumnDefs);
   };
   // Function used when we want to edit the details of column header
-  const handleEditCol = (
-    colId: string, // id of the selected column
-    newHeaderName: string, // new header name provided by the user
-    newTypeName: string // new type ex: string,number...
+  const handleEditCol:handleEditCol = (
+    colId, // id of the selected column
+    newHeaderName, // new header name provided by the user
+    newTypeName, // new type ex: string,number...
   ) => {
     if (colId) {
       setWhenColumnDefs((data: any) => {
@@ -378,8 +333,11 @@ const Table = () => {
           const selectedCol = updatedCols.findIndex((col) => col.id === id);
 
           let filteredCols: any;
-          // if (updatedCols.length >= 3) {
-          if (selectedCol === 1) {
+
+          if(selectedCol!==1){
+            filteredCols = updatedCols.filter((col) => col.id !== id);
+          }
+          if(updatedCols[2]){
             updatedCols[2] = {
               ...updatedCols[2],
               cellRendererParams: (params: any) => ({
@@ -394,11 +352,12 @@ const Table = () => {
                 handleAddRow: handleAddRow,
               }),
             };
+            filteredCols = updatedCols.filter((col) => col.id !== id);
+            return filteredCols
           }
-          filteredCols = updatedCols.filter((col) => col.id !== id);
-          // }
-
-          return filteredCols;
+          // Handle- Incase of only one column
+          filteredCols=[...prevData]
+          return filteredCols
         });
       } else if (selectedOption.includes('a-z')) {
         gridRef.current?.columnApi?.applyColumnState({
@@ -465,14 +424,14 @@ const Table = () => {
         handleAddWhenCol();
       }
     }
-  }, [whenColumnDefs.length]);
+  }, [whenColumnDefs?.length]);
 
   
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="scroll-wrapper flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
-        <div className="flex-1 h-[50vh]">
+    <div className="flex flex-col min-w-[110%] max-w-[130%]">
+      <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[#e7e7e7]">
+        <div className="flex-1 w-full">
           <div className="flex items-center gap-x-[5.5px] mb-[10px] absolute z-10 top-7 left-[7rem] select-none">
             <span className="text-[15.7px] tracking-wide">When</span>
             <AiFillPlusCircle

@@ -18,9 +18,11 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   onColumnChange,
   handlePin,
   handleOptions,
+  
 }) => {
   const [pinned, setPinned] = useState(true);
   const [hover, setHover] = useState(false);
+  const [anyColValue,setAnyColValue]=useState("")
   const handlePinning = () => {
     setPinned((data) => {
       return !data;
@@ -35,6 +37,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   const handleMouseLeave = () => {
     setHover(false);
   };
+ 
   if (userColumn) {
     return (
       // <div className="h-full w-full">
@@ -141,9 +144,9 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
               {hitRatioOptions.map((data) => {
                 return (
                   <p
-                    className="text-[14px] font-medium m-0 px-[7px] py-[5px] hover:bg-[#f5f5f5] cursor-pointer"
+                    className={`text-[14px] font-medium m-0 px-[7px] py-[5px] hover:bg-[#f5f5f5] cursor-pointer ${anyColValue===data.value?"bg-[#fafafa]":""}`}
                     onClick={() => {
-                      console.log('pressed');
+                      setAnyColValue(data.value)
                     }}
                     key={data.id}
                   >
