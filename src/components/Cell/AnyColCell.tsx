@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { RxDotsHorizontal } from 'react-icons/rx';
-import { BsClock } from 'react-icons/bs';
+import { BsClock, BsPlusCircleFill } from 'react-icons/bs';
 import { CgMenuGridO } from 'react-icons/cg';
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -11,10 +11,11 @@ interface IProps {
   cellValue?: string;
   whenRowData?: any;
   id?: any;
+  data?: any;
+  handleAddRow: () => void;
 }
 
-const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
-  console.log(cellValue);
+const AnyColCell: React.FC<IProps> = (props) => {
   const { duplicateRule, deleteRule, clearRule } = useStore((store) => store);
   const [hovering, setHovering] = useState(false);
   const handleMouseEnter = () => {
@@ -24,7 +25,7 @@ const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
   const handleMouseLeave = () => {
     setHovering(false);
   };
-  if (cellValue) {
+  if (props.cellValue && props.data.button !== "Add Rule") {
     return (
       <>
         <div
@@ -73,13 +74,13 @@ const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
                                   data.key === 'delete'
                                     ? () => {
                                         const id: number = parseInt(
-                                          cellValue || '0'
+                                          props.cellValue || '0'
                                         );
                                         deleteRule(id);
                                       }
                                     : () => {
                                         const id: number = parseInt(
-                                          cellValue || '0'
+                                          props.cellValue || '0'
                                         );
                                         console.log(id);
                                         clearRule(id);
@@ -97,7 +98,7 @@ const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
                                 data.key === 'duplicate'
                                   ? () => {
                                       const id: number = parseInt(
-                                        cellValue || '0'
+                                        props.cellValue || '0'
                                       );
                                       duplicateRule(id);
                                     }
@@ -118,7 +119,7 @@ const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
               // Row Number
               <div className="px-[11px]">
                 <span className="text-[15px] font-normal text-[#595959]">
-                  {cellValue}
+                  {props.cellValue}
                 </span>
               </div>
             )}
@@ -126,6 +127,22 @@ const AnyColCell: React.FC<IProps> = ({ cellValue }) => {
         </div>
       </>
     );
+  } else if (props.data.button === "Add Rule" && props.id === "first-col"){
+    return(
+      <div
+        onClick={props.handleAddRow}
+        className="flex items-center gap-x-2 pl-3 addRuleDiv w-fit hover:cursor-pointer"
+      >
+        <BsPlusCircleFill
+          className="text-[#8C8C8C] plusIcon"
+        // color="#8C8C8C"
+        // fill="#8C8C8C"
+        />
+        <span className="text-[#8C8C8C] text-[14px] font-normal hover:text-[#597EF7]">
+          Add Rule
+        </span>
+      </div>
+    )
   }
   return <></>;
 };
