@@ -564,8 +564,8 @@ const Table = () => {
 
   return (
     <div className="flex flex-col min-w-[100%] max-w-[130%]">
-      <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[#e7e7e7]">
-        <div className="flex-1 w-full h-[300px]">
+      <div className="scroll-wrapper flex w-full border-t-[1px] border-[#e7e7e7]">
+        <div className="flex-1 w-full h-[550px]">
           <AgGridReact
             ref={gridRef}
             rowData={whenRowData}
