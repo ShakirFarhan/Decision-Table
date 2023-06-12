@@ -5,26 +5,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import CustomHeaderCell from './Header/CustomHeaderCell';
 import CustomCell from './Cell/CustomCell';
-// import { columnInterface } from '../constants/interfaces';
 import uuid from 'react-uuid';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { BsPlusCircleFill } from 'react-icons/bs';
-
 
 const Table = () => {
-  const {
-    addRow,
-    whenRowData,
-    thenRowData,
-    // setWhenColDefs,
-    whenColDefs,
-    // editWhenCol,
-  } = useStore((store) => store);
+  const { addRow, whenRowData, thenRowData } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
-
 
   const [thenColumnDefs, setThenColumnDefs] = useState<any[]>([
     {
@@ -121,46 +110,6 @@ const Table = () => {
         },
       ],
     },
-
-    // {
-    //   id: 'input',
-    //   headerClass: 'top-column-header',
-    //   children: [
-    //     {
-    //       id: firstIndex,
-    //       headerName: '',
-    //       field: firstIndex,
-    //       type: '',
-    //       sortable: true,
-    //       // rowDrag: true,
-    //       headerComponent: () => (
-    //         <CustomHeaderCell
-    //           label=""
-    //           type=""
-    //           id={firstIndex}
-    //           userColumn={true}
-    //           onColumnChange={handleEditCol}
-    //           handlePin={handlePin}
-    //           handleOptions={handleOptions}
-    //         />
-    //       ),
-    //       cellRendererFramework: CustomCell,
-    //       cellRendererParams: (params: any) => ({
-    //         onEdit: () => {
-    //           params.api.startEditingCell({
-    //             rowIndex: params.node.rowIndex,
-    //             colKey: params.column.colId,
-    //           });
-    //         },
-    //         cellValue: params.value,
-    //       }),
-    //       headerClass: 'column-header',
-    //     }
-    //   ],
-    //   headerGroupComponent: () => (
-    //     <ButtonHeader name="When" onClick={handleAddWhenCol} />
-    //   )
-    // }
   ]);
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
@@ -169,7 +118,7 @@ const Table = () => {
       enableRowGroup: true,
       enableValue: true,
       enablePivot: true,
-      width:200,
+      width: 200,
       // resizable: true,
       sortable: true,
       filter: true,
@@ -179,7 +128,6 @@ const Table = () => {
     }),
     []
   );
-
 
   const isFullWidthRow = useCallback((params: any) => {
     return params.rowNode.data.fullWidth;
@@ -195,7 +143,7 @@ const Table = () => {
         headerName: 'default',
         field: 'default',
         type: 'any',
-        
+
         headerComponent: () => (
           <CustomHeaderCell
             label="Default"
@@ -252,7 +200,6 @@ const Table = () => {
           ),
           cellRendererFramework: CustomCell,
           cellRendererParams: (params: any) => ({
-
             onEdit: () => {
               params.api.startEditingCell({
                 rowIndex: params.node.rowIndex,
@@ -467,8 +414,6 @@ const Table = () => {
     }
   }, [whenColumnDefs.length]);
 
-  
-
   return (
     <div className="flex flex-col h-full">
       <div className="scroll-wrapper flex h-[300px] max-h-[900px] mt-5 border-t-[1px] border-[#e7e7e7]">
@@ -481,7 +426,6 @@ const Table = () => {
             />
           </div>
           <AgGridReact
-            
             ref={gridRef}
             rowData={whenRowData}
             // columnDefs={whenColDefs} //zustand state column array
@@ -505,7 +449,6 @@ const Table = () => {
             defaultColDef={defaultColDef}
             className={`ag-theme-alpine`}
             groupHeaderHeight={42}
-            
             // domLayout={'autoHeight'}
             headerHeight={65}
           />
