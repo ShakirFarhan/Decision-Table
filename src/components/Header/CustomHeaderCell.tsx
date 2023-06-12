@@ -40,6 +40,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
 }) => {
   const [pinned, setPinned] = useState(true);
   const [hover, setHover] = useState(false);
+  const [anyColValue, setAnyColValue] = useState('');
   const handlePinning = () => {
     setPinned((data) => {
       return !data;
@@ -54,6 +55,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   const handleMouseLeave = () => {
     setHover(false);
   };
+
   if (userColumn) {
     return (
       <>

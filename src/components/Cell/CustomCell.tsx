@@ -14,6 +14,7 @@ interface IProps {
   node?: any;
   value?: any;
   data?: any;
+  handleAddRow: () => void;
 }
 const CustomCell: React.FC<IProps> = (props) => {
   const { editRowData } = useStore((store) => store);

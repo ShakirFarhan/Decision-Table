@@ -1,18 +1,38 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export interface columnInterface {
+interface CellRendererParams {
+  onEdit: () => void;
+  cellValue: any;
+}
+
+type CellRendererParamsInterface = (params: any) => CellRendererParams;
+
+
+interface children{
   id: string;
   headerName: string;
+  headerClass:string;
   field: string;
   type: string;
   disableColumnMenu?: boolean;
   headerComponent: (() => JSX.Element) | any;
-  headerClass: string;
   headerProps?: any;
   cellRendererFramework?: any;
-  cellRendererParams?: any;
+  cellRendererParams?: CellRendererParamsInterface;
   pinned?: 'left' | 'right';
   width?: number;
+  maxWidth?:number
+  minWidth?:number
+  lockPosition?:string
+
+}
+export interface columnInterface {
+  id: string;
+  headerName: string;
+  headerClass:string;
+  children:[children]
+  cellRendererFramework?: any;
+  cellRendererParams?: CellRendererParamsInterface;
 }
 export interface rowType {
   id?: number | string;
@@ -39,6 +59,7 @@ export interface columnHeaderProps {
   setWhenColumnDefs?: Dispatch<SetStateAction<columnInterface[]>>;
   newCol?: boolean;
   handleOptions: (id: string, task: string) => void;
+ 
 }
 export interface defaultProps {
   id: string;
@@ -51,10 +72,5 @@ export interface defaultProps {
     // id: string
   ) => void;
 }
-// export interface zustandStoreInterface {
-//   whenRowData: rowType[];
-//   whenColData: columnInterface[];
-//   thenRowData: rowType[];
-//   thenColData: columnInterface[];
-//   addRow: (whenColData: any, thenColData: any) => void;
-// }
+
+export type handleEditCol=(colId: string,newHeaderName: string,newTypeName: string)=>void
