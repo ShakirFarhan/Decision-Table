@@ -25,7 +25,7 @@ const TypesOptions: React.FC<defaultProps> = ({
     <>
       <form
         onSubmit={handleOnSubmit}
-        className="modal-options flex flex-col gap-y-[12px] px-[10px] py-[8px] bg-[white] w-[270px] h-[241px]"
+        className="modal-options flex flex-col gap-y-[12px] px-[10px] py-[8px] bg-[white] w-[270px] h-[230px]"
       >
         <input
           name="col-name"
