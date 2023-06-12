@@ -18,6 +18,7 @@ interface IProps {
 }
 const CustomCell: React.FC<IProps> = (props) => {
   const { editRowData } = useStore((store) => store);
+  const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
     props && props.cellValue && props.cellValue.value
   );
@@ -72,8 +73,13 @@ const CustomCell: React.FC<IProps> = (props) => {
             {props && props.cellValue && props.cellValue.value}
           </span>
           <Popover
-            placement="bottomLeft"
+            placement="bottomRight"
             overlayClassName="custom-popover"
+            onOpenChange={(visible) => {
+              if (!visible) {
+                setClicked(false);
+              }
+            }}
             content={
               <>
                 <div className="w-[240px] p-3 -rounded-[20px]">
@@ -99,9 +105,14 @@ const CustomCell: React.FC<IProps> = (props) => {
             }
             trigger="click"
           >
-            <button className="absolute right-4">
-              {hovering && (
+            <button
+              onClick={() => setClicked(true)}
+              className="absolute right-4 w-[18px] h-[18px]"
+            >
+              {hovering || clicked ? (
                 <img src={editIcon} className="w-[18px] h-[18px]" alt="" />
+              ) : (
+                ''
               )}
             </button>
           </Popover>
