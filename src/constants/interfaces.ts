@@ -7,11 +7,10 @@ interface CellRendererParams {
 
 type CellRendererParamsInterface = (params: any) => CellRendererParams;
 
-
-interface children{
+interface children {
   id: string;
   headerName: string;
-  headerClass:string;
+  headerClass: string;
   field: string;
   type: string;
   disableColumnMenu?: boolean;
@@ -21,16 +20,15 @@ interface children{
   cellRendererParams?: CellRendererParamsInterface;
   pinned?: 'left' | 'right';
   width?: number;
-  maxWidth?:number
-  minWidth?:number
-  lockPosition?:string
-
+  maxWidth?: number;
+  minWidth?: number;
+  lockPosition?: string;
 }
 export interface columnInterface {
   id: string;
   headerName: string;
-  headerClass:string;
-  children:[children]
+  headerClass: string;
+  children: [children];
   cellRendererFramework?: any;
   cellRendererParams?: CellRendererParamsInterface;
 }
@@ -59,7 +57,6 @@ export interface columnHeaderProps {
   setWhenColumnDefs?: Dispatch<SetStateAction<columnInterface[]>>;
   newCol?: boolean;
   handleOptions: (id: string, task: string) => void;
- 
 }
 export interface defaultProps {
   id: string;
@@ -73,4 +70,8 @@ export interface defaultProps {
   ) => void;
 }
 
-export type handleEditCol=(colId: string,newHeaderName: string,newTypeName: string)=>void
+export type handleEditCol = (
+  colId: string,
+  newHeaderName: string,
+  newTypeName: string
+) => void;
