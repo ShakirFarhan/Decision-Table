@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { RxDotsHorizontal } from 'react-icons/rx';
 import { BsClock, BsPlusCircleFill } from 'react-icons/bs';
 import { CgMenuGridO } from 'react-icons/cg';
-import Popover from '@mui/material/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { Popover } from 'antd';
 import '../css/table.css';
 import { rowOptions } from '../../constants/data';
 import { useStore } from '../../store';
@@ -18,14 +17,18 @@ interface IProps {
 const AnyColCell: React.FC<IProps> = (props) => {
   const { duplicateRule, deleteRule, clearRule } = useStore((store) => store);
   const [hovering, setHovering] = useState(false);
+  const [clicked, setClicked] = useState(false);
   const handleMouseEnter = () => {
     setHovering(true);
+    setClicked(false);
   };
 
   const handleMouseLeave = () => {
-    setHovering(false);
+    if (!clicked) {
+      setHovering(false);
+    }
   };
-  if (props.cellValue && props.data.button !== "Add Rule") {
+  if (props.cellValue && props.data.button !== 'Add Rule') {
     return (
       <>
         <div
@@ -39,110 +42,94 @@ const AnyColCell: React.FC<IProps> = (props) => {
           <button className="hover:bg-[#f0f5ff] h-full px-2">
             <BsClock className="h-[16px] w-[16px]" color="#bfbfbf" />
           </button>
-          <div className="h-full">
-            {hovering ? (
-              <PopupState variant="popover" popupId="demo-popup-popover">
-                {(popupState: any) => (
-                  <div className="h-full hover:cursor-pointer hover:bg-[#f0f5ff]">
-                    <button
-                      className="border-none outline-none h-[40px] px-[5px]"
-                      {...bindTrigger(popupState)}
-                    >
-                      <RxDotsHorizontal className="text-[#000000]" />
-                    </button>
-
-                    <Popover
-                      {...bindPopover(popupState)}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                      }}
-                      sx={{
-                        marginTop: '10px',
-                      }}
-                    >
-                      <div className="w-[170px]">
-                        {rowOptions.map((data) => {
-                          if (data.key === 'delete' || data.key === 'clear') {
-                            return (
-                              <p
-                                onClick={
-                                  data.key === 'delete'
-                                    ? () => {
-                                        const id: number = parseInt(
-                                          props.cellValue || '0'
-                                        );
-                                        deleteRule(id);
-                                      }
-                                    : () => {
-                                        const id: number = parseInt(
-                                          props.cellValue || '0'
-                                        );
-                                        console.log(id);
-                                        clearRule(id);
-                                      }
+          {hovering ? (
+            <Popover
+              placement="bottomRight"
+              overlayClassName="custom-popover"
+              onOpenChange={(visible) => {
+                if (!visible) {
+                  setClicked(false);
+                }
+              }}
+              content={
+                <div className="w-[170px]">
+                  {rowOptions.map((data) => {
+                    if (data.key === 'delete' || data.key === 'clear') {
+                      return (
+                        <p
+                          onClick={
+                            data.key === 'delete'
+                              ? () => {
+                                  const id: number = parseInt(
+                                    props.cellValue || '0'
+                                  );
+                                  deleteRule(id);
                                 }
-                                className="py-[6px] px-3 text-[#ff8586] font-semibold hover:bg-[#ff4d4f] hover:text-[#fff] hover:cursor-pointer"
-                              >
-                                {data.header}
-                              </p>
-                            );
+                              : () => {
+                                  const id: number = parseInt(
+                                    props.cellValue || '0'
+                                  );
+                                  console.log(id);
+                                  clearRule(id);
+                                }
                           }
-                          return (
-                            <p
-                              onClick={
-                                data.key === 'duplicate'
-                                  ? () => {
-                                      const id: number = parseInt(
-                                        props.cellValue || '0'
-                                      );
-                                      duplicateRule(id);
-                                    }
-                                  : () => {}
+                          className="py-[6px] px-3 text-[#ff8586] font-semibold hover:bg-[#ff4d4f] hover:text-[#fff] hover:cursor-pointer"
+                        >
+                          {data.header}
+                        </p>
+                      );
+                    }
+                    return (
+                      <p
+                        onClick={
+                          data.key === 'duplicate'
+                            ? () => {
+                                const id: number = parseInt(
+                                  props.cellValue || '0'
+                                );
+                                duplicateRule(id);
                               }
-                              className="py-[6px] px-3 text-[#343434] hover:bg-[#f5f5f5] font-semibold hover:cursor-pointer"
-                            >
-                              {data.header}
-                            </p>
-                          );
-                        })}
-                      </div>
-                    </Popover>
-                  </div>
-                )}
-              </PopupState>
-            ) : (
-              // Row Number
-              <div className="px-[11px]">
-                <span className="text-[15px] font-normal text-[#595959]">
-                  {props.cellValue}
-                </span>
-              </div>
-            )}
-          </div>
+                            : () => {}
+                        }
+                        className="py-[6px] px-3 text-[#343434] hover:bg-[#f5f5f5] font-semibold hover:cursor-pointer"
+                      >
+                        {data.header}
+                      </p>
+                    );
+                  })}
+                </div>
+              }
+              trigger="click"
+            >
+              <button
+                onClick={() => setClicked(true)}
+                className="border-none outline-none h-[40px] px-[5px]"
+              >
+                <RxDotsHorizontal className="text-[#000000]" />
+              </button>
+            </Popover>
+          ) : (
+            <div className="px-[11px]">
+              <span className="text-[15px] font-normal text-[#595959]">
+                {props.cellValue}
+              </span>
+            </div>
+          )}
         </div>
       </>
     );
-  } else if (props.data.button === "Add Rule" && props.id === "first-col"){
-    return(
+  } else if (props.data.button === 'Add Rule' && props.id === 'any-col') {
+    return (
       <div
         onClick={props.handleAddRow}
         className="flex items-center gap-x-2 pl-3 addRuleDiv w-fit hover:cursor-pointer"
       >
-        <BsPlusCircleFill
-          className="text-[#8C8C8C] plusIcon"
-        // color="#8C8C8C"
-        // fill="#8C8C8C"
-        />
+        <BsPlusCircleFill className="text-[#8C8C8C] plusIcon" />
         <span className="text-[#8C8C8C] text-[14px] font-normal hover:text-[#597EF7]">
           Add Rule
         </span>
       </div>
-    )
+    );
   }
   return <></>;
 };

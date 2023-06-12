@@ -8,3 +8,19 @@
 .addRuleDiv:hover .plusIcon {
   color: #597ef7;
 }
+.overlay {
+  position: absolute;
+  top: 300px;
+}
+.custom-popover .ant-popover-inner-content {
+  padding: 0;
+}
+.custom-popover .ant-popover-inner {
+  padding: 0;
+}
+.select .ant-select-selector {
+  border-radius: 0;
+}
+.select:hover {
+  border-color: #000000;
+}
