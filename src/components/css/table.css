@@ -26,6 +26,7 @@
   height: 300px;
   min-height: 100px;
   max-height: 400px;
+  max-width: 130%;
 }
 .ag-theme-alpine::-webkit-scrollbar {
   display: none;
@@ -38,9 +39,8 @@
 .scroll-wrapper::-webkit-scrollbar {
   display: none;
 }
-.scroll-wrapper{
+.scroll-wrapper {
   min-width: 300px;
-
 }
 /* Container class of grouped headers */
 .ag-header {

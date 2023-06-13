@@ -46,6 +46,11 @@ const AnyColCell: React.FC<IProps> = (props) => {
             <Popover
               placement="bottomRight"
               overlayClassName="custom-popover"
+              onOpenChange={(visible) => {
+                if (!visible) {
+                  setClicked(false);
+                }
+              }}
               content={
                 <div className="w-[170px]">
                   {rowOptions.map((data) => {
@@ -113,7 +118,7 @@ const AnyColCell: React.FC<IProps> = (props) => {
         </div>
       </>
     );
-  } else if (props.data.button === 'Add Rule' && props.id === 'first-col') {
+  } else if (props.data.button === 'Add Rule' && props.id === 'any-col') {
     return (
       <div
         onClick={props.handleAddRow}
