@@ -45,7 +45,7 @@ export interface IProps {
 export interface columnHeaderProps {
   label: string;
   children?: any;
-  type: string;
+  dataType: string;
   id: string;
   userColumn: boolean;
   onColumnChange: (

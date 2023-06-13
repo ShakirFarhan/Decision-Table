@@ -28,7 +28,8 @@ const Table = () => {
           id: 'any-col',
           headerName: 'Any',
           field: 'any',
-          type: '',
+
+          dataType: '',
           maxWidth: 106,
           minWidth: 100,
           pinned: 'left',
@@ -38,7 +39,7 @@ const Table = () => {
             // Customized Column Header
             <CustomHeaderCell
               label="Any"
-              type=""
+              dataType=""
               id="any-col"
               userColumn={false}
               onColumnChange={handleEditCol}
@@ -83,13 +84,14 @@ const Table = () => {
           id: uniqID,
           headerName: '',
           field: uniqID,
-          type: '',
+
+          dataType: '',
           sortable: true,
           // rowDrag: true,
           headerComponent: () => (
             <CustomHeaderCell
               label=""
-              type=""
+              dataType=""
               id={uniqID}
               userColumn={true}
               onColumnChange={handleEditCol}
@@ -129,7 +131,7 @@ const Table = () => {
           headerComponent: () => (
             <CustomHeaderCell
               label="annotations"
-              type=""
+              dataType=""
               id="annotations"
               userColumn={true}
               onColumnChange={() => ''}
@@ -186,13 +188,14 @@ const Table = () => {
         id: newIndex,
         headerName: '',
         field: newIndex,
-        type: '',
+
+        dataType: '',
         sortable: true,
         // rowDrag: true,
         headerComponent: () => (
           <CustomHeaderCell
             label=""
-            type=""
+            dataType=""
             id={newIndex}
             userColumn={true}
             onColumnChange={handleEditCol}
@@ -230,13 +233,14 @@ const Table = () => {
         id: newIndex,
         headerName: '',
         field: newIndex,
-        type: '',
+
+        dataType: '',
         sortable: true,
         // rowDrag: true,
         headerComponent: () => (
           <CustomHeaderCell
             label=""
-            type=""
+            dataType=""
             id={newIndex}
             userColumn={true}
             onColumnChange={handleEditCol}
@@ -287,11 +291,11 @@ const Table = () => {
           whenCol[whenColIndex] = {
             ...whenCol[whenColIndex],
             headerName: newHeaderName,
-            type: newTypeName,
+            dataType: newTypeName,
             headerComponent: () => (
               <CustomHeaderCell
                 label={newHeaderName}
-                type={newTypeName}
+                dataType={newTypeName}
                 id={colId}
                 userColumn={true}
                 onColumnChange={handleEditCol}
@@ -318,11 +322,11 @@ const Table = () => {
           thenCol[thenColIndex] = {
             ...thenCol[thenColIndex],
             headerName: newHeaderName,
-            type: newTypeName,
+            dataType: newTypeName,
             headerComponent: () => (
               <CustomHeaderCell
                 label={newHeaderName}
-                type={newTypeName}
+                dataType={newTypeName}
                 id={colId}
                 userColumn={true}
                 onColumnChange={handleEditCol}

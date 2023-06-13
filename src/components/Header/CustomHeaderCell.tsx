@@ -31,7 +31,7 @@ const AnyCol = () => {
 const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   label,
   children,
-  type,
+  dataType,
   id,
   userColumn,
   onColumnChange,
@@ -71,7 +71,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
               content={
                 <TypesOptions
                   id={id}
-                  type={type}
+                  type={dataType}
                   column={label}
                   onColumnChange={onColumnChange}
                 />
@@ -90,7 +90,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
                 )}
 
                 <span className="mr-2 text-[13px] font-normal tracking-wide text-[#597EF7]">
-                  {type}
+                  {dataType}
                 </span>
 
                 {children}
