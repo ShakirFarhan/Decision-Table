@@ -9,11 +9,10 @@ import uuid from 'react-uuid';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
-import { AiFillPlusCircle } from 'react-icons/ai';
 import { handleEditCol } from '../constants/interfaces';
 
 const Table = () => {
-  const { addRow, whenRowData, thenRowData } = useStore((store) => store);
+  const { addRow, whenRowData } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
   const uniqID = uuid();
   // store when block column data
@@ -164,7 +163,7 @@ const Table = () => {
       enableValue: true,
       enablePivot: true,
       width: 200,
-      // resizable: true,
+      resizable: true,
       sortable: true,
       filter: true,
       editable: false,
