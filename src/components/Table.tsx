@@ -9,13 +9,14 @@ import uuid from 'react-uuid';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
-import { AiFillPlusCircle } from 'react-icons/ai';
 import { handleEditCol } from '../constants/interfaces';
 
 const Table = () => {
-  const { addRow, whenRowData, thenRowData } = useStore((store) => store);
+  const { addRow, whenRowData } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
-  const uniqID = uuid();
+  const whenID = uuid();
+  const thenID = uuid();
+
   // store when block column data
   const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
     // Grouped column
@@ -23,18 +24,18 @@ const Table = () => {
       id: 'hit',
       headerName: 'Hit Ratio',
       headerClass: 'top-column-header',
+      suppressMovable: true,
+
       children: [
         {
           id: 'any-col',
           headerName: 'Any',
           field: 'any',
-
           dataType: '',
           maxWidth: 106,
           minWidth: 100,
           pinned: 'left',
-          lockPosition: 'left',
-          // rowDrag: true,
+          suppressMovable: true,
           headerComponent: () => (
             // Customized Column Header
             <CustomHeaderCell
@@ -69,8 +70,41 @@ const Table = () => {
     {
       id: 'when',
       headerClass: 'ag-header-cell',
-      minWidth: 600,
-      children: [],
+      children: [
+        {
+          id: thenID,
+          headerName: '',
+          field: thenID,
+
+          dataType: '',
+          sortable: true,
+          // rowDrag: true,
+          headerComponent: () => (
+            <CustomHeaderCell
+              label=""
+              dataType=""
+              id={thenID}
+              userColumn={true}
+              onColumnChange={handleEditCol}
+              handlePin={handlePin}
+              handleOptions={handleOptions}
+            />
+          ),
+          cellRendererFramework: CustomCell,
+          cellRendererParams: (params: any) => ({
+            onEdit: () => {
+              params.api.startEditingCell({
+                rowIndex: params.node.rowIndex,
+                colKey: params.column.colId,
+              });
+            },
+            cellValue: params.value,
+            id: whenColumnDefs.length === 1 ? 'first-col' : '',
+            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
+          }),
+          headerClass: 'column-header',
+        },
+      ],
       headerGroupComponent: () => (
         <ButtonHeader name="When" onClick={handleAddWhenCol} />
       ),
@@ -81,9 +115,9 @@ const Table = () => {
       minWidth: 600,
       children: [
         {
-          id: uniqID,
+          id: whenID,
           headerName: '',
-          field: uniqID,
+          field: whenID,
 
           dataType: '',
           sortable: true,
@@ -92,7 +126,7 @@ const Table = () => {
             <CustomHeaderCell
               label=""
               dataType=""
-              id={uniqID}
+              id={whenID}
               userColumn={true}
               onColumnChange={handleEditCol}
               handlePin={handlePin}
@@ -183,12 +217,10 @@ const Table = () => {
     setWhenColumnDefs((data: any) => {
       const newIndex = uuid();
       const newColDefs = [...data];
-
       const updated = {
         id: newIndex,
         headerName: '',
         field: newIndex,
-
         dataType: '',
         sortable: true,
         // rowDrag: true,
@@ -281,6 +313,7 @@ const Table = () => {
         const updatedColumnDefs = [...data];
         const whenCol = updatedColumnDefs[1].children;
         const thenCol = updatedColumnDefs[2].children;
+
         const whenColIndex = whenCol.findIndex((col: any) => col.id === colId);
         const thenColIndex = thenCol.findIndex((col: any) => col.id === colId);
 
@@ -353,12 +386,17 @@ const Table = () => {
   const handlePin = (id: string): void => {
     setWhenColumnDefs((data: any) => {
       const updatedColumnDefs = [...data];
-      const index = updatedColumnDefs.findIndex((col) => col.id === id);
-      const column = updatedColumnDefs[index];
-      updatedColumnDefs[index] = {
-        ...column,
-        pinned: 'left', // Set pinned property to 'left' unconditionally
-      };
+      const whenCol = updatedColumnDefs[1].children;
+      const thenCol = updatedColumnDefs[2].children;
+      const whenColIndex = whenCol.findIndex((col: any) => col.id === id);
+      const thenColIndex = thenCol.findIndex((col: any) => col.id === id);
+      if (whenColIndex !== -1) {
+        console.log(whenCol[whenColIndex]);
+        whenCol[whenColIndex] = {
+          ...whenCol[whenColIndex],
+          pinned: 'left', // Set pinned property to 'left' unconditionally
+        };
+      }
 
       return updatedColumnDefs;
     });
@@ -373,41 +411,40 @@ const Table = () => {
       if (selectedOption.includes('remove')) {
         setWhenColumnDefs((prevData) => {
           const updatedCols = [...prevData];
-          const selectedCol = updatedCols.findIndex((col) => col.id === id);
+          let whenCol = updatedCols[1].children;
+          let thenCol = updatedCols[2].children;
+          const whenColIndex = whenCol.findIndex((col: any) => col.id === id);
+          const thenColIndex = thenCol.findIndex((col: any) => col.id === id);
 
-          let filteredCols: any;
+          if (whenColIndex !== -1) {
+            if (whenColIndex !== 0) {
+              whenCol = whenCol.filter((col: any) => col.id !== id);
+            }
+          }
 
-          if (selectedCol !== 1) {
-            filteredCols = updatedCols.filter((col) => col.id !== id);
+          if (thenColIndex !== -1) {
+            if (thenColIndex !== 0) {
+              thenCol = thenCol.filter((col: any) => col.id !== id);
+            }
           }
-          if (updatedCols[2]) {
-            updatedCols[2] = {
-              ...updatedCols[2],
-              cellRendererParams: (params: any) => ({
-                onEdit: () => {
-                  params.api.startEditingCell({
-                    rowIndex: params.node.rowIndex,
-                    colKey: params.column.colId,
-                  });
-                },
-                cellValue: params.value,
-                id: 'first-col',
-                handleAddRow: handleAddRow,
-              }),
-            };
-            filteredCols = updatedCols.filter((col) => col.id !== id);
-            return filteredCols;
-          }
-          // Handle- Incase of only one column
-          filteredCols = [...prevData];
-          return filteredCols;
+
+          updatedCols[1].children = whenCol;
+          updatedCols[2].children = thenCol;
+
+          return updatedCols;
         });
       } else if (selectedOption.includes('a-z')) {
-        gridRef.current?.columnApi?.applyColumnState({
-          // Api provided to perform sorting on the column data
-          state: [{ colId: id, sort: 'asc' }], // here colId - represents which column need to be sorted and sort - whether it is ascending or descending
-          defaultState: { sort: null },
+        const columnState = gridRef.current?.columnApi?.getColumnState();
+        const sortedColumns = columnState.map((column: any) => {
+          if (column.colId === id) {
+            console.log(column);
+            return { ...column, sort: 'asc' }; // Apply ascending sorting to the specified column
+          } else {
+            return { ...column, sort: null }; // Remove sorting from other columns
+          }
         });
+
+        gridRef.current?.columnApi?.applyColumnState({ state: sortedColumns });
       } else if (selectedOption.includes('z-a')) {
         gridRef.current?.columnApi?.applyColumnState({
           state: [{ colId: id, sort: 'desc' }],
@@ -415,22 +452,55 @@ const Table = () => {
         });
       } else if (selectedOption.includes('duplicate')) {
         setWhenColumnDefs((prevData) => {
-          const updatedColDefs: any = [...prevData];
+          // const updatedColDefs: any = [...prevData];
+          const updatedColDefs = [...prevData];
+          const whenCol = updatedColDefs[1].children;
+          const thenCol = updatedColDefs[2].children;
+          const whenColIndex = whenCol.findIndex((col: any) => col.id === id);
+          const thenColIndex = thenCol.findIndex((col: any) => col.id === id);
 
-          const index = updatedColDefs.findIndex((col: any) => col.id === id);
-          const newid = uuid();
+          if (whenColIndex !== -1) {
+            const newid = uuid();
+            const existingHeaderComponent =
+              whenCol[whenColIndex].headerComponent;
 
-          const selectedColumn = {
-            ...updatedColDefs[index],
-            id: newid,
-            field: newid,
-          };
-          updatedColDefs.push(selectedColumn);
+            const selectedColumn = {
+              ...whenCol[whenColIndex],
+              id: newid,
+              field: newid,
+              headerComponent: (props: any) => (
+                <CustomHeaderCell
+                  {...existingHeaderComponent().props} // Pass the previous props
+                  id={newid}
+                />
+              ),
+            };
+            updatedColDefs[1].children.push(selectedColumn);
+          }
+          if (thenColIndex !== -1) {
+            const newid = uuid();
+            const existingHeaderComponent =
+              thenCol[thenColIndex].headerComponent;
+
+            const selectedColumn = {
+              ...thenCol[thenColIndex],
+              id: newid,
+              field: newid,
+              headerComponent: (props: any) => (
+                <CustomHeaderCell
+                  {...existingHeaderComponent().props} // Pass the previous props
+                  id={newid}
+                />
+              ),
+            };
+            updatedColDefs[2].children.push(selectedColumn);
+          }
+
           return updatedColDefs;
         });
       }
     },
-    [whenColumnDefs]
+    []
   );
 
   const handleCellValueChanged = (params: any) => {
@@ -459,15 +529,15 @@ const Table = () => {
   const isFirstRender = useRef(true);
 
   // this one will create a column without any value of header name and it's type
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      if (whenColumnDefs[1].children.length <= 1) {
-        // this function is calling to add column at first render
-        handleAddWhenCol();
-      }
-    }
-  }, [whenColumnDefs?.length]);
+  // useEffect(() => {
+  //   if (isFirstRender.current) {
+  //     isFirstRender.current = false;
+  //     if (whenColumnDefs[1].children.length <= 1) {
+  //       // this function is calling to add column at first render
+  //       handleAddWhenCol();
+  //     }
+  //   }
+  // }, [whenColumnDefs, handleAddWhenCol]);
 
   return (
     <div className="flex flex-col max-w-[130%]">
@@ -476,14 +546,12 @@ const Table = () => {
           <AgGridReact
             ref={gridRef}
             rowData={whenRowData}
-            // columnDefs={whenColDefs} //zustand state column array
             columnDefs={whenColumnDefs}
             defaultColDef={defaultColDef}
             className={`ag-theme-alpine`}
             gridOptions={gridOptions}
             onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
             rowDragManaged={true}
-            // domLayout={'autoHeight'}
             animateRows={true}
             groupHeaderHeight={42}
             headerHeight={65}
