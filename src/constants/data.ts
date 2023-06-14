@@ -1,5 +1,3 @@
-import { rowType } from './interfaces';
-
 export const types = [
   {
     id: 1,
@@ -19,7 +17,7 @@ export const types = [
   },
   {
     id: 5,
-    type: 'Data',
+    type: 'Date',
   },
   {
     id: 6,
@@ -36,26 +34,6 @@ export const types = [
   {
     id: 9,
     type: 'YearMonthDuration',
-  },
-];
-export const DefaultWhenRowData: rowType[] = [
-  {
-    id: 1,
-    name: 'Shakir Farhan',
-    age: 18,
-    phone: 88484,
-  },
-  {
-    id: 2,
-    name: 'John Doe',
-    age: 21,
-    phone: 24533,
-  },
-  {
-    id: 3,
-    name: 'Rock',
-    age: 32,
-    phone: 687647,
   },
 ];
 
@@ -100,24 +78,6 @@ export const rowOptions = [
     header: 'Delete Rule',
   },
 ];
-// export const cellOptions = [
-//   { id: 'any', value: 'Any' },
-//   { id: 'equals', value: 'Equals' },
-//   { id: 'notEquals', value: 'Does not equal' },
-//   { id: 'greaterThan', value: 'Greater than' },
-//   { id: 'lessThan', value: 'Less than' },
-//   { id: 'greaterThanOrEqual', value: 'Greater than or equal to' },
-//   { id: 'lessThanOrEqual', value: 'Less than or equal to' },
-//   { id: 'between', value: 'Between' },
-//   { id: 'isEven', value: 'Is even' },
-//   { id: 'isOdd', value: 'Is Odd' },
-//   { id: 'isNegative', value: 'Is negative' },
-//   { id: 'isZero', value: 'Is Zero' },
-//   { id: 'isNotZero', value: 'Is not zero' },
-//   { id: 'isMultipleOf', value: 'Is a multiple of' },
-//   { id: 'isNotMultipleOf', value: 'Is not a multiple of' },
-// ];
-
 export const cellOptions = [
   { id: 'Any', value: 'Any' },
   { id: 'Equals', value: 'Equals' },

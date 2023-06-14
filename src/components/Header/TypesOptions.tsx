@@ -41,11 +41,11 @@ const TypesOptions: React.FC<defaultProps> = ({
           onChange={handleSelectedOptions}
         >
           {types.map((e) => {
-            if (selectedOption === e.type.toLowerCase()) {
+            if (selectedOption === e.type) {
               return (
                 <option
                   key={e.id}
-                  value={e.type.toLowerCase()}
+                  value={e.type}
                   className="w-[100px] h-[400px] text-[#2f54eb] outline-0 border-none bg-[#f0f5ff] shadow-lg rounded-[-10px] px-[4px] py-[3px] text-[15px] tracking-[0.3px] mb-4px"
                 >
                   {e.type}
@@ -53,7 +53,7 @@ const TypesOptions: React.FC<defaultProps> = ({
               );
             }
             return (
-              <option key={e.id} value={e.type.toLowerCase()}>
+              <option key={e.id} value={e.type}>
                 {e.type}
               </option>
             );
