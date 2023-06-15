@@ -10,9 +10,35 @@ import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
 import { handleEditCol } from '../constants/interfaces';
+import { GrDownload } from 'react-icons/gr';
+import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
+import { CsvExportModule } from '@ag-grid-community/csv-export';
+import DashBoardLayout from './layout/indext';
+// cell code
+// interface tableInterface {
+//   rowData: any[];
+//   columnData: any[];
+// }
+// const disable = (id: any, disabled: any) => {
+//   const element = document.querySelector(id);
+//   if (element !== null) {
+//     element.disabled = disabled;
+//   } else {
+//     console.error(`Element with ID ${id} not found.`);
+//   }
+// };
 
+// const setValue = (id: any, value: any) => {
+//   if (value) {
+//     document.querySelector(id).value = value;
+//   }
+// };
 const Table = () => {
   const { addRow, whenRowData } = useStore((store) => store);
+  //cell code
+  // const [undoValue, setUndoValue] = useState(null);
+  // const [redoValue, setRedoValue] = useState(null);
+
   const gridRef: React.MutableRefObject<any> = useRef(null);
   const whenID = uuid();
   const thenID = uuid();
@@ -72,18 +98,45 @@ const Table = () => {
       headerClass: 'ag-header-cell',
       children: [
         {
-          id: thenID,
+          id: whenID,
           headerName: '',
-          field: thenID,
+          field: whenID,
 
           dataType: '',
           sortable: true,
-          // rowDrag: true,
+          // cell code
+          // cellDataType: 'object',
+          // valueParser: (params: any) => {
+          //   // convert `params.newValue` string value into complex object
+          //   console.log('pasrser');
+          //   return {
+          //     actualValue: params.newValue,
+          //     anotherProperty: params.data.anotherProperty,
+          //   };
+          // },
+          // valueGetter: (params: any) => {
+          //   // create complex object from data
+          //   return {
+          //     actualValue: params.data[params.colDef.field],
+          //     anotherProperty: params.data.anotherProperty,
+          //   };
+          // },
+          // valueSetter: (params: any) => {
+          //   // update data from complex object
+          //   console.log('setter');
+          //   params.data[params.colDef.field] = params.newValue.actualValue;
+          //   return true;
+          // },
+          // equals: (valueA: any, valueB: any) => {
+          //   // compare complex objects
+          //   return valueA.actualValue === valueB.actualValue;
+          // },
+
           headerComponent: () => (
             <CustomHeaderCell
               label=""
               dataType=""
-              id={thenID}
+              id={whenID}
               userColumn={true}
               onColumnChange={handleEditCol}
               handlePin={handlePin}
@@ -115,9 +168,9 @@ const Table = () => {
       minWidth: 600,
       children: [
         {
-          id: whenID,
+          id: thenID,
           headerName: '',
-          field: whenID,
+          field: thenID,
 
           dataType: '',
           sortable: true,
@@ -126,7 +179,7 @@ const Table = () => {
             <CustomHeaderCell
               label=""
               dataType=""
-              id={whenID}
+              id={thenID}
               userColumn={true}
               onColumnChange={handleEditCol}
               handlePin={handlePin}
@@ -201,7 +254,7 @@ const Table = () => {
       // resizable: true,
       sortable: true,
       filter: true,
-      editable: false,
+      editable: true,
       flex: 1,
       minWidth: 300,
     }),
@@ -391,7 +444,6 @@ const Table = () => {
       const whenColIndex = whenCol.findIndex((col: any) => col.id === id);
       const thenColIndex = thenCol.findIndex((col: any) => col.id === id);
       if (whenColIndex !== -1) {
-        console.log(whenCol[whenColIndex]);
         whenCol[whenColIndex] = {
           ...whenCol[whenColIndex],
           pinned: 'left', // Set pinned property to 'left' unconditionally
@@ -437,7 +489,6 @@ const Table = () => {
         const columnState = gridRef.current?.columnApi?.getColumnState();
         const sortedColumns = columnState.map((column: any) => {
           if (column.colId === id) {
-            console.log(column);
             return { ...column, sort: 'asc' }; // Apply ascending sorting to the specified column
           } else {
             return { ...column, sort: null }; // Remove sorting from other columns
@@ -503,10 +554,44 @@ const Table = () => {
     []
   );
 
-  const handleCellValueChanged = (params: any) => {
-    params.api.stopEditing();
-  };
+  // const handleCellValueChanged = (params: any) => {
+  //   params.api.stopEditing();
+  // };
 
+  // cell code
+  // // ---------- Undo/Redo -----------
+
+  // const onFirstDataRendered = useCallback(() => {
+  //   setValue('#undoInput', 0);
+  //   disable('#undoInput', true);
+  //   disable('#undoBtn', true);
+  //   setValue('#redoInput', 0);
+  //   disable('#redoInput', true);
+  //   disable('#redoBtn', true);
+  // }, []);
+
+  // const onCellValueChanged = useCallback((params: any) => {
+  //   console.log(params);
+  //   console.log('value changed');
+  //   var undoSize = gridRef.current.api.getCurrentUndoSize();
+  //   // setValue('#undoInput', undoSize);
+  //   setUndoValue(undoSize);
+  //   disable('#undoBtn', undoSize < 1);
+  //   var redoSize = gridRef.current.api.getCurrentRedoSize();
+  //   // setValue('#redoInput', redoSize);
+  //   setRedoValue(redoSize);
+  //   disable('#redoBtn', redoSize < 1);
+  // }, []);
+
+  // const undo = useCallback(() => {
+  //   gridRef.current.api.undoCellEditing();
+  // }, []);
+
+  // const redo = useCallback(() => {
+  //   gridRef.current.api.redoCellEditing();
+  // }, []);
+
+  // // --------------------------------
   useEffect(() => {
     window.addEventListener('error', (e) => {
       if (e.message === 'ResizeObserver loop limit exceeded') {
@@ -539,27 +624,96 @@ const Table = () => {
   //   }
   // }, [whenColumnDefs, handleAddWhenCol]);
 
+  // const onBtExport = useCallback(() => {
+  //   gridRef.current.api.exportDataAsExcel();
+  // }, []);
+
+  //  converts the data available in the table to excel and then it downloads it
+  const onBtExport = useCallback(() => {
+    gridRef.current.api.exportDataAsExcel({
+      fileName: 'exported_table.xlsx',
+      processCellCallback: (params: any) => {
+        if (params.value && typeof params.value === 'object') {
+          return params.value.value; // for type params.value.type
+        }
+        return params.value;
+      },
+    });
+  }, []);
+
+  const csvDownload = useCallback(() => {
+    gridRef.current.api.exportDataAsCsv({
+      fileName: 'exported_table.csv',
+      processCellCallback: (params: any) => {
+        if (params.value && typeof params.value === 'object') {
+          return params.value.value; // for type params.value.type
+        }
+        return params.value;
+      },
+    });
+  }, []);
   return (
-    <div className="flex flex-col max-w-[130%]">
-      <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[#e7e7e7]">
-        <div className="flex-1 w-full h-[300px]">
-          <AgGridReact
-            ref={gridRef}
-            rowData={whenRowData}
-            columnDefs={whenColumnDefs}
-            defaultColDef={defaultColDef}
-            className={`ag-theme-alpine`}
-            gridOptions={gridOptions}
-            onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
-            rowDragManaged={true}
-            animateRows={true}
-            groupHeaderHeight={42}
-            headerHeight={65}
-            isFullWidthRow={isFullWidthRow}
-          />
+    <DashBoardLayout
+      // cell code
+      handleRedo={() => ''}
+      handleUndo={() => ''}
+      downloadCSV={csvDownload}
+      downloadExcel={onBtExport}
+    >
+      <div className="flex flex-col max-w-[130%]">
+        {/*  cell code  */}
+        {/* <div>
+          <span className="button-group">
+            <label>Available Undo's</label>
+            <input
+              id="undoInput"
+              className="undo-redo-input"
+              value={undoValue ? undoValue : 0}
+            />
+            <label>Available Redo's</label>
+            <input
+              id="redoInput"
+              className="undo-redo-input"
+              value={redoValue ? redoValue : 0}
+            />
+            <button id="undoBtn" className="undo-btn" onClick={undo}>
+              Undo
+            </button>
+            <button id="redoBtn" className="redo-btn" onClick={redo}>
+              Redo
+            </button>
+          </span>
+        </div> */}
+        <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[#e7e7e7]">
+          <div className="flex-1 w-full h-[300px]">
+            <AgGridReact
+              ref={gridRef}
+              rowData={whenRowData}
+              columnDefs={whenColumnDefs}
+              defaultColDef={defaultColDef}
+              className={`ag-theme-alpine`}
+              gridOptions={gridOptions}
+              // onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
+              rowDragManaged={true}
+              animateRows={true}
+              groupHeaderHeight={42}
+              headerHeight={65}
+              isFullWidthRow={isFullWidthRow}
+              modules={[ExcelExportModule, CsvExportModule]} // Registering csv and excel to download
+              // undo/redo related - cell code
+              // enterMovesDown={true}
+              // enableRangeSelection={true}
+              // enableFillHandle={true}
+              // undoRedoCellEditing={true}
+              // undoRedoCellEditingLimit={5}
+              // enableCellChangeFlash={true}
+              // onFirstDataRendered={onFirstDataRendered}
+              // onCellValueChanged={onCellValueChanged}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </DashBoardLayout>
   );
 };
 export default Table;
