@@ -25,13 +25,13 @@ const DashBoardLayout: React.FC<CardProps> = ({children}) => {
     const sunIcon = <BsSun size={22} className={mode === 'light' ? 'text-black' : 'text-white'} />;
 
     return (
-        <Layout className={mode === 'light' ? 'bg-white text-black' : 'bg-[#242526] text-white'}>
-            <Sider trigger={null} collapsible collapsed={collapsed}>
-                <div className={` ${mode === 'light' ? 'bg-white' :'bg-[#242526]' }  p-7 cursor-pointer`}>
+        <Layout className={mode === 'light' ? 'bg-white text-black' : 'bg-[#18191A] text-white'}>
+            <Sider trigger={null} collapsible collapsed={collapsed} className={ mode === 'dark' ? `border-r-[0.2px] border-[#242526]` : ''}>
+                <div className={` ${mode === 'light' ? 'bg-white' :'bg-[#18191A]' }  p-7 cursor-pointer`}>
                     <AiOutlineMenu size={22} onClick={() => setCollapsed(!collapsed)} />
                 </div>
                 <Menu
-                    className={`h-[100vh] ${mode === 'dark' ? 'bg-[#242526]' : 'bg-white'}`}
+                    className={`h-[100vh] ${mode === 'dark' ? 'bg-[#18191A]' : 'bg-white'}`}
                     theme={mode === "light" ? 'light' : 'dark'}
                     mode="inline"
                     defaultSelectedKeys={['1']}
@@ -76,7 +76,7 @@ const DashBoardLayout: React.FC<CardProps> = ({children}) => {
             </Sider>
             <Layout className="h-[100vh]">
                 <Header style={{ padding: 0, background: colorBgContainer }}>
-                    <nav className={mode === 'dark' ? 'bg-[#242526]' : 'bg-[#ffffff]'}>
+                    <nav className={mode === 'dark' ? 'bg-[#18191A]' : 'bg-[#ffffff]'}>
                         <div className="container mx-auto flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                                 <a href="#" className={`${mode === 'dark' ? "text-white": "text-black"} font-bold`}>Home</a>
@@ -104,7 +104,7 @@ const DashBoardLayout: React.FC<CardProps> = ({children}) => {
                 <Content
                     style={{
                         minHeight: 280,
-                        background: mode === 'light' ? '#ffffff' : '#242526',
+                        background: mode === 'light' ? '#ffffff' : '#18191A',
                     }}
                 >
                     {children}

@@ -23,9 +23,13 @@ const CustomCell: React.FC<IProps> = (props) => {
   const { editRowData } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
+    // cell code
+    // props && props.cellValue?.actualValue && props.cellValue.actualValue.value
     props && props.cellValue && props.cellValue.value
   );
   const [selectedOption, setSelectedOption] = useState(
+    // cell code
+    // props && props.cellValue?.actualValue && props.cellValue.actualValue.type
     props && props.cellValue && props.cellValue.type
   );
   const [hovering, setHovering] = useState(false);
@@ -60,9 +64,13 @@ const CustomCell: React.FC<IProps> = (props) => {
           onMouseLeave={handleMouseLeave}
         >
           <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
+            {/* cell code  */}
+            {/* {props &&
+              props.cellValue?.actualValue &&
+              props.cellValue?.actualValue.type && ( */}
             {props && props.cellValue && props.cellValue.type && (
               <div className="rounded-0 bg-[#f5f5f5]  tracking-[1px] h-[25px]  flex items-center cellType ">
-                {containsSpecialValue(props.cellValue.type) ? (
+                {containsSpecialValue(props.cellValue.actualValue.type) ? (
                   <span className="flex items-center font-medium text-[#595959] w-[26px] pl-2 py-0">
                     {props.cellValue.type}
                   </span>
@@ -73,7 +81,12 @@ const CustomCell: React.FC<IProps> = (props) => {
                 )}
               </div>
             )}
+
             <span className="text-[12px] font-medium text-[#595959] tracking-wide">
+              {/* cell code  */}
+              {/* {props &&
+                props.cellValue?.actualValue &&
+                props.cellValue?.actualValue?.value} */}
               {props && props.cellValue && props.cellValue.value}
             </span>
             <Popover

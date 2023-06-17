@@ -76,7 +76,6 @@ export const useStore = create<
 
     editRowData: (rowIndex, colId, value) =>
       set((store) => {
-        console.log(value);
         const updatedRowData = [...store.whenRowData];
         const rowToUpdate = updatedRowData[rowIndex];
         rowToUpdate[colId] = value;
