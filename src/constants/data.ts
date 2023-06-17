@@ -133,7 +133,7 @@ export const headerTypes = [
       { id: 'any', value: 'Any', regex: "" },
       { id: "capital", value: "Capital", regex: "^[A-Z]+$" },
       { id: "small", value: "Small", regex: "^[a-z]+$" },
-      { id: "alphanumeric", value: "Small", regex: "^[A-Za-z0-9]+$" },
+      { id: "alphanumeric", value: "Alpha Numeric", regex: "^[A-Za-z0-9]+$" },
     ]
   },
   {
