@@ -14,6 +14,7 @@ import { GrDownload } from 'react-icons/gr';
 import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
+import PopupCell from './Cell/PopupCell';
 // cell code
 // interface tableInterface {
 //   rowData: any[];
@@ -155,6 +156,19 @@ const Table = () => {
             id: whenColumnDefs.length === 1 ? 'first-col' : '',
             handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
           }),
+          cellEditor: PopupCell,
+          cellEditorParams: (params: any) => ({
+            onEdit: () => {
+              params.api.startEditingCell({
+                rowIndex: params.node.rowIndex,
+                colKey: params.column.colId,
+              });
+            },
+            cellValue: params.value,
+            id: whenColumnDefs.length === 1 ? 'first-col' : '',
+            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
+          }),
+          cellEditorPopup: true,
           headerClass: 'column-header',
         },
       ],
@@ -570,18 +584,18 @@ const Table = () => {
   //   disable('#redoBtn', true);
   // }, []);
 
-  // const onCellValueChanged = useCallback((params: any) => {
-  //   console.log(params);
-  //   console.log('value changed');
-  //   var undoSize = gridRef.current.api.getCurrentUndoSize();
-  //   // setValue('#undoInput', undoSize);
-  //   setUndoValue(undoSize);
-  //   disable('#undoBtn', undoSize < 1);
-  //   var redoSize = gridRef.current.api.getCurrentRedoSize();
-  //   // setValue('#redoInput', redoSize);
-  //   setRedoValue(redoSize);
-  //   disable('#redoBtn', redoSize < 1);
-  // }, []);
+  const onCellValueChanged = useCallback((params: any) => {
+    // console.log(params);
+    // console.log('value changed');
+    // var undoSize = gridRef.current.api.getCurrentUndoSize();
+    // // setValue('#undoInput', undoSize);
+    // setUndoValue(undoSize);
+    // disable('#undoBtn', undoSize < 1);
+    // var redoSize = gridRef.current.api.getCurrentRedoSize();
+    // // setValue('#redoInput', redoSize);
+    // setRedoValue(redoSize);
+    // disable('#redoBtn', redoSize < 1);
+  }, []);
 
   // const undo = useCallback(() => {
   //   gridRef.current.api.undoCellEditing();
@@ -629,6 +643,17 @@ const Table = () => {
   // }, []);
 
   //  converts the data available in the table to excel and then it downloads it
+
+  const onCellClicked = (event: any) => {
+    console.log('Cell clicked:', event);
+  };
+
+  const onCellEditStart = (event: any) => {
+    console.log('Cell edited started :', event);
+  };
+  const onCellEditEnd = (event: any) => {
+    console.log('Cell edited ended :', event);
+  };
   const onBtExport = useCallback(() => {
     gridRef.current.api.exportDataAsExcel({
       fileName: 'exported_table.xlsx',
@@ -700,6 +725,7 @@ const Table = () => {
               headerHeight={65}
               isFullWidthRow={isFullWidthRow}
               modules={[ExcelExportModule, CsvExportModule]} // Registering csv and excel to download
+              suppressClickEdit={true}
               // undo/redo related - cell code
               // enterMovesDown={true}
               // enableRangeSelection={true}
@@ -708,7 +734,11 @@ const Table = () => {
               // undoRedoCellEditingLimit={5}
               // enableCellChangeFlash={true}
               // onFirstDataRendered={onFirstDataRendered}
-              // onCellValueChanged={onCellValueChanged}
+
+              onCellValueChanged={onCellValueChanged}
+              onCellClicked={onCellClicked}
+              onCellEditingStarted={onCellEditStart}
+              onCellEditingStopped={onCellEditEnd}
             />
           </div>
         </div>
