@@ -118,6 +118,91 @@ export const rowOptions = [
 //   { id: 'isNotMultipleOf', value: 'Is not a multiple of' },
 // ];
 
+export const headerTypes = [
+  {
+    id: 1,
+    type: "None",
+    options: [
+      { id: 'any', value: 'Any', regex: "" },
+    ]
+  },
+  {
+    id: 2,
+    type: "String",
+    options: [
+      { id: 'any', value: 'Any', regex: "" },
+      { id: "capital", value: "Capital", regex: "^[A-Z]+$" },
+      { id: "small", value: "Small", regex: "^[a-z]+$" },
+      { id: "alphanumeric", value: "Small", regex: "^[A-Za-z0-9]+$" },
+    ]
+  },
+  {
+    id: 3,
+    type: "Boolean",
+    options: [
+      { id: 'true', value: 'True', regex: "^True$" },
+      { id: 'false', value: 'False', regex: "^False$" },
+    ]
+  },
+  {
+    id: 4,
+    type: "Number",
+    options: [
+      { id: 'equal', value: 'Equal', regex: "" },
+      { id: 'doesnotequal', value: 'Does not equal', regex: "" },
+      { id: 'greaterthan', value: 'Greater than', regex: "" },
+      { id: 'lessthan', value: 'Less than', regex: "" },
+      { id: 'greaterthanorequal', value: 'Greater than or equal to', regex: "" },
+      { id: 'lessthanorequal', value: 'Less than or equal to', regex: "" },
+      { id: 'between', value: 'Between', regex: "" },
+      { id: 'iseven', value: 'Is even', regex: "" },
+      { id: 'isodd', value: 'Is Odd', regex: "" },
+      { id: 'isnegative', value: 'Is negative', regex: "" },
+      { id: 'iszero', value: 'Is Zero', regex: "" },
+      { id: 'isnotzero', value: 'Is not zero', regex: "" },
+      { id: 'ismultipleof', value: 'Is a multiple of', regex: "" },
+      { id: 'isnotmultipleof', value: 'Is not a multiple of', regex: "" },
+    ]
+  },
+  {
+    id: 5,
+    type: "Date",
+    options: [
+      { id: 'between', value: 'Between', regex: "" },
+    ]
+  },
+  {
+    id: 6,
+    type: "Time",
+    options: [
+      { id: 'between', value: 'Between', regex: "" },
+    ]
+  },
+  {
+    id: 7,
+    type: "Date Time",
+    options: [
+      { id: 'between', value: 'Between', regex: "" },
+    ]
+  },
+  {
+    id: 7,
+    type: "Day Time Duration",
+    options: [
+      { id: 'fromdaytoday', value: 'From DayTime to Daytime', regex: "" },
+    ]
+  },
+  {
+    id: 7,
+    type: "Year Month Duration",
+    options: [
+      { id: 'fromyeartoyear', value: 'From year to year', regex: "" },
+      { id: 'frommonthtomonth', value: 'From Month to Month', regex: "" },
+    ]
+  },
+  
+]
+
 export const cellOptions = [
   { id: 'Any', value: 'Any' },
   { id: 'Equals', value: 'Equals' },

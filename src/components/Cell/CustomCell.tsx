@@ -4,7 +4,7 @@ import editIcon from '../../assets/Edit.svg';
 import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
-import { cellOptions, containsSpecialValue } from '../../constants/data';
+import { cellOptions, containsSpecialValue, headerTypes } from '../../constants/data';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -17,6 +17,9 @@ interface IProps {
   handleAddRow: () => void;
 }
 const CustomCell: React.FC<IProps> = (props) => {
+
+  console.log({props: props?.column?.colDef?.dataType})
+
   const { editRowData } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
@@ -89,9 +92,9 @@ const CustomCell: React.FC<IProps> = (props) => {
                         className="w-full rounded-0 mb-3 select"
                         defaultValue={selectedOption || 'Default'}
                         onChange={handleChangeOption}
-                        options={cellOptions.map((data) => ({
-                          label: data.value,
-                          value: data.value,
+                        options={headerTypes.find(value => value.type.toLowerCase() === props?.column?.colDef?.dataType)?.options.map((data) => ({
+                          label: data?.value,
+                          value: data?.value,
                         }))}
                       />
                       <Input
