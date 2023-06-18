@@ -117,7 +117,7 @@ const CustomCell: React.FC<IProps> = (props) => {
                         value={editingValue}
                         onChange={handleChange}
                       />
-                      <button type="submit"></button>
+                      <button type="submit" className='w-full mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-1 border border-gray-400 rounded shadow'>Submit</button>
                     </Form>
                   </div>
                 </>

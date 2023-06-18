@@ -25,7 +25,7 @@ const TypesOptions: React.FC<defaultProps> = ({
     <>
       <form
         onSubmit={handleOnSubmit}
-        className="modal-options flex flex-col gap-y-[12px] px-[10px] py-[8px] bg-[var(--primary-bg)] w-[270px] h-[230px]"
+        className="modal-options flex flex-col gap-y-[12px] px-[10px] py-[8px] bg-[var(--primary-bg)] w-[270px] h-[280px]"
       >
         <input
           name="col-name"
@@ -77,7 +77,7 @@ const TypesOptions: React.FC<defaultProps> = ({
           type="text"
           placeholder="Expression"
         />
-        <button type="submit"></button>
+        <button type="submit" className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-1 border border-gray-400 rounded shadow'>Submit</button>
       </form>
     </>
   );
