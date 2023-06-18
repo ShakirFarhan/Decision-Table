@@ -8,10 +8,10 @@ html {
   overflow-y: hidden;
 }
 .ag-theme-alpine {
-  --ag-foreground-color: #282c35;
-  --ag-background-color: #fafafa;
-  --ag-header-foreground-color: #282c35;
-  --ag-header-column-resize-handle-color: rgb(126, 46, 132);
+  --ag-foreground-color: var(--foreground-color);
+  --ag-background-color: var(--primary-bg);
+  --ag-header-foreground-color: var(--foreground-color);
+  /* --ag-header-column-resize-handle-color: rgb(126, 46, 132); */
   --ag-header-height: 65px;
   --ag-header-column-separator-width: 2px;
   --ag-font-size: 17px;
@@ -47,13 +47,14 @@ html {
 }
 /* Container class of grouped headers */
 .ag-header {
-  border-left: 2px solid #e7e7e7;
+  /* border-left: 2px solid var(--primary-border); */
   border-bottom: 0.01px solid transparent;
+  background-color: transparent;
 }
 /* individual column header */
 .column-header {
-  background-color: #f5f5f5;
-  border-right: 1.76px solid #e7e7e7;
+  background-color: var(--primary-bg);
+  border-right: 1.76px solid var(--primary-border);
   width: 100%;
   box-sizing: border-box;
 }
@@ -95,7 +96,7 @@ html {
   border: transparent;
   border-width: 0;
   outline: 0;
-  border-color: #ffff;
+  border-color: var(--secondary-color);
 }
 
 .ag-ltr .ag-cell:not(.ag-cell-range-selected):focus-within {
@@ -107,42 +108,45 @@ html {
   padding-left: 0;
   padding-right: 0;
 }
-/* .ag-body {
-
-
-} */
+.ag-row-odd,
+.ag-row-even {
+  background-color: var(--primary-bg);
+}
+.ag-row-animation .ag-row {
+  transition: none;
+}
 
 .top-column-header {
   width: 100%;
   font-size: 12px;
   display: flex;
   align-items: center;
-  color: #595959;
+  color: var(--primary-color);
   font-size: 12px;
   font-weight: 600;
   padding-right: 0;
-  background-color: #fff;
+  background-color: var(--secondary-bg);
   letter-spacing: 0.4px;
-  border-right: 2px solid #e7e7e7;
+  border-right: 2px solid var(--primary-border);
 }
 .top-column-header:hover {
-  background-color: #fff;
+  background-color: var(--secondary-bg);
 }
 .ag-header-row {
   height: 30px;
 }
 /* Header group */
 .ag-header-group-cell {
-  background-color: #ffff;
+  background-color: var(--secondary-bg);
   padding-left: 12px;
   padding-right: 0;
 }
 .ag-header-group-cell:hover {
-  background-color: #ffff !important;
+  background-color: var(--secondary-bg) !important;
 }
 .ag-row {
-  border-bottom: 1.64px solid #e7e7e7;
-  border-right: 1px solid #e7e7e7;
+  border-bottom: 1.64px solid var(--primary-border);
+  border-right: 1px solid var(--primary-border);
 }
 
 .ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(

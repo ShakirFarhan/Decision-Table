@@ -1,6 +1,6 @@
 .col-input::placeholder {
-  color: #262626;
+  color: var(--dark-grey);
 }
 .col-other-input::placeholder {
-  color: #8c8c8c;
+  color: var(--dark-grey);
 }

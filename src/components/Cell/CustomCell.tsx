@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import { Input, Popover } from 'antd';
-import editIcon from '../../assets/Edit.svg';
+import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
@@ -23,13 +23,9 @@ const CustomCell: React.FC<IProps> = (props) => {
   const { editRowData } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
-    // cell code
-    // props && props.cellValue?.actualValue && props.cellValue.actualValue.value
     props && props.cellValue && props.cellValue.value
   );
   const [selectedOption, setSelectedOption] = useState(
-    // cell code
-    // props && props.cellValue?.actualValue && props.cellValue.actualValue.type
     props && props.cellValue && props.cellValue.type
   );
   const [hovering, setHovering] = useState(false);
@@ -59,34 +55,26 @@ const CustomCell: React.FC<IProps> = (props) => {
     return (
       <>
         <div
-          className="w-full h-full border-l-[1.5px] border-r-[1.5px] border-r-transparent border-y-[1.5px] border-y-transparent border-[#e7e7e7] bg-[#fafafa] hover:bg-[#fff] hover:border-[1.5px] hover:border-[#597EF7] hover:cursor-pointer"
+          className="w-full h-full border-l-[1.5px] border-r-[1.5px] border-r-transparent border-y-[1.5px] border-y-transparent border-[var(--primary-border)] bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1.5px] hover:border-[var(--secondary-color)] hover:cursor-pointer"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
-            {/* cell code  */}
-            {/* {props &&
-              props.cellValue?.actualValue &&
-              props.cellValue?.actualValue.type && ( */}
             {props && props.cellValue && props.cellValue.type && (
-              <div className="rounded-0 bg-[#f5f5f5]  tracking-[1px] h-[25px]  flex items-center cellType ">
-                {containsSpecialValue(props.cellValue.actualValue.type) ? (
-                  <span className="flex items-center font-medium text-[#595959] w-[26px] pl-2 py-0">
+              <div className="rounded-0 bg-[var(--primary-bg)]  tracking-[1px] h-[25px]  flex items-center cellType ">
+                {containsSpecialValue(props.cellValue.type) ? (
+                  <span className="flex items-center font-medium text-[var(--primary-color)] w-[26px] pl-2 py-0">
                     {props.cellValue.type}
                   </span>
                 ) : (
-                  <span className="text-[13px] font-medium text-[#595959] px-2">
+                  <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
                     {props.cellValue.type}
                   </span>
                 )}
               </div>
             )}
 
-            <span className="text-[12px] font-medium text-[#595959] tracking-wide">
-              {/* cell code  */}
-              {/* {props &&
-                props.cellValue?.actualValue &&
-                props.cellValue?.actualValue?.value} */}
+            <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
               {props && props.cellValue && props.cellValue.value}
             </span>
             <Popover
@@ -99,10 +87,15 @@ const CustomCell: React.FC<IProps> = (props) => {
               }}
               content={
                 <>
-                  <div className="w-[240px] p-3 -rounded-[20px]">
+                  <div className="w-[240px] p-3 bg-[var(--primary-bg)] -rounded-[20px]">
                     <Form onFinish={handleSubmit}>
                       <Select
-                        className="w-full rounded-0 mb-3 select"
+                        style={{
+                          backgroundColor: 'var(--primary-bg)',
+                          borderColor: 'var(--primary-border)',
+                          color: 'var(--primary-color)',
+                        }}
+                        className="w-full rounded-0 mb-3 select "
                         defaultValue={selectedOption || 'Default'}
                         onChange={handleChangeOption}
                         options={headerTypes.find(value => value.type.toLowerCase() === props?.column?.colDef?.dataType)?.options.map((data) => ({
@@ -111,6 +104,12 @@ const CustomCell: React.FC<IProps> = (props) => {
                         }))}
                       />
                       <Input
+                        style={{
+                          backgroundColor: 'var(--primary-bg)',
+                          borderColor: 'var(--primary-border)',
+                          color: 'var(--primary-color)',
+                        }}
+                        className="px-[10px] py-[4px] border-[1.7px]"
                         placeholder={editingValue || 'Enter'}
                         value={editingValue}
                         onChange={handleChange}
@@ -127,7 +126,7 @@ const CustomCell: React.FC<IProps> = (props) => {
                 className="absolute right-4 w-[18px] h-[18px]"
               >
                 {hovering || clicked ? (
-                  <img src={editIcon} className="w-[18px] h-[18px]" alt="" />
+                  <AiOutlineEdit color="var(--secondary-color)" />
                 ) : (
                   ''
                 )}
