@@ -8,7 +8,7 @@ import CustomCell from './Cell/CustomCell';
 import uuid from 'react-uuid';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
-import ButtonHeader from './Header/ButtonHeader';
+import {ButtonHeader} from './Header/ButtonHeader';
 import { handleEditCol } from '../constants/interfaces';
 import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
@@ -569,10 +569,10 @@ const Table = () => {
   return (
     <DashBoardLayout
       // cell code
-      // handleRedo={() => ''}
-      // handleUndo={() => ''}
-      // downloadCSV={csvDownload}
-      // downloadExcel={onBtExport}
+      handleRedo={() => ''}
+      handleUndo={() => ''}
+      downloadCSV={csvDownload}
+      downloadExcel={onBtExport}
     >
       <div className="flex flex-col max-w-[130%] bg-[var(--secondary-bg)] h-full">
         <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[var(--primary-border)]">

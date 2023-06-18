@@ -98,10 +98,13 @@ const CustomCell: React.FC<IProps> = (props) => {
                         className="w-full rounded-0 mb-3 select "
                         defaultValue={selectedOption || 'Default'}
                         onChange={handleChangeOption}
-                        options={headerTypes.find(value => value.type.toLowerCase() === props?.column?.colDef?.dataType)?.options.map((data) => ({
-                          label: data?.value,
-                          value: data?.value,
-                        }))}
+                        options={headerTypes.find(value => value.type === props?.column?.colDef?.dataType)?.options.map((data) => {
+                          return {
+                            label: data?.value,
+                            value: data?.value,
+                          }
+                          
+                        })}
                       />
                       <Input
                         style={{

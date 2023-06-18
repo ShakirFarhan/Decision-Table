@@ -3,7 +3,7 @@ type props = {
   name: string;
   onClick?: () => void;
 };
-function ButtonHeader({ name, onClick }: props) {
+export const ButtonHeader = ({ name, onClick }: props)  =>{
   if (name !== 'Annotations') {
     return (
       <div
@@ -30,4 +30,3 @@ function ButtonHeader({ name, onClick }: props) {
   );
 }
 
-export default ButtonHeader;
