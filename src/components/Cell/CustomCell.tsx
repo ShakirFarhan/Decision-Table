@@ -14,7 +14,11 @@ interface IProps {
   node?: any;
   value?: any;
   data?: any;
+  api?: any;
+  current?: any;
+  rowIndex?: any;
   handleAddRow: () => void;
+  setSuppressKeyboardEvent?: any;
 }
 const CustomCell: React.FC<IProps> = (props) => {
 
@@ -31,6 +35,11 @@ const CustomCell: React.FC<IProps> = (props) => {
   const [hovering, setHovering] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.api.startEditingCell({
+      rowIndex: props.rowIndex,
+      colKey: props.column.getId(),
+    });
+    props.api.setSuppressRowClickSelection(true);
     setEditingValue(event.target.value);
   };
 
@@ -49,6 +58,11 @@ const CustomCell: React.FC<IProps> = (props) => {
       type: selectedOption,
       value: editingValue,
     };
+    props.api.stopEditing({
+      rowIndex: props.rowIndex,
+      colKey: props.column.getId(),
+    });
+
     editRowData(props.node.rowIndex, props.column.colId, cellValueNew);
   };
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {

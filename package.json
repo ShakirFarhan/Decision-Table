@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ag-grid-community/core": "^30.0.0",
-    "@ag-grid-enterprise/excel-export": "^30.0.0",
+    "@ag-grid-community/core": "30.0.0",
+    "@ag-grid-enterprise/excel-export": "30.0.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.14",
