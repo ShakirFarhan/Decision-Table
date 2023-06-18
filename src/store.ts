@@ -8,6 +8,7 @@ export interface zustandStoreInterface {
   thenRowData: any[];
   thenColData: columnInterface[];
   pinnedColumn: any;
+  mode: 'light' | 'dark';
   setPinnedColumn: (colId: string) => void;
   editRowData: (rowIndex: any, colId: any, value: any) => void;
   addRow: (whenColData: any, thenColData: any) => void;
@@ -16,6 +17,7 @@ export interface zustandStoreInterface {
   duplicateRule: (id: number) => void;
   deleteRule: (id: number) => void;
   clearRule: (id: number) => void;
+  setMode: (mode: 'light' | 'dark') => void;
 }
 
 export const useStore = create<
@@ -32,7 +34,11 @@ export const useStore = create<
     thenColData: [],
     thenRowData: [],
     pinnedColumn: null,
-
+    mode: 'light',
+    setMode: (mode) =>
+      set((store) => ({
+        mode: mode,
+      })),
     duplicateRule: (id) =>
       set((store) => {
         const whenRowData = [...store.whenRowData];
@@ -76,7 +82,6 @@ export const useStore = create<
 
     editRowData: (rowIndex, colId, value) =>
       set((store) => {
-        console.log(value);
         const updatedRowData = [...store.whenRowData];
         const rowToUpdate = updatedRowData[rowIndex];
         rowToUpdate[colId] = value;

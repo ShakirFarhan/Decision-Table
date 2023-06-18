@@ -10,9 +10,12 @@ import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
 import { handleEditCol } from '../constants/interfaces';
-
+import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
+import { CsvExportModule } from '@ag-grid-community/csv-export';
+import DashBoardLayout from './layout/indext';
 const Table = () => {
-  const { addRow, whenRowData } = useStore((store) => store);
+  const { addRow, whenRowData, mode } = useStore((store) => store);
+
   const gridRef: React.MutableRefObject<any> = useRef(null);
   const whenID = uuid();
   const thenID = uuid();
@@ -72,18 +75,16 @@ const Table = () => {
       headerClass: 'ag-header-cell',
       children: [
         {
-          id: thenID,
+          id: whenID,
           headerName: '',
-          field: thenID,
-
+          field: whenID,
           dataType: '',
           sortable: true,
-          // rowDrag: true,
           headerComponent: () => (
             <CustomHeaderCell
               label=""
               dataType=""
-              id={thenID}
+              id={whenID}
               userColumn={true}
               onColumnChange={handleEditCol}
               handlePin={handlePin}
@@ -115,9 +116,9 @@ const Table = () => {
       minWidth: 600,
       children: [
         {
-          id: whenID,
+          id: thenID,
           headerName: '',
-          field: whenID,
+          field: thenID,
 
           dataType: '',
           sortable: true,
@@ -126,7 +127,7 @@ const Table = () => {
             <CustomHeaderCell
               label=""
               dataType=""
-              id={whenID}
+              id={thenID}
               userColumn={true}
               onColumnChange={handleEditCol}
               handlePin={handlePin}
@@ -201,7 +202,7 @@ const Table = () => {
       // resizable: true,
       sortable: true,
       filter: true,
-      editable: false,
+      editable: true,
       flex: 1,
       minWidth: 300,
     }),
@@ -391,7 +392,6 @@ const Table = () => {
       const whenColIndex = whenCol.findIndex((col: any) => col.id === id);
       const thenColIndex = thenCol.findIndex((col: any) => col.id === id);
       if (whenColIndex !== -1) {
-        console.log(whenCol[whenColIndex]);
         whenCol[whenColIndex] = {
           ...whenCol[whenColIndex],
           pinned: 'left', // Set pinned property to 'left' unconditionally
@@ -437,7 +437,6 @@ const Table = () => {
         const columnState = gridRef.current?.columnApi?.getColumnState();
         const sortedColumns = columnState.map((column: any) => {
           if (column.colId === id) {
-            console.log(column);
             return { ...column, sort: 'asc' }; // Apply ascending sorting to the specified column
           } else {
             return { ...column, sort: null }; // Remove sorting from other columns
@@ -503,10 +502,6 @@ const Table = () => {
     []
   );
 
-  const handleCellValueChanged = (params: any) => {
-    params.api.stopEditing();
-  };
-
   useEffect(() => {
     window.addEventListener('error', (e) => {
       if (e.message === 'ResizeObserver loop limit exceeded') {
@@ -525,6 +520,10 @@ const Table = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    document.body.className = mode + '-theme';
+  }, [mode]);
   // using this to stop re-render of this below use effect
   const isFirstRender = useRef(true);
 
@@ -539,27 +538,64 @@ const Table = () => {
   //   }
   // }, [whenColumnDefs, handleAddWhenCol]);
 
+  // const onBtExport = useCallback(() => {
+  //   gridRef.current.api.exportDataAsExcel();
+  // }, []);
+
+  //  converts the data available in the table to excel and then it downloads it
+  const onBtExport = useCallback(() => {
+    gridRef.current.api.exportDataAsExcel({
+      fileName: 'exported_table.xlsx',
+      processCellCallback: (params: any) => {
+        if (params.value && typeof params.value === 'object') {
+          return params.value.value; // for type params.value.type
+        }
+        return params.value;
+      },
+    });
+  }, []);
+
+  const csvDownload = useCallback(() => {
+    gridRef.current.api.exportDataAsCsv({
+      fileName: 'exported_table.csv',
+      processCellCallback: (params: any) => {
+        if (params.value && typeof params.value === 'object') {
+          return params.value.value; // for type params.value.type
+        }
+        return params.value;
+      },
+    });
+  }, []);
   return (
-    <div className="flex flex-col max-w-[130%]">
-      <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[#e7e7e7]">
-        <div className="flex-1 w-full h-[300px]">
-          <AgGridReact
-            ref={gridRef}
-            rowData={whenRowData}
-            columnDefs={whenColumnDefs}
-            defaultColDef={defaultColDef}
-            className={`ag-theme-alpine`}
-            gridOptions={gridOptions}
-            onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
-            rowDragManaged={true}
-            animateRows={true}
-            groupHeaderHeight={42}
-            headerHeight={65}
-            isFullWidthRow={isFullWidthRow}
-          />
+    <DashBoardLayout
+      // cell code
+      handleRedo={() => ''}
+      handleUndo={() => ''}
+      downloadCSV={csvDownload}
+      downloadExcel={onBtExport}
+    >
+      <div className="flex flex-col max-w-[130%] bg-[var(--secondary-bg)] h-full">
+        <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[var(--primary-border)]">
+          <div className="flex-1 w-full h-[300px]">
+            <AgGridReact
+              ref={gridRef}
+              rowData={whenRowData}
+              columnDefs={whenColumnDefs}
+              defaultColDef={defaultColDef}
+              className={`ag-theme-alpine`}
+              gridOptions={gridOptions}
+              // onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
+              rowDragManaged={true}
+              animateRows={true}
+              groupHeaderHeight={42}
+              headerHeight={65}
+              isFullWidthRow={isFullWidthRow}
+              modules={[ExcelExportModule, CsvExportModule]} // Registering csv and excel to download
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </DashBoardLayout>
   );
 };
 export default Table;

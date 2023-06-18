@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import '../css/table.css';
 import { optionsData } from '../../constants/data';
 import { CiMenuKebab } from 'react-icons/ci';
@@ -16,11 +15,11 @@ function ColOptions({ handleOptions, id }: colInterface) {
         overlayClassName="custom-popover"
         content={
           <>
-            <div className="w-[170px] h-[140px] flex flex-col gap-y-[-40px] bg-[#fff] shadow-xl z-[99999] scroll">
+            <div className="w-[170px] h-[140px] flex flex-col gap-y-[-40px] bg-[var(--secondary-bg)] text-[var(--primary-color)] shadow-xl z-[99999] scroll">
               {optionsData.map((data) => {
                 return (
                   <p
-                    className="text-[12px] m-0 px-[7px] py-[5px] hover:bg-[antiquewhite] cursor-pointer"
+                    className="text-[12px] m-0 px-[7px] py-[5px] hover:bg-[var(--hover-bg)] cursor-pointer"
                     onClick={() => {
                       handleOptions(id, data.key);
                     }}

@@ -36,11 +36,11 @@ const AnyColCell: React.FC<IProps> = (props) => {
           onMouseLeave={handleMouseLeave}
           className="flex items-center w-full h-full justify-between h-[40px] gap-x-0 css-class"
         >
-          <button className="hover:bg-[#f0f5ff] h-full px-1">
-            <CgMenuGridO className="h-[19px] w-[19px]" color="#bfbfbf" />
+          <button className="hover:bg-[var(--light-blue)] h-full px-1 text-[var(--dark-grey)] hover:text-[var(--dark-shade)]">
+            <CgMenuGridO className="h-[19px] w-[19px]" />
           </button>
-          <button className="hover:bg-[#f0f5ff] h-full px-2">
-            <BsClock className="h-[16px] w-[16px]" color="#bfbfbf" />
+          <button className="hover:bg-[var(--light-blue)] h-full px-2 text-[var(--dark-grey)] hover:text-[var(--dark-shade)]">
+            <BsClock className="h-[16px] w-[16px]" />
           </button>
           {hovering ? (
             <Popover
@@ -69,11 +69,10 @@ const AnyColCell: React.FC<IProps> = (props) => {
                                   const id: number = parseInt(
                                     props.cellValue || '0'
                                   );
-                                  console.log(id);
                                   clearRule(id);
                                 }
                           }
-                          className="py-[6px] px-3 text-[#ff8586] font-semibold hover:bg-[#ff4d4f] hover:text-[#fff] hover:cursor-pointer"
+                          className="py-[6px] px-3 text-[var(--light-red)] font-semibold hover:bg-[var(--red)] hover:text-[#fff] hover:cursor-pointer"
                         >
                           {data.header}
                         </p>
@@ -91,7 +90,7 @@ const AnyColCell: React.FC<IProps> = (props) => {
                               }
                             : () => {}
                         }
-                        className="py-[6px] px-3 text-[#343434] hover:bg-[#f5f5f5] font-semibold hover:cursor-pointer"
+                        className="py-[6px] px-3 text-[var(--black-shade)] hover:bg-[var(--primary-bg)] font-semibold hover:cursor-pointer"
                       >
                         {data.header}
                       </p>
@@ -105,12 +104,12 @@ const AnyColCell: React.FC<IProps> = (props) => {
                 onClick={() => setClicked(true)}
                 className="border-none outline-none h-[40px] px-[5px]"
               >
-                <RxDotsHorizontal className="text-[#000000]" />
+                <RxDotsHorizontal className="text-[var(--black-shade)] w-[18px]" />
               </button>
             </Popover>
           ) : (
             <div className="px-[11px]">
-              <span className="text-[15px] font-normal text-[#595959]">
+              <span className="text-[15px] font-normal text-[var(--primary-color)] ">
                 {props.cellValue}
               </span>
             </div>
@@ -124,8 +123,8 @@ const AnyColCell: React.FC<IProps> = (props) => {
         onClick={props.handleAddRow}
         className="flex items-center gap-x-2 pl-3 addRuleDiv w-fit hover:cursor-pointer"
       >
-        <BsPlusCircleFill className="text-[#8C8C8C] plusIcon" />
-        <span className="text-[#8C8C8C] text-[14px] font-normal hover:text-[#597EF7]">
+        <BsPlusCircleFill className="text-[var(--dark-grey)] plusIcon" />
+        <span className="text-[var(--dark-grey)] text-[14px] font-normal hover:text-[var(--secondary-color)]">
           Add Rule
         </span>
       </div>
