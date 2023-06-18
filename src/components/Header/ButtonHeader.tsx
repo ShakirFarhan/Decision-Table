@@ -13,7 +13,7 @@ function ButtonHeader({ name, onClick }: props) {
         }`}
       >
         <div className="flex items-center gap-x-[5.5px] mb-[10px]">
-          <span className="text-[14px] font-semibold tracking-wide text-[#595959]">
+          <span className="text-[14px] font-semibold tracking-wide text-[var(--primary-color)]">
             {name}
           </span>
           <AiFillPlusCircle className="fill-[grey] w-[22px] h-[22px] hover:cursor-pointer" />
@@ -23,7 +23,7 @@ function ButtonHeader({ name, onClick }: props) {
   }
   return (
     <div className="flex items-center gap-x-[5.5px] mb-[10px]">
-      <span className="text-[14px] font-semibold tracking-wide text-[#595959]">
+      <span className="text-[14px] font-semibold tracking-wide text-[var(--primary-color)]">
         {name}
       </span>
     </div>

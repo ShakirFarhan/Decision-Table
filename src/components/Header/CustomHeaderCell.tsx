@@ -60,7 +60,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
       return (
         <>
           <div
-            className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[#e7e7e7] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[#597EF7] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[#ffff]"
+            className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[var(--primary-border)] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[var(--secondary-color)] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[var(--secondary-bg)]"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -79,16 +79,16 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
             >
               <div className="flex flex-col items-start justify-start gap-y-2 cursor-pointer w-full">
                 {!label || label === '' ? (
-                  <span className="font-normal text-[13px] text-[#595959]">
+                  <span className="font-normal text-[13px] text-[var(--primary-color)]">
                     Input
                   </span>
                 ) : (
-                  <span className="font-normal text-[13px] text-[#595959] tracking-wide">
+                  <span className="font-normal text-[13px] text-[var(--primary-color)] tracking-wide">
                     {label}
                   </span>
                 )}
 
-                <span className="mr-2 text-[13px] font-normal tracking-wide text-[#597EF7]">
+                <span className="mr-2 text-[13px] font-normal tracking-wide text-[var(--secondary-color)]">
                   {dataType}
                 </span>
 
@@ -104,7 +104,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
                   className={
                     pinned
                       ? 'h-[13.5px] w-[15px] fill-[grey]'
-                      : 'h-[13.5px] w-[15px] fill-[#2f54eb]'
+                      : 'h-[13.5px] w-[15px] fill-[var(--secondary-color)]'
                   }
                 />
                 {id !== 'id' ? (
@@ -118,13 +118,13 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
     }
     return (
       <>
-        <div className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[#e7e7e7]"></div>
+        <div className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[var(--primary-border)]"></div>
       </>
     );
   }
   return (
     <>
-      <div className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[#e7e7e7] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[#597EF7] flex items-center pl-5 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[#ffff]">
+      <div className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[var(--primary-border)] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[var(secondary-color)] flex items-center pl-5 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[var(--secondary-bg)]">
         <Popover
           placement="bottomLeft"
           overlayClassName="custom-popover"
@@ -132,7 +132,9 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
           trigger="click"
         >
           <button className="any-btn border-none w-full h-full outline-none flex items-center">
-            <span className="text-[13px] font-normal text-[#597EF7]">Any</span>
+            <span className="text-[13px] font-normal text-[--var(--secondary-color)]">
+              Any
+            </span>
             <MdKeyboardArrowDown className="w-[18px]" />
           </button>
         </Popover>

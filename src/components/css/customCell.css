@@ -2,11 +2,11 @@
   background-color: #d6e4ff;
 }
 .addRuleDiv:hover span {
-  color: #597ef7;
-  fill: #597ef7;
+  color: var(--secondary-color);
+  fill: var(--secondary-color);
 }
 .addRuleDiv:hover .plusIcon {
-  color: #597ef7;
+  color: var(--secondary-color);
 }
 .overlay {
   position: absolute;
@@ -20,7 +20,4 @@
 }
 .select .ant-select-selector {
   border-radius: 0;
-}
-.select:hover {
-  border-color: #000000;
 }
