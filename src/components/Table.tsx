@@ -494,7 +494,6 @@ const Table = () => {
             };
             updatedColDefs[2].children.push(selectedColumn);
           }
-
           return updatedColDefs;
         });
       }
@@ -567,17 +566,24 @@ const Table = () => {
     });
   }, []);
 
-
-
   const handleCellValueChanged = (value: any) => {
-    console.log({value})
-    console.log("passing through")
-    const colId = value.column.colId;    
+    console.log({ value });
+    console.log('passing through');
+    const colId = value.column.colId;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     editRowData(value, value?.rowIndex, colId, value.newValue)
   }
 
+  const onCellClicked = (event: any) => {
+    console.log('Cell clicked:', event);
+  };
 
+  const onCellEditStart = (event: any) => {
+    console.log('Cell edited started :', event);
+  };
+  const onCellEditEnd = (event: any) => {
+    console.log('Cell edited ended :', event);
+  };
   return (
     <DashBoardLayout
       // cell code
@@ -604,6 +610,10 @@ const Table = () => {
               headerHeight={65}
               isFullWidthRow={isFullWidthRow}
               modules={[ExcelExportModule, CsvExportModule]} // Registering csv and excel to download
+              // suppressClickEdit={true}
+              onCellClicked={onCellClicked}
+              onCellEditingStarted={onCellEditStart}
+              onCellEditingStopped={onCellEditEnd}
             />
           </div>
         </div>
