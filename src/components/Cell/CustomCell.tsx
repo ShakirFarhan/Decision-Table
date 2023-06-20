@@ -4,7 +4,7 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
-import { cellOptions, containsSpecialValue } from '../../constants/data';
+import { containsSpecialValue, headerTypes } from '../../constants/data';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -17,10 +17,11 @@ interface IProps {
   handleAddRow: () => void;
 }
 const CustomCell: React.FC<IProps> = (props) => {
+
   const { editRowData } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
-    props && props.cellValue && props.cellValue.value
+    props && props.cellValue && props.cellValue.mainval
   );
   const [selectedOption, setSelectedOption] = useState(
     props && props.cellValue && props.cellValue.type
@@ -34,7 +35,7 @@ const CustomCell: React.FC<IProps> = (props) => {
   const handleChangeOption = (value: any) => {
     setSelectedOption(value);
   };
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (id: any) => {
     setHovering(true);
   };
 
@@ -45,15 +46,18 @@ const CustomCell: React.FC<IProps> = (props) => {
     const cellValueNew = {
       type: selectedOption,
       value: editingValue,
+      mainval: editingValue,
     };
-    editRowData(props.node.rowIndex, props.column.colId, cellValueNew);
+    editRowData(props ,props.node.rowIndex, props.column.colId, cellValueNew);
   };
+
+
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>
         <div
           className="w-full h-full border-l-[1.5px] border-r-[1.5px] border-r-transparent border-y-[1.5px] border-y-transparent border-[var(--primary-border)] bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1.5px] hover:border-[var(--secondary-color)] hover:cursor-pointer"
-          onMouseEnter={handleMouseEnter}
+          onMouseEnter={() => handleMouseEnter(props.id)}
           onMouseLeave={handleMouseLeave}
         >
           <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
@@ -72,7 +76,7 @@ const CustomCell: React.FC<IProps> = (props) => {
             )}
 
             <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-              {props && props.cellValue && props.cellValue.value}
+              {props && props?.cellValue && props?.cellValue?.mainval}
             </span>
             <Popover
               placement="bottomRight"
@@ -95,10 +99,13 @@ const CustomCell: React.FC<IProps> = (props) => {
                         className="w-full rounded-0 mb-3 select "
                         defaultValue={selectedOption || 'Default'}
                         onChange={handleChangeOption}
-                        options={cellOptions.map((data) => ({
-                          label: data.value,
-                          value: data.value,
-                        }))}
+                        options={headerTypes.find(value => value.type === props?.column?.colDef?.dataType)?.options.map((data) => {
+                          return {
+                            label: data?.value,
+                            value: data?.value,
+                          }
+
+                        })}
                       />
                       <Input
                         style={{

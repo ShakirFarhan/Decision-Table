@@ -14,7 +14,7 @@ import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
 const Table = () => {
-  const { addRow, whenRowData, mode } = useStore((store) => store);
+  const { addRow, whenRowData, mode, editRowData } = useStore((store) => store);
 
   const gridRef: React.MutableRefObject<any> = useRef(null);
   const whenID = uuid();
@@ -566,6 +566,18 @@ const Table = () => {
       },
     });
   }, []);
+
+
+
+  const handleCellValueChanged = (value: any) => {
+    console.log({value})
+    console.log("passing through")
+    const colId = value.column.colId;    
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    editRowData(value, value?.rowIndex, colId, { 'type': undefined, 'value': value.newValue, 'mainval': value.newValue })
+  }
+
+
   return (
     <DashBoardLayout
       // cell code
@@ -584,6 +596,7 @@ const Table = () => {
               defaultColDef={defaultColDef}
               className={`ag-theme-alpine`}
               gridOptions={gridOptions}
+              onCellValueChanged={handleCellValueChanged}
               // onCellValueChanged={handleCellValueChanged} //onCellValueChanged - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
               rowDragManaged={true}
               animateRows={true}
