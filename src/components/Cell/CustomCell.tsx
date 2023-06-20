@@ -14,11 +14,11 @@ interface IProps {
   node?: any;
   value?: any;
   data?: any;
+  api?: any;
+  rowIndex?: any;
   handleAddRow: () => void;
-  
 }
 const CustomCell: React.FC<IProps> = (props) => {
-
   const { editRowData } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
@@ -44,14 +44,22 @@ const CustomCell: React.FC<IProps> = (props) => {
     setHovering(false);
   };
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    props.api.startEditingCell({
+      rowIndex: props.rowIndex,
+      colKey: props.column.getId(),
+    });
+    props.api.setSuppressRowClickSelection(true);
     const cellValueNew = {
       type: selectedOption,
       value: editingValue,
       mainval: editingValue,
     };
-    editRowData(props ,props.node.rowIndex, props.column.colId, cellValueNew);
+    props.api.stopEditing({
+      rowIndex: props.rowIndex,
+      colKey: props.column.getId(),
+    });
+    editRowData(props, props.node.rowIndex, props.column.colId, cellValueNew);
   };
-
 
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
@@ -100,13 +108,17 @@ const CustomCell: React.FC<IProps> = (props) => {
                         className="w-full rounded-0 mb-3 select "
                         defaultValue={selectedOption || 'Default'}
                         onChange={handleChangeOption}
-                        options={headerTypes.find(value => value.type === props?.column?.colDef?.dataType)?.options.map((data) => {
-                          return {
-                            label: data?.value,
-                            value: data?.value,
-                          }
-
-                        })}
+                        options={headerTypes
+                          .find(
+                            (value) =>
+                              value.type === props?.column?.colDef?.dataType
+                          )
+                          ?.options.map((data) => {
+                            return {
+                              label: data?.value,
+                              value: data?.value,
+                            };
+                          })}
                       />
                       <Input
                         style={{

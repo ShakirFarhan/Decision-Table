@@ -494,7 +494,6 @@ const Table = () => {
             };
             updatedColDefs[2].children.push(selectedColumn);
           }
-
           return updatedColDefs;
         });
       }
