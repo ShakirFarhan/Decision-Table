@@ -17,17 +17,11 @@ interface IProps {
   api?: any;
   rowIndex?: any;
   handleAddRow: () => void;
-<<<<<<< HEAD
 
 }
 const CustomCell: React.FC<IProps> = (props) => {
 
   const { editRowDataType } = useStore((store) => store);
-=======
-}
-const CustomCell: React.FC<IProps> = (props) => {
-  const { editRowData } = useStore((store) => store);
->>>>>>> e2382065b2fd85c909c62fda23d12ba656d2b521
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
     props && props.cellValue && props.cellValue.mainval
