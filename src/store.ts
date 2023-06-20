@@ -94,9 +94,7 @@ export const useStore = create<
           value: value
         });
 
-        core.data.data = newdata.filter((item, index, self) =>
-          index === self.findIndex((t) => t.key === item.key)
-        );
+        core.data.data = newdata
 
         const updatedRowData = [...store.whenRowData];
         // const rowToUpdate = updatedRowData[rowIndex];
