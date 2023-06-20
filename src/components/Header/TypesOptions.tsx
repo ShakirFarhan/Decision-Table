@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { types } from '../../constants/data';
+import { headerTypes, types } from '../../constants/data';
 import { defaultProps } from '../../constants/interfaces';
 import '../css/typesoption.css';
 const TypesOptions: React.FC<defaultProps> = ({
@@ -40,7 +40,7 @@ const TypesOptions: React.FC<defaultProps> = ({
           value={selectedOption}
           onChange={handleSelectedOptions}
         >
-          {types.map((e) => {
+          {headerTypes.map((e) => {
             if (selectedOption === e.type) {
               return (
                 <option
