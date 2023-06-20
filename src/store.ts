@@ -11,6 +11,7 @@ export interface zustandStoreInterface {
   mode: 'light' | 'dark';
   setPinnedColumn: (colId: string) => void;
   editRowData: (core: any,rowIndex: any, colId: any, value: any) => void;
+  editRowDataType: (core: any,rowIndex: any, colId: any, value: any) => void;
   addRow: (whenColData: any, thenColData: any) => void;
   setWhenColDefs: (whenColData: any) => void;
   editWhenCol: (updatedDef: any) => void;
@@ -80,9 +81,33 @@ export const useStore = create<
         'Set When Col'
       ),
 
+    editRowDataType: (core, rowIndex, colId, value) =>
+      set((store) => {
+        const newdata = [];
+
+        core.data?.data?.map((item:any) => {
+          newdata.push(item);
+        });
+
+        newdata.push({
+          key: colId,
+          value: value
+        });
+
+        core.data.data = newdata.filter((item, index, self) =>
+          index === self.findIndex((t) => t.key === item.key)
+        );
+
+        const updatedRowData = [...store.whenRowData];
+        // const rowToUpdate = updatedRowData[rowIndex];
+        // core.data[colId] = value;
+        // rowToUpdate[colId] = value;
+        return { whenRowData: updatedRowData };
+      }),
+
     editRowData: (core, rowIndex, colId, value) =>
       set((store) => {
-        
+
         const updatedRowData = [...store.whenRowData];
         const rowToUpdate = updatedRowData[rowIndex];
         rowToUpdate[colId] = value;

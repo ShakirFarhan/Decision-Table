@@ -15,11 +15,11 @@ interface IProps {
   value?: any;
   data?: any;
   handleAddRow: () => void;
-  
+
 }
 const CustomCell: React.FC<IProps> = (props) => {
 
-  const { editRowData } = useStore((store) => store);
+  const { editRowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
     props && props.cellValue && props.cellValue.mainval
@@ -43,13 +43,15 @@ const CustomCell: React.FC<IProps> = (props) => {
   const handleMouseLeave = () => {
     setHovering(false);
   };
+
+  
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     const cellValueNew = {
       type: selectedOption,
       value: editingValue,
-      mainval: editingValue,
     };
-    editRowData(props ,props.node.rowIndex, props.column.colId, cellValueNew);
+    console.log(props)
+    editRowDataType(props ,props.node.rowIndex, props.column.colId, cellValueNew);
   };
 
 
@@ -77,7 +79,7 @@ const CustomCell: React.FC<IProps> = (props) => {
             )}
 
             <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-              {props && props?.cellValue && props?.cellValue?.mainval}
+              {props && props?.cellValue && props?.cellValue}
             </span>
             <Popover
               placement="bottomRight"

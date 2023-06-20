@@ -574,7 +574,7 @@ const Table = () => {
     console.log("passing through")
     const colId = value.column.colId;    
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    editRowData(value, value?.rowIndex, colId, { 'type': undefined, 'value': value.newValue, 'mainval': value.newValue })
+    editRowData(value, value?.rowIndex, colId, value.newValue)
   }
 
 
