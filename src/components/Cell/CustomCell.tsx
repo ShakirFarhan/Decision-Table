@@ -15,6 +15,7 @@ interface IProps {
   value?: any;
   data?: any;
   handleAddRow: () => void;
+  
 }
 const CustomCell: React.FC<IProps> = (props) => {
 
