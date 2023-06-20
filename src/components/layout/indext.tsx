@@ -113,7 +113,11 @@ const DashBoardLayout: React.FC<CardProps> = ({
                 <input
                   type="text"
                   placeholder="Search"
-                  className="bg-gray-50 h-8 rounded-md w-64 px-4"
+                  style={{
+                    boxShadow:
+                      'rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;',
+                  }}
+                  className="bg-[var(--primary-bg)] h-8 rounded-md w-64 px-4 focus:outline-none focus:border-none text-[var(--foreground-color)]"
                 />
               </div>
 
