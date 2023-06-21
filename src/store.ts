@@ -4,6 +4,7 @@ import { devtools } from 'zustand/middleware';
 
 export interface zustandStoreInterface {
   whenRowData: any[];
+  rowDataType: any[];
   whenColDefs: columnInterface[];
   thenRowData: any[];
   thenColData: columnInterface[];
@@ -27,6 +28,7 @@ export const useStore = create<
 >(
   devtools((set) => ({
     whenColDefs: [],
+    rowDataType: [],
     whenRowData: [
       {
         button: 'Add Rule',
@@ -84,23 +86,26 @@ export const useStore = create<
     editRowDataType: (core, rowIndex, colId, value) =>
       set((store) => {
         const newdata = [];
+        const storedata = store.rowDataType
+        const existingindex = store.rowDataType?.findIndex((item: any) => item.key === colId && item.rowIndex === rowIndex)
 
-        core.data?.data?.map((item:any) => {
+        if(existingindex !== -1){
+          storedata.splice(existingindex , 1)
+        }
+
+        storedata.map((item:any) => {
           newdata.push(item);
-        });
-
+        })
+        
         newdata.push({
           key: colId,
-          value: value
+          value: value,
+          rowIndex: rowIndex
         });
 
-        core.data.data = newdata
+        const updateRowData = [...newdata];
 
-        const updatedRowData = [...store.whenRowData];
-        // const rowToUpdate = updatedRowData[rowIndex];
-        // core.data[colId] = value;
-        // rowToUpdate[colId] = value;
-        return { whenRowData: updatedRowData };
+        return { rowDataType: updateRowData };
       }),
 
     editRowData: (core, rowIndex, colId, value) =>

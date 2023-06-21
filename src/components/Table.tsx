@@ -567,19 +567,17 @@ const Table = () => {
   }, []);
 
   const handleCellValueChanged = (value: any) => {
-    console.log({ value });
-    console.log('passing through');
     const colId = value.column.colId;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     editRowData(value, value?.rowIndex, colId, value.newValue)
   }
 
   const onCellClicked = (event: any) => {
-    console.log('Cell clicked:', event);
+    // console.log('Cell clicked:', event);
   };
 
   const onCellEditStart = (event: any) => {
-    console.log('Cell edited started :', event);
+    // console.log('Cell edited started :', event);
   };
   const onCellEditEnd = (event: any) => {
     console.log('Cell edited ended :', event);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { headerTypes, types } from '../../constants/data';
+import { headerTypes } from '../../constants/data';
 import { defaultProps } from '../../constants/interfaces';
 import '../css/typesoption.css';
 const TypesOptions: React.FC<defaultProps> = ({

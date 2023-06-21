@@ -59,7 +59,6 @@ const CustomCell: React.FC<IProps> = (props) => {
     };
 
     editRowDataType(props ,props.node.rowIndex, props.column.colId, cellValueNew);
-
     
     props.api.stopEditing({
       rowIndex: props.rowIndex,

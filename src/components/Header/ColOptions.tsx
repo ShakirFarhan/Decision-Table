@@ -23,7 +23,7 @@ function ColOptions({ handleOptions, id }: colInterface) {
                     onClick={() => {
                       handleOptions(id, data.key);
                     }}
-                    key={data.key}
+                    key={data.key}  
                   >
                     {data.function}
                   </p>
