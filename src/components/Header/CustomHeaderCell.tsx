@@ -124,7 +124,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   }
   return (
     <>
-      <div className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[var(--primary-border)] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[var(secondary-color)] flex items-center pl-5 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[var(--secondary-bg)]">
+      <div className="w-[100%] h-[100%]  box-border border-y-2 border-[var(--primary-border)] flex items-center pl-5 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[var(--secondary-bg)]">
         <Popover
           placement="bottomLeft"
           overlayClassName="custom-popover"

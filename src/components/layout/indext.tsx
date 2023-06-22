@@ -49,6 +49,7 @@ const DashBoardLayout: React.FC<CardProps> = ({
         </div>
         <Menu
           className="h-full bg-[var(--secondary-bg)] text-[var(--black-shade)] pt-1"
+          style={{ borderRight: '1.5px solid var(--primary-border)' }}
           mode="inline"
           defaultSelectedKeys={['1']}
           items={[
@@ -117,7 +118,7 @@ const DashBoardLayout: React.FC<CardProps> = ({
                     boxShadow:
                       'rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;',
                   }}
-                  className="bg-[var(--primary-bg)] h-8 rounded-md w-64 px-4 focus:outline-none focus:border-none text-[var(--foreground-color)]"
+                  className="bg-[var(--primary-bg)] h-8 rounded-md w-64 px-4 focus:outline-none focus:border-none text-[var(--foreground-color)] border-[0.6px] border-[var(--primary-border)]"
                 />
               </div>
 

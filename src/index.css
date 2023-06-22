@@ -16,6 +16,7 @@
   --light-blue: #f0f5ff;
   --black-shade: #343434;
   --hover-bg: #f0f5ff;
+  --cell-hover: #d6e4ff;
 }
 .dark-theme {
   --primary-bg: #16191e;
@@ -31,4 +32,5 @@
   --black-shade: #e2e8f0;
   --hover-bg: #16181d;
   --dark-shade: #343434;
+  --cell-hover: #343434;
 }
