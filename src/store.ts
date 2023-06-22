@@ -10,7 +10,7 @@ export interface zustandStoreInterface {
   pinnedColumn: any;
   mode: 'light' | 'dark';
   setPinnedColumn: (colId: string) => void;
-  editRowData: (rowIndex: any, colId: any, value: any) => void;
+  editRowData: (core: any,rowIndex: any, colId: any, value: any) => void;
   addRow: (whenColData: any, thenColData: any) => void;
   setWhenColDefs: (whenColData: any) => void;
   editWhenCol: (updatedDef: any) => void;
@@ -80,13 +80,15 @@ export const useStore = create<
         'Set When Col'
       ),
 
-    editRowData: (rowIndex, colId, value) =>
+    editRowData: (core, rowIndex, colId, value) =>
       set((store) => {
+        
         const updatedRowData = [...store.whenRowData];
         const rowToUpdate = updatedRowData[rowIndex];
         rowToUpdate[colId] = value;
         return { whenRowData: updatedRowData };
       }),
+
     addRow: (whenColDeta, thenColData) =>
       set((store) => {
         const newWhenRowData = [...store.whenRowData];

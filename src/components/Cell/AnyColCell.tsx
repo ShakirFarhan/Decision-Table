@@ -36,10 +36,10 @@ const AnyColCell: React.FC<IProps> = (props) => {
           onMouseLeave={handleMouseLeave}
           className="flex items-center w-full h-full justify-between h-[40px] gap-x-0 css-class"
         >
-          <button className="hover:bg-[var(--light-blue)] h-full px-1 text-[var(--dark-grey)] hover:text-[var(--dark-shade)]">
+          <button className="hover:bg-[var(--cell-hover)] h-full px-1 text-[var(--dark-grey)]">
             <CgMenuGridO className="h-[19px] w-[19px]" />
           </button>
-          <button className="hover:bg-[var(--light-blue)] h-full px-2 text-[var(--dark-grey)] hover:text-[var(--dark-shade)]">
+          <button className="hover:bg-[var(--cell-hover)] h-full px-2 text-[var(--dark-grey)]">
             <BsClock className="h-[16px] w-[16px]" />
           </button>
           {hovering ? (
@@ -102,13 +102,13 @@ const AnyColCell: React.FC<IProps> = (props) => {
             >
               <button
                 onClick={() => setClicked(true)}
-                className="border-none outline-none h-[40px] px-[5px]"
+                className="border-none outline-none h-[40px] px-[5px] max-w-[28px]"
               >
                 <RxDotsHorizontal className="text-[var(--black-shade)] w-[18px]" />
               </button>
             </Popover>
           ) : (
-            <div className="px-[11px]">
+            <div className="px-[11px] max-w-[28px]">
               <span className="text-[15px] font-normal text-[var(--primary-color)] ">
                 {props.cellValue}
               </span>

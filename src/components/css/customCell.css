@@ -1,5 +1,6 @@
 .customCell:hover .cellType {
-  background-color: #d6e4ff;
+  background-color: var(--cell-hover);
+  color: var(--foreground-color);
 }
 .addRuleDiv:hover span {
   color: var(--secondary-color);
