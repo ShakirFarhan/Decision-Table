@@ -21,7 +21,9 @@ interface IProps {
 }
 const CustomCell: React.FC<IProps> = (props) => {
 
-  const { editRowDataType } = useStore((store) => store);
+  const { editRowDataType, rowDataType } = useStore((store) => store);
+
+
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
     props && props.cellValue && props.cellValue.mainval
@@ -59,12 +61,18 @@ const CustomCell: React.FC<IProps> = (props) => {
     };
 
     editRowDataType(props ,props.node.rowIndex, props.column.colId, cellValueNew);
-    
+    setClicked(false)
     props.api.stopEditing({
       rowIndex: props.rowIndex,
       colKey: props.column.getId(),
     });
   };
+
+
+  const rowDataTypes = rowDataType.find(value => value.key === props.column.colId && value.rowIndex === props.rowIndex)
+  console.log(rowDataTypes && rowDataTypes.value && rowDataTypes.value.type && rowDataTypes.value.type !== undefined ? rowDataTypes.value.type : null);
+
+
 
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
@@ -75,17 +83,11 @@ const CustomCell: React.FC<IProps> = (props) => {
           onMouseLeave={handleMouseLeave}
         >
           <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
-            {props && props.cellValue && props.cellValue.type && (
+            {rowDataTypes && rowDataTypes.value && rowDataTypes.value.type && rowDataTypes.value.type !== undefined && (
               <div className="rounded-0 bg-[var(--primary-bg)]  tracking-[1px] h-[25px]  flex items-center cellType ">
-                {containsSpecialValue(props.cellValue.type) ? (
-                  <span className="flex items-center font-medium text-[var(--primary-color)] w-[26px] pl-2 py-0">
-                    {props.cellValue.type}
-                  </span>
-                ) : (
-                  <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
-                    {props.cellValue.type}
-                  </span>
-                )}
+                <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
+                  {rowDataTypes.value.type}
+                </span>
               </div>
             )}
 
@@ -95,6 +97,7 @@ const CustomCell: React.FC<IProps> = (props) => {
             <Popover
               placement="bottomRight"
               overlayClassName="custom-popover"
+              open={clicked}
               onOpenChange={(visible) => {
                 if (!visible) {
                   setClicked(false);
@@ -111,7 +114,7 @@ const CustomCell: React.FC<IProps> = (props) => {
                           color: 'var(--primary-color)',
                         }}
                         className="w-full rounded-0 mb-3 select "
-                        defaultValue={selectedOption || 'Default'}
+                        defaultValue={rowDataTypes && rowDataTypes.value && rowDataTypes.value.type && rowDataTypes.value.type !== undefined ? rowDataTypes.value.type : 'Default'}
                         onChange={handleChangeOption}
                         options={headerTypes
                           .find(

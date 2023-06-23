@@ -40,11 +40,11 @@ const TypesOptions: React.FC<defaultProps> = ({
           value={selectedOption}
           onChange={handleSelectedOptions}
         >
-          {headerTypes.map((e) => {
+          {headerTypes.map((e, index) => {
             if (selectedOption === e.type) {
               return (
                 <option
-                  key={e.id}
+                  key={index}
                   value={e.type}
                   className="w-[100px] h-[400px] text-[var(--secondary-color)] outline-0 border-none bg-[var(--hover-bg)] shadow-lg rounded-[-10px] px-[4px] py-[3px] text-[15px] tracking-[0.3px] mb-4px"
                 >
@@ -53,7 +53,7 @@ const TypesOptions: React.FC<defaultProps> = ({
               );
             }
             return (
-              <option key={e.id} value={e.type}>
+              <option key={index} value={e.type}>
                 {e.type}
               </option>
             );
