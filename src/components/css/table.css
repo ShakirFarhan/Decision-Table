@@ -48,9 +48,14 @@ html {
 /* Container class of grouped headers */
 .ag-header {
   /* border-left: 2px solid var(--primary-border); */
-  border-bottom: 0.01px solid transparent;
+  border-bottom: none;
   background-color: transparent;
+  /* max-height: 95%; */
+  height: 107px !important;
+
+  min-height: 107px !important;
 }
+
 /* individual column header */
 .column-header {
   background-color: var(--primary-bg);
@@ -87,8 +92,9 @@ html {
   margin-bottom: 0;
   margin-top: 0;
   height: 100%;
-  width: 100%;
+  width: 105%;
   box-sizing: border-box;
+  /* border-right: 2px solid var(--primary-bg) !important; */
 }
 
 .ag-cell:focus {
@@ -128,6 +134,7 @@ html {
   background-color: var(--secondary-bg);
   letter-spacing: 0.4px;
   border-right: 2px solid var(--primary-border);
+  /* border-left: 2px solid var(--primary-border); */
 }
 .top-column-header:hover {
   background-color: var(--secondary-bg);
@@ -153,7 +160,9 @@ html {
     .ag-cell-range-single-cell
   ) {
   position: relative;
-  border-right: 1.64px solid transparent;
+  border-right: none;
+  border-right: 2px solid var(--primary-border) !important;
+  /* border-left: 2px solid var(--primary-border) !important; */
 }
 
 .ag-cell,

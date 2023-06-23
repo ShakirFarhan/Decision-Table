@@ -7,16 +7,18 @@ function ButtonHeader({ name, onClick }: props) {
   if (name !== 'Annotations') {
     return (
       <div
-        onClick={onClick}
-        className={`w-full h-full pt-[10px]  ${
+        className={`h-full pt-[10px]  ${
           name === 'When' ? '-pl-3' : 'pl-0'
-        }`}
+        } border-r-[2px] border-[var(--primary-border)] w-full`}
       >
-        <div className="flex items-center gap-x-[5.5px] mb-[10px]">
+        <div className="flex items-center gap-x-[5.5px] mb-[10px] w-fit">
           <span className="text-[14px] font-semibold tracking-wide text-[var(--primary-color)]">
             {name}
           </span>
-          <AiFillPlusCircle className="fill-[grey] w-[22px] h-[22px] hover:cursor-pointer" />
+          <AiFillPlusCircle
+            onClick={onClick}
+            className="fill-[grey] w-[22px] h-[22px] hover:cursor-pointer"
+          />
         </div>
       </div>
     );

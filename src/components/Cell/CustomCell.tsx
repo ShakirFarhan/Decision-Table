@@ -70,7 +70,6 @@ const CustomCell: React.FC<IProps> = (props) => {
 
 
   const rowDataTypes = rowDataType.find(value => value.key === props.column.colId && value.rowIndex === props.rowIndex)
-  console.log(rowDataTypes && rowDataTypes.value && rowDataTypes.value.type && rowDataTypes.value.type !== undefined ? rowDataTypes.value.type : null);
 
 
 
@@ -78,7 +77,7 @@ const CustomCell: React.FC<IProps> = (props) => {
     return (
       <>
         <div
-          className="w-full h-full border-l-[1.5px] border-r-[1.5px] border-r-transparent border-y-[1.5px] border-y-transparent border-[var(--primary-border)] bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1.5px] hover:border-[var(--secondary-color)] hover:cursor-pointer"
+          className="w-[100%] h-full  border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)] bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer"
           onMouseEnter={() => handleMouseEnter(props.id)}
           onMouseLeave={handleMouseLeave}
         >
