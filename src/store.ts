@@ -58,22 +58,29 @@ export const useStore = create<
       }),
 
     clearRule: (id) =>
-      set((store) => ({
-        whenRowData: store.whenRowData.map((data) => {
-          if (data.any === id) {
-            return {
-              any: data.any,
-              [data]: '',
-            };
-          }
-          return data;
-        }),
-      })),
+      set((store) => {
+
+        const allrowdata = store.rowDataType.filter(value => value.rowIndex !== id - 1)
+        
+        return {
+          whenRowData: store.whenRowData.map((data) => {
+            if (data.any === id) {
+              return {
+                any: data.any,
+                [data]: '',
+              };
+            }
+            return data;
+          }),
+          rowDataType: allrowdata,
+        }
+      }),
 
     deleteRule: (id) =>
-      set((store) => ({
-        whenRowData: store.whenRowData.filter((data) => data.any !== id),
-      })),
+      set((store) => {
+        const allrowdata = store.rowDataType.filter(value => value.rowIndex !== id - 1)
+        return { whenRowData: store.whenRowData.filter((data) => data.any !== id), rowDataType: allrowdata }
+      }),
     setWhenColDefs: (whenColData) =>
       set(
         (store) => ({
