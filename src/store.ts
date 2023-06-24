@@ -11,7 +11,9 @@ export interface zustandStoreInterface {
   pinnedColumn: any;
   mode: 'light' | 'dark';
   setPinnedColumn: (colId: string) => void;
+  // for storing row data
   editRowData: (core: any,rowIndex: any, colId: any, value: any) => void;
+  // for storing row data type. 
   editRowDataType: (core: any,rowIndex: any, colId: any, value: any) => void;
   addRow: (whenColData: any, thenColData: any) => void;
   setWhenColDefs: (whenColData: any) => void;
@@ -59,7 +61,7 @@ export const useStore = create<
 
     clearRule: (id) =>
       set((store) => {
-
+        // filtering using rowindex to clear rule while clearing value
         const allrowdata = store.rowDataType.filter(value => value.rowIndex !== id - 1)
         
         return {
@@ -78,6 +80,7 @@ export const useStore = create<
 
     deleteRule: (id) =>
       set((store) => {
+        // filtering using rowIndex to delete the rule while deleting the complete row
         const allrowdata = store.rowDataType.filter(value => value.rowIndex !== id - 1)
         return { whenRowData: store.whenRowData.filter((data) => data.any !== id), rowDataType: allrowdata }
       }),
@@ -93,23 +96,31 @@ export const useStore = create<
     editRowDataType: (core, rowIndex, colId, value) =>
       set((store) => {
         const newdata = [];
+        // getting previous data types from store
         const storedata = store.rowDataType
+        // finding existing indexes
         const existingindex = store.rowDataType?.findIndex((item: any) => item.key === colId && item.rowIndex === rowIndex)
-
+        // if the index value is not more the -1 then the action will not perform here
         if(existingindex !== -1){
+          // removing previous same data from existing store
           storedata.splice(existingindex , 1)
         }
 
+        // pusing previous other datas to the state for further process
         storedata.map((item:any) => {
           newdata.push(item);
         })
         
+
+        // pushing newly created row type to the state
         newdata.push({
           key: colId,
           value: value,
           rowIndex: rowIndex
         });
 
+
+        // storing all to the state
         const updateRowData = [...newdata];
 
         return { rowDataType: updateRowData };
@@ -118,6 +129,7 @@ export const useStore = create<
     editRowData: (core, rowIndex, colId, value) =>
       set((store) => {
 
+        // this will only update the cell value not type
         const updatedRowData = [...store.whenRowData];
         const rowToUpdate = updatedRowData[rowIndex];
         rowToUpdate[colId] = value;
