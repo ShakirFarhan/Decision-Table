@@ -96,6 +96,8 @@ export const rowOptions = [
 //   { id: 'isNotMultipleOf', value: 'Is not a multiple of' },
 // ];
 
+
+// previous types are removed and this will be used for further things
 export const headerTypes = [
   {
     id: 1,

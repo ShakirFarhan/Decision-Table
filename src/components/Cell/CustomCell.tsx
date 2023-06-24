@@ -4,7 +4,7 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
-import { containsSpecialValue, headerTypes } from '../../constants/data';
+import { headerTypes } from '../../constants/data';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -69,6 +69,7 @@ const CustomCell: React.FC<IProps> = (props) => {
     });
   };
 
+  // fetching row type from store
   const rowDataTypes = rowDataType.find(
     (value) =>
       value.key === props.column.colId && value.rowIndex === props.rowIndex
@@ -87,8 +88,9 @@ const CustomCell: React.FC<IProps> = (props) => {
               rowDataTypes.value &&
               rowDataTypes.value.type &&
               rowDataTypes.value.type !== undefined && (
-                <div className="rounded-0 bg-[var(--primary-border)] tracking-[1px] h-[25px]  flex items-center cellType">
+                <div className="rounded-0 bg-[var(--primary-bg)]  tracking-[1px] h-[25px]  flex items-center cellType ">
                   <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
+                    {/* here we are only showing the type. and based on this we will validate the cellsa */}
                     {rowDataTypes.value.type}
                   </span>
                 </div>

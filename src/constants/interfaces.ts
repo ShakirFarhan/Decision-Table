@@ -9,28 +9,35 @@ type CellRendererParamsInterface = (params: any) => CellRendererParams;
 
 interface children {
   id: string;
-  headerName: string;
-  headerClass: string;
+  headerName?: string;
+  headerClass?: string;
   field: string;
-  type: string;
+  dataType?: string;
+  suppressMovable?: any;
   disableColumnMenu?: boolean;
   headerComponent: (() => JSX.Element) | any;
+  sortable?: boolean;
   headerProps?: any;
   cellRendererFramework?: any;
   cellRendererParams?: CellRendererParamsInterface;
   pinned?: 'left' | 'right';
+  isPinned?: boolean;
+  editable?: boolean;
   width?: number;
   maxWidth?: number;
   minWidth?: number;
   lockPosition?: string;
 }
 export interface columnInterface {
-  id: string;
-  headerName: string;
-  headerClass: string;
-  children: [children];
+  id?: string;
+  headerName?: string;
+  headerClass?: string;
+  suppressMovable?: any;
+  children: children[];
   cellRendererFramework?: any;
+  minWidth?: number;
   cellRendererParams?: CellRendererParamsInterface;
+  headerGroupComponent?: () => any;
 }
 export interface rowType {
   id?: number | string;

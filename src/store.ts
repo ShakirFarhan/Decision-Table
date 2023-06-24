@@ -79,13 +79,11 @@ export const useStore = create<
 
     deleteRule: (id) =>
       set((store) => {
-        console.log('ID : ' + id);
         const allrowdata = store.rowDataType.filter(
-          (value) => value.rowIndex !== id
+          (value) => value.rowIndex !== id - 1
         );
-
         return {
-          whenRowData: store.whenRowData.filter((data) => data.any !== id - 1),
+          whenRowData: store.whenRowData.filter((data) => data.any !== id),
           rowDataType: allrowdata,
         };
       }),
@@ -120,6 +118,7 @@ export const useStore = create<
           rowIndex: rowIndex,
         });
 
+        // storing all to the state
         const updateRowData = [...newdata];
 
         return { rowDataType: updateRowData };

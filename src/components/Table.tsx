@@ -9,7 +9,7 @@ import uuid from 'react-uuid';
 import { useStore } from '../store';
 import AnyColCell from './Cell/AnyColCell';
 import ButtonHeader from './Header/ButtonHeader';
-import { handleEditCol } from '../constants/interfaces';
+import { columnInterface, handleEditCol } from '../constants/interfaces';
 import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
@@ -21,19 +21,19 @@ const Table = () => {
   const thenID = uuid();
 
   // store when block column data
-  const [whenColumnDefs, setWhenColumnDefs] = useState<any[]>([
+  const [columnDefs, setColumnDefs] = useState<any[]>([
     // Grouped column
     {
       id: 'hit',
       headerName: 'Hit Ratio',
       headerClass: 'top-column-header',
       suppressMovable: true,
-
       children: [
         {
           id: 'any-col',
           headerName: 'Any',
           field: 'any',
+          editable: false,
           dataType: '',
           maxWidth: 106,
           minWidth: 100,
@@ -72,12 +72,14 @@ const Table = () => {
     {
       id: 'when',
       headerClass: 'ag-header-cell',
+      lockPosition: true,
       children: [
         {
           id: whenID,
           headerName: '',
           field: whenID,
           dataType: '',
+          isPinned: false,
           sortable: true,
           headerComponent: () => (
             <CustomHeaderCell
@@ -99,8 +101,8 @@ const Table = () => {
               });
             },
             cellValue: params.value,
-            id: whenColumnDefs.length === 1 ? 'first-col' : '',
-            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
+            id: columnDefs.length === 1 ? 'first-col' : '',
+            handleAddRow: columnDefs.length === 1 ? handleAddRow : '',
           }),
           headerClass: 'column-header',
         },
@@ -118,7 +120,7 @@ const Table = () => {
           id: thenID,
           headerName: '',
           field: thenID,
-
+          isPinned: false,
           dataType: '',
           sortable: true,
           // rowDrag: true,
@@ -142,8 +144,8 @@ const Table = () => {
               });
             },
             cellValue: params.value,
-            id: whenColumnDefs.length === 1 ? 'first-col' : '',
-            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
+            id: columnDefs.length === 1 ? 'first-col' : '',
+            handleAddRow: columnDefs.length === 1 ? handleAddRow : '',
           }),
           headerClass: 'column-header',
         },
@@ -161,6 +163,7 @@ const Table = () => {
           id: 'annotations',
           field: 'annotations',
           headerName: '',
+          isPinned: false,
           headerClass: 'column-header',
           headerComponent: () => (
             <CustomHeaderCell
@@ -182,8 +185,8 @@ const Table = () => {
               });
             },
             cellValue: params.value,
-            id: whenColumnDefs.length === 1 ? 'first-col' : '',
-            handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
+            id: columnDefs.length === 1 ? 'first-col' : '',
+            handleAddRow: columnDefs.length === 1 ? handleAddRow : '',
           }),
         },
       ],
@@ -214,7 +217,7 @@ const Table = () => {
 
   // Function used to add columns in then block
   const handleAddThenCol = (): void => {
-    setWhenColumnDefs((data: any) => {
+    setColumnDefs((data: any) => {
       const newIndex = uuid();
       const newColDefs = [...data];
       const updated = {
@@ -223,6 +226,7 @@ const Table = () => {
         field: newIndex,
         dataType: '',
         sortable: true,
+        isPinned: false,
         // rowDrag: true,
         headerComponent: () => (
           <CustomHeaderCell
@@ -257,17 +261,17 @@ const Table = () => {
   // In this function, the first thing we do is add a new column with an unique id common for id and field, and rest of the properties as empty.
   // After that, the handleEditCol function will be activated when the user clicks on that column once more to edit the column header information.
   const handleAddWhenCol = (): void => {
-    setWhenColumnDefs((data: any) => {
+    setColumnDefs((data: any) => {
       const newIndex = uuid();
       const newColDefs = [...data];
-
       const updated = {
         id: newIndex,
         headerName: '',
         field: newIndex,
-
         dataType: '',
         sortable: true,
+        isPinned: false,
+
         // rowDrag: true,
         headerComponent: () => (
           <CustomHeaderCell
@@ -289,8 +293,8 @@ const Table = () => {
             });
           },
           cellValue: params.value,
-          id: whenColumnDefs.length === 1 ? 'first-col' : '',
-          handleAddRow: whenColumnDefs.length === 1 ? handleAddRow : '',
+          id: columnDefs.length === 1 ? 'first-col' : '',
+          handleAddRow: columnDefs.length === 1 ? handleAddRow : '',
         }),
         headerClass: 'column-header',
       };
@@ -300,7 +304,7 @@ const Table = () => {
   };
 
   const handleAddRow = () => {
-    addRow(whenColumnDefs, whenColumnDefs); // Need to be fixed
+    addRow(columnDefs, columnDefs); // Need to be fixed
   };
   // Function used when we want to edit the details of column header
   const handleEditCol: handleEditCol = (
@@ -309,7 +313,7 @@ const Table = () => {
     newTypeName // new type ex: string,number...
   ) => {
     if (colId) {
-      setWhenColumnDefs((data: any) => {
+      setColumnDefs((data: any) => {
         const updatedColumnDefs = [...data];
         const whenCol = updatedColumnDefs[1].children;
         const thenCol = updatedColumnDefs[2].children;
@@ -384,17 +388,44 @@ const Table = () => {
   };
   // function used to pin a column
   const handlePin = (id: string): void => {
-    setWhenColumnDefs((data: any) => {
+    setColumnDefs((data: any) => {
       const updatedColumnDefs = [...data];
       const whenCol = updatedColumnDefs[1].children;
       const thenCol = updatedColumnDefs[2].children;
+
       const whenColIndex = whenCol.findIndex((col: any) => col.id === id);
       const thenColIndex = thenCol.findIndex((col: any) => col.id === id);
       if (whenColIndex !== -1) {
-        whenCol[whenColIndex] = {
-          ...whenCol[whenColIndex],
-          pinned: 'left', // Set pinned property to 'left' unconditionally
-        };
+        const selectedColumn = whenCol[whenColIndex];
+        if (selectedColumn.isPinned) {
+          // Column is currently pinned, so unpin it and move to previous position
+          selectedColumn.isPinned = false;
+          whenCol.splice(whenColIndex, 1);
+          whenCol.splice(selectedColumn.previousIndex, 0, selectedColumn);
+        } else {
+          // Column is currently not pinned, so pin it and move to the first index
+          selectedColumn.isPinned = true;
+          selectedColumn.previousIndex = whenColIndex; // Store the previous index
+          whenCol.splice(whenColIndex, 1);
+          whenCol.splice(0, 0, selectedColumn);
+        }
+      }
+      if (thenCol !== -1) {
+        const selectedColumn = thenCol[thenColIndex];
+        if (selectedColumn) {
+          if (selectedColumn.isPinned) {
+            // Column is currently pinned, so unpin it and move to previous position
+            selectedColumn.isPinned = false;
+            thenCol.splice(thenColIndex, 1);
+            thenCol.splice(selectedColumn.previousIndex, 0, selectedColumn);
+          } else {
+            // Column is currently not pinned, so pin it and move to the first index
+            selectedColumn.isPinned = true;
+            selectedColumn.previousIndex = thenColIndex; // Store the previous index
+            thenCol.splice(thenColIndex, 1);
+            thenCol.splice(0, 0, selectedColumn);
+          }
+        }
       }
 
       return updatedColumnDefs;
@@ -408,7 +439,7 @@ const Table = () => {
   const handleOptions = useCallback(
     (id: string, selectedOption: string): void => {
       if (selectedOption.includes('remove')) {
-        setWhenColumnDefs((prevData) => {
+        setColumnDefs((prevData) => {
           const updatedCols = [...prevData];
           let whenCol = updatedCols[1].children;
           let thenCol = updatedCols[2].children;
@@ -449,7 +480,7 @@ const Table = () => {
           defaultState: { sort: null },
         });
       } else if (selectedOption.includes('duplicate')) {
-        setWhenColumnDefs((prevData) => {
+        setColumnDefs((prevData) => {
           // const updatedColDefs: any = [...prevData];
           const updatedColDefs = [...prevData];
           const whenCol = updatedColDefs[1].children;
@@ -529,12 +560,12 @@ const Table = () => {
   // useEffect(() => {
   //   if (isFirstRender.current) {
   //     isFirstRender.current = false;
-  //     if (whenColumnDefs[1].children.length <= 1) {
+  //     if (columnDefs[1].children.length <= 1) {
   //       // this function is calling to add column at first render
   //       handleAddWhenCol();
   //     }
   //   }
-  // }, [whenColumnDefs, handleAddWhenCol]);
+  // }, [columnDefs, handleAddWhenCol]);
 
   // const onBtExport = useCallback(() => {
   //   gridRef.current.api.exportDataAsExcel();
@@ -595,7 +626,7 @@ const Table = () => {
             <AgGridReact
               ref={gridRef}
               rowData={whenRowData}
-              columnDefs={whenColumnDefs}
+              columnDefs={columnDefs}
               defaultColDef={defaultColDef}
               className={`ag-theme-alpine`}
               gridOptions={gridOptions}
