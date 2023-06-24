@@ -57,7 +57,6 @@ const Table = () => {
             // to control its behavior and appearance.
             onEdit: () => {
               // User defined function
-
               params.api.startEditingCell({
                 rowIndex: params.node.rowIndex,
                 colKey: params.column.colId,
@@ -65,7 +64,7 @@ const Table = () => {
             },
             id: 'any-col',
             handleAddRow: handleAddRow,
-            cellValue: params.value,
+            cellValue: params.node.rowIndex + 1,
           }),
         },
       ],
@@ -569,8 +568,8 @@ const Table = () => {
   const handleCellValueChanged = (value: any) => {
     const colId = value.column.colId;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    editRowData(value, value?.rowIndex, colId, value.newValue)
-  }
+    editRowData(value, value?.rowIndex, colId, value.newValue);
+  };
 
   const onCellClicked = (event: any) => {
     // console.log('Cell clicked:', event);
@@ -580,7 +579,7 @@ const Table = () => {
     // console.log('Cell edited started :', event);
   };
   const onCellEditEnd = (event: any) => {
-    console.log('Cell edited ended :', event);
+    // console.log('Cell edited ended :', event);
   };
   return (
     <DashBoardLayout

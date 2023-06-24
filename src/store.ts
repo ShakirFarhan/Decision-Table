@@ -11,8 +11,8 @@ export interface zustandStoreInterface {
   pinnedColumn: any;
   mode: 'light' | 'dark';
   setPinnedColumn: (colId: string) => void;
-  editRowData: (core: any,rowIndex: any, colId: any, value: any) => void;
-  editRowDataType: (core: any,rowIndex: any, colId: any, value: any) => void;
+  editRowData: (core: any, rowIndex: any, colId: any, value: any) => void;
+  editRowDataType: (core: any, rowIndex: any, colId: any, value: any) => void;
   addRow: (whenColData: any, thenColData: any) => void;
   setWhenColDefs: (whenColData: any) => void;
   editWhenCol: (updatedDef: any) => void;
@@ -59,9 +59,10 @@ export const useStore = create<
 
     clearRule: (id) =>
       set((store) => {
+        const allrowdata = store.rowDataType.filter(
+          (value) => value.rowIndex !== id - 1
+        );
 
-        const allrowdata = store.rowDataType.filter(value => value.rowIndex !== id - 1)
-        
         return {
           whenRowData: store.whenRowData.map((data) => {
             if (data.any === id) {
@@ -73,13 +74,20 @@ export const useStore = create<
             return data;
           }),
           rowDataType: allrowdata,
-        }
+        };
       }),
 
     deleteRule: (id) =>
       set((store) => {
-        const allrowdata = store.rowDataType.filter(value => value.rowIndex !== id - 1)
-        return { whenRowData: store.whenRowData.filter((data) => data.any !== id), rowDataType: allrowdata }
+        console.log('ID : ' + id);
+        const allrowdata = store.rowDataType.filter(
+          (value) => value.rowIndex !== id
+        );
+
+        return {
+          whenRowData: store.whenRowData.filter((data) => data.any !== id - 1),
+          rowDataType: allrowdata,
+        };
       }),
     setWhenColDefs: (whenColData) =>
       set(
@@ -93,21 +101,23 @@ export const useStore = create<
     editRowDataType: (core, rowIndex, colId, value) =>
       set((store) => {
         const newdata = [];
-        const storedata = store.rowDataType
-        const existingindex = store.rowDataType?.findIndex((item: any) => item.key === colId && item.rowIndex === rowIndex)
+        const storedata = store.rowDataType;
+        const existingindex = store.rowDataType?.findIndex(
+          (item: any) => item.key === colId && item.rowIndex === rowIndex
+        );
 
-        if(existingindex !== -1){
-          storedata.splice(existingindex , 1)
+        if (existingindex !== -1) {
+          storedata.splice(existingindex, 1);
         }
 
-        storedata.map((item:any) => {
+        storedata.map((item: any) => {
           newdata.push(item);
-        })
-        
+        });
+
         newdata.push({
           key: colId,
           value: value,
-          rowIndex: rowIndex
+          rowIndex: rowIndex,
         });
 
         const updateRowData = [...newdata];
@@ -117,7 +127,6 @@ export const useStore = create<
 
     editRowData: (core, rowIndex, colId, value) =>
       set((store) => {
-
         const updatedRowData = [...store.whenRowData];
         const rowToUpdate = updatedRowData[rowIndex];
         rowToUpdate[colId] = value;

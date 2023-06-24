@@ -44,7 +44,7 @@ const AnyColCell: React.FC<IProps> = (props) => {
           </button>
           {hovering ? (
             <Popover
-              placement="bottomRight"
+              placement="bottomLeft"
               overlayClassName="custom-popover"
               onOpenChange={(visible) => {
                 if (!visible) {
@@ -52,7 +52,7 @@ const AnyColCell: React.FC<IProps> = (props) => {
                 }
               }}
               content={
-                <div className="w-[170px]">
+                <div className="w-[170px] bg-[var(--primary-bg)] border-[1px] border-[var(--primary-border)]">
                   {rowOptions.map((data) => {
                     if (data.key === 'delete' || data.key === 'clear') {
                       return (
