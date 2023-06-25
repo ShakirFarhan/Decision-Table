@@ -145,7 +145,7 @@ const CustomCell: React.FC<IProps> = (props) => {
                       {selectedOption === "Capital" ? <div className='m-0 mt-3'> <RDatePicker /></div> : null}
                       {selectedOption === "Small" ? <div className='m-0 mt-3'><RRangePicker /></div> : null}
 
-                      <button type="submit"></button>
+                      <button type="submit" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-[100%]">Submit</button>
                     </Form>
                   </div>
                 </>

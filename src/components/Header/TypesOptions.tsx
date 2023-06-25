@@ -77,7 +77,7 @@ const TypesOptions: React.FC<defaultProps> = ({
           type="text"
           placeholder="Expression"
         />
-        <button type="submit"></button>
+        <button type="submit" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-[100%]">Submit</button>
       </form>
     </>
   );
