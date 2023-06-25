@@ -5,6 +5,7 @@ import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
+import RDatePicker from '../reusables/datepicker';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -74,7 +75,6 @@ const CustomCell: React.FC<IProps> = (props) => {
     (value) =>
       value.key === props.column.colId && value.rowIndex === props.rowIndex
   );
-
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>
@@ -88,9 +88,9 @@ const CustomCell: React.FC<IProps> = (props) => {
               rowDataTypes.value &&
               rowDataTypes.value.type &&
               rowDataTypes.value.type !== undefined && (
-                <div className="rounded-0 bg-[var(--primary-bg)]  tracking-[1px] h-[25px]  flex items-center cellType ">
+                <div className="rounded-0 bg-[var(--primary-border)]  tracking-[1px] h-[25px]  flex items-center cellType ">
                   <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
-                    {/* here we are only showing the type. and based on this we will validate the cellsa */}
+                    {/* here we are only showing the type. and based on this we will validate the cells */}
                     {rowDataTypes.value.type}
                   </span>
                 </div>
@@ -111,7 +111,7 @@ const CustomCell: React.FC<IProps> = (props) => {
               content={
                 <>
                   <div className="w-[240px] p-3 bg-[var(--primary-bg)] -rounded-[20px]">
-                    <Form onFinish={handleSubmit}>
+                    <Form className="flex flex-col" onFinish={handleSubmit}>
                       <Select
                         style={{
                           backgroundColor: 'var(--primary-bg)',
@@ -120,10 +120,11 @@ const CustomCell: React.FC<IProps> = (props) => {
                         }}
                         className="w-full rounded-0 mb-3 select "
                         defaultValue={
-                          rowDataTypes &&
-                          rowDataTypes.value &&
-                          rowDataTypes.value.type &&
-                          rowDataTypes.value.type !== undefined
+                          // rowDataTypes &&
+                          // rowDataTypes.value &&
+                          // rowDataTypes.value.type &&
+                          // rowDataTypes.value.type !== undefined
+                          rowDataTypes?.value?.type
                             ? rowDataTypes.value.type
                             : 'Default'
                         }
@@ -140,18 +141,23 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-                      <Input
-                        style={{
-                          backgroundColor: 'var(--primary-bg)',
-                          borderColor: 'var(--primary-border)',
-                          color: 'var(--primary-color)',
-                        }}
-                        className="px-[10px] py-[4px] border-[1.7px]"
-                        placeholder={editingValue || 'Enter'}
-                        value={editingValue}
-                        onChange={handleChange}
-                      />
-                      <button type="submit"></button>
+
+                      {props?.column?.colDef?.dataType !== 'Date' ? (
+                        <Input
+                          style={{
+                            backgroundColor: 'var(--primary-bg)',
+                            borderColor: 'var(--primary-border)',
+                            color: 'var(--primary-color)',
+                          }}
+                          className="px-[10px] py-[4px] border-[1.7px]"
+                          placeholder={editingValue || 'Enter'}
+                          value={editingValue}
+                          onChange={handleChange}
+                        />
+                      ) : (
+                        <RDatePicker />
+                      )}
+                      <button type="submit">Add</button>
                     </Form>
                   </div>
                 </>
