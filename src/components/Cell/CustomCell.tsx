@@ -9,7 +9,7 @@ import RDatePicker from '../reusables/datepicker';
 import RTimePicker from '../reusables/timepicker';
 import RRangePicker from '../reusables/daterange';
 import RInputField from '../reusables/inputField';
-import { checkTypeAndRender } from '../../utils';
+import { checkTypeAndRender, checkValidity } from '../../utils';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -84,11 +84,11 @@ const CustomCell: React.FC<IProps> = (props) => {
     return (
       <>
         <div
-          className="w-[100%] h-full  border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)] bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer"
+          className={`w-[100%] h-full ${checkValidity(rowDataTypes, props.cellValue) === false ? 'border-x-[1px] border-red-500 border-y-[1px]' : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'}  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
           onMouseEnter={() => handleMouseEnter(props.id)}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
+          <div className="flex  items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
             {rowDataTypes && rowDataTypes.value && rowDataTypes.value.type && rowDataTypes.value.type !== undefined && (
               <div className="rounded-0 bg-[var(--primary-bg)]  tracking-[1px] h-[25px]  flex items-center cellType ">
                 <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
