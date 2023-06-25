@@ -8,6 +8,7 @@ import { headerTypes } from '../../constants/data';
 import RDatePicker from '../reusables/datepicker';
 import RTimePicker from '../reusables/timepicker';
 import RRangePicker from '../reusables/daterange';
+import RInputField from '../reusables/inputField';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -133,16 +134,9 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-                      {selectedOption === "Any" && <Input
-                        style={{
-                          backgroundColor: 'var(--primary-bg)',
-                          borderColor: 'var(--primary-border)',
-                          color: 'var(--primary-color)',
-                        }}
-                        className="px-[10px] py-[4px] border-[1.7px]"
-                        placeholder={editingValue || 'Enter'}
-                        value={editingValue}
-                        onChange={handleChange}
+                      {selectedOption === "Any" && <RInputField
+                        editingValue={editingValue}
+                        handleChange={handleChange}
                       />}
 
                       {selectedOption === "Capital" ? <div className='m-0 mt-3'> <RDatePicker /></div> : null}
