@@ -1,4 +1,3 @@
-import React, { Component } from 'react'
 import type { DatePickerProps } from 'antd';
 import { DatePicker, Space } from 'antd'
 
@@ -7,7 +6,7 @@ const onChange: DatePickerProps['onChange'] = (date, dateString) => {
 };
 
 const RDatePicker: React.FC = () => (
-  <Space direction="vertical">
+  <Space direction="vertical" size="large">
     <DatePicker onChange={onChange} />
   </Space>
 );

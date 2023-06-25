@@ -112,7 +112,7 @@ export const useStore = create<
         })
         
 
-        // pushing newly created row type to the state
+        // pushing newly created row type to the stateR
         newdata.push({
           key: colId,
           value: value,

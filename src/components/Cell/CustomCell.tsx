@@ -5,6 +5,9 @@ import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
+import RDatePicker from '../reusables/datepicker';
+import RTimePicker from '../reusables/timepicker';
+import RRangePicker from '../reusables/daterange';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -38,6 +41,7 @@ const CustomCell: React.FC<IProps> = (props) => {
   };
 
   const handleChangeOption = (value: any) => {
+    console.log({ value });
     setSelectedOption(value);
   };
   const handleMouseEnter = (id: any) => {
@@ -48,7 +52,7 @@ const CustomCell: React.FC<IProps> = (props) => {
     setHovering(false);
   };
 
-  
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     props.api.startEditingCell({
       rowIndex: props.rowIndex,
@@ -60,7 +64,7 @@ const CustomCell: React.FC<IProps> = (props) => {
       value: editingValue,
     };
 
-    editRowDataType(props ,props.node.rowIndex, props.column.colId, cellValueNew);
+    editRowDataType(props, props.node.rowIndex, props.column.colId, cellValueNew);
     setClicked(false)
     props.api.stopEditing({
       rowIndex: props.rowIndex,
@@ -129,7 +133,7 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-                      <Input
+                      {selectedOption === "Any" && <Input
                         style={{
                           backgroundColor: 'var(--primary-bg)',
                           borderColor: 'var(--primary-border)',
@@ -139,7 +143,11 @@ const CustomCell: React.FC<IProps> = (props) => {
                         placeholder={editingValue || 'Enter'}
                         value={editingValue}
                         onChange={handleChange}
-                      />
+                      />}
+
+                      {selectedOption === "Capital" ? <div className='m-0 mt-3'> <RDatePicker /></div> : null}
+                      {selectedOption === "Small" ? <div className='m-0 mt-3'><RRangePicker /></div> : null}
+
                       <button type="submit"></button>
                     </Form>
                   </div>
@@ -157,9 +165,9 @@ const CustomCell: React.FC<IProps> = (props) => {
                   ''
                 )}
               </button>
-            </Popover>
-          </div>
-        </div>
+            </Popover >
+          </div >
+        </div >
       </>
     );
   }
