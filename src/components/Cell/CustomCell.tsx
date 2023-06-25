@@ -9,6 +9,7 @@ import RDatePicker from '../reusables/datepicker';
 import RTimePicker from '../reusables/timepicker';
 import RRangePicker from '../reusables/daterange';
 import RInputField from '../reusables/inputField';
+import { checkTypeAndRender } from '../../utils';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -134,7 +135,9 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-                      {selectedOption === "Any" && <RInputField
+                      {checkTypeAndRender(selectedOption)}
+                      {selectedOption === "Any" && 
+                      <RInputField
                         editingValue={editingValue}
                         handleChange={handleChange}
                       />}
