@@ -77,6 +77,12 @@ export interface defaultProps {
   ) => void;
 }
 
+
+export interface inputFieldProps {
+  editingValue: any,
+  handleChange: any
+}
+
 export type handleEditCol = (
   colId: string,
   newHeaderName: string,

@@ -1,11 +1,15 @@
 import React, { FormEvent, useState } from 'react';
-import { Input, Popover } from 'antd';
+import { Button, Input, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
 import RDatePicker from '../reusables/datepicker';
+import RTimePicker from '../reusables/timepicker';
+import RRangePicker from '../reusables/daterange';
+import RInputField from '../reusables/inputField';
+import { getTypeOfInput, getSpecialTypeLabels } from '../../utils';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -21,7 +25,6 @@ interface IProps {
 }
 const CustomCell: React.FC<IProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
-
   const [clicked, setClicked] = useState(false);
   const [editingValue, setEditingValue] = useState(
     props && props.cellValue && props.cellValue.mainval
@@ -29,6 +32,7 @@ const CustomCell: React.FC<IProps> = (props) => {
   const [selectedOption, setSelectedOption] = useState(
     props && props.cellValue && props.cellValue.type
   );
+  console.log('selected option :' + selectedOption);
   const [hovering, setHovering] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +79,7 @@ const CustomCell: React.FC<IProps> = (props) => {
     (value) =>
       value.key === props.column.colId && value.rowIndex === props.rowIndex
   );
+  console.log(rowDataType);
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>
@@ -84,20 +89,18 @@ const CustomCell: React.FC<IProps> = (props) => {
           onMouseLeave={handleMouseLeave}
         >
           <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
-            {rowDataTypes &&
-              rowDataTypes.value &&
-              rowDataTypes.value.type &&
-              rowDataTypes.value.type !== undefined && (
-                <div className="rounded-0 bg-[var(--primary-border)]  tracking-[1px] h-[25px]  flex items-center cellType ">
-                  <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
-                    {/* here we are only showing the type. and based on this we will validate the cells */}
-                    {rowDataTypes.value.type}
-                  </span>
-                </div>
-              )}
+            {rowDataTypes?.value?.type && (
+              <div className="rounded-0 bg-[var(--primary-border)]  tracking-[1px] h-[25px]  flex items-center cellType ">
+                <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
+                  {/* here we are only showing the type. and based on this we will validate the cells */}
+                  {getSpecialTypeLabels(rowDataTypes.value.type)}
+                </span>
+              </div>
+            )}
 
             <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-              {props && props?.cellValue && props?.cellValue}
+              {/* {props && props?.cellValue && props?.cellValue} */}
+              {rowDataTypes?.value?.value}
             </span>
             <Popover
               placement="bottomRight"
@@ -120,11 +123,8 @@ const CustomCell: React.FC<IProps> = (props) => {
                         }}
                         className="w-full rounded-0 mb-3 select "
                         defaultValue={
-                          // rowDataTypes &&
-                          // rowDataTypes.value &&
-                          // rowDataTypes.value.type &&
-                          // rowDataTypes.value.type !== undefined
-                          rowDataTypes?.value?.type
+                          rowDataTypes?.value?.type &&
+                          rowDataTypes !== undefined
                             ? rowDataTypes.value.type
                             : 'Default'
                         }
@@ -141,23 +141,19 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-
-                      {props?.column?.colDef?.dataType !== 'Date' ? (
-                        <Input
-                          style={{
-                            backgroundColor: 'var(--primary-bg)',
-                            borderColor: 'var(--primary-border)',
-                            color: 'var(--primary-color)',
-                          }}
-                          className="px-[10px] py-[4px] border-[1.7px]"
-                          placeholder={editingValue || 'Enter'}
-                          value={editingValue}
-                          onChange={handleChange}
-                        />
-                      ) : (
-                        <RDatePicker />
-                      )}
-                      <button type="submit">Add</button>
+                      {getTypeOfInput(
+                        props?.column?.colDef?.dataType,
+                        selectedOption
+                      ) === 'date-inputs'
+                        ? ''
+                        : ''}
+                      <Button
+                        className="w-full"
+                        type="primary"
+                        htmlType="submit"
+                      >
+                        Submit
+                      </Button>
                     </Form>
                   </div>
                 </>

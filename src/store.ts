@@ -112,6 +112,7 @@ export const useStore = create<
           newdata.push(item);
         });
 
+        // pushing newly created row type to the stateR
         newdata.push({
           key: colId,
           value: value,
