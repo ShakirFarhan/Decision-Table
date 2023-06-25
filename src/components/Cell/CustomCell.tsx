@@ -1,15 +1,13 @@
-import React, { FormEvent, useState } from 'react';
-import { Button, Input, Popover } from 'antd';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { Button, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
-import RDatePicker from '../reusables/datepicker';
-import RTimePicker from '../reusables/timepicker';
-import RRangePicker from '../reusables/daterange';
-import RInputField from '../reusables/inputField';
-import { getTypeOfInput, getSpecialTypeLabels } from '../../utils';
+
+import { getSpecialTypeLabels, checkValidity } from '../../utils';
+import InputTypes from './InputFields/InputTypes';
 
 interface IProps {
   onEdit: (params: any) => void;
@@ -32,7 +30,7 @@ const CustomCell: React.FC<IProps> = (props) => {
   const [selectedOption, setSelectedOption] = useState(
     props && props.cellValue && props.cellValue.type
   );
-  console.log('selected option :' + selectedOption);
+
   const [hovering, setHovering] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,18 +71,20 @@ const CustomCell: React.FC<IProps> = (props) => {
       colKey: props.column.getId(),
     });
   };
-
   // fetching row type from store
-  const rowDataTypes = rowDataType.find(
+  let rowDataTypes = rowDataType.find(
     (value) =>
       value.key === props.column.colId && value.rowIndex === props.rowIndex
   );
-  console.log(rowDataType);
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>
         <div
-          className="w-[100%] h-full  border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)] bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer"
+          className={`w-[100%] h-full ${
+            checkValidity(rowDataTypes, props.cellValue) === false
+              ? 'border-x-[1px] border-red-500 border-y-[1px]'
+              : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'
+          }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
           onMouseEnter={() => handleMouseEnter(props.id)}
           onMouseLeave={handleMouseLeave}
         >
@@ -141,12 +141,14 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-                      {getTypeOfInput(
-                        props?.column?.colDef?.dataType,
-                        selectedOption
-                      ) === 'date-inputs'
-                        ? ''
-                        : ''}
+
+                      <InputTypes
+                        dataType={props?.column?.colDef?.dataType}
+                        selectedOption={selectedOption}
+                        editingValue={editingValue}
+                        handleChange={handleChange}
+                        className="px-[10px] py-[4px] border-[1.7px]"
+                      />
                       <Button
                         className="w-full"
                         type="primary"
