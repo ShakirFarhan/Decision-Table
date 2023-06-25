@@ -58,7 +58,7 @@ const CustomCell: React.FC<IProps> = (props) => {
       type: selectedOption,
       value: editingValue,
     };
-
+    console.log(cellValueNew);
     editRowDataType(
       props,
       props.node.rowIndex,

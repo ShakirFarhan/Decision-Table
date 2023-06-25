@@ -16,6 +16,7 @@ function InputTypes({
   dataType,
   selectedOption,
 }: any) {
+  console.log(editingValue);
   if (getTypeOfInput(dataType, selectedOption) === 'single-input') {
     return (
       <Input
