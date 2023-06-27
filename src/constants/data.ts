@@ -78,23 +78,6 @@ export const rowOptions = [
     header: 'Delete Rule',
   },
 ];
-// export const cellOptions = [
-//   { id: 'any', value: 'Any' },
-//   { id: 'equals', value: 'Equals' },
-//   { id: 'notEquals', value: 'Does not equal' },
-//   { id: 'greaterThan', value: 'Greater than' },
-//   { id: 'lessThan', value: 'Less than' },
-//   { id: 'greaterThanOrEqual', value: 'Greater than or equal to' },
-//   { id: 'lessThanOrEqual', value: 'Less than or equal to' },
-//   { id: 'between', value: 'Between' },
-//   { id: 'isEven', value: 'Is even' },
-//   { id: 'isOdd', value: 'Is Odd' },
-//   { id: 'isNegative', value: 'Is negative' },
-//   { id: 'isZero', value: 'Is Zero' },
-//   { id: 'isNotZero', value: 'Is not zero' },
-//   { id: 'isMultipleOf', value: 'Is a multiple of' },
-//   { id: 'isNotMultipleOf', value: 'Is not a multiple of' },
-// ];
 
 // previous types are removed and this will be used for further things
 export const headerTypes = [
