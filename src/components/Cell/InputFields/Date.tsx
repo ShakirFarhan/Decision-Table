@@ -2,15 +2,26 @@ import { DatePicker, TimePicker } from 'antd';
 import type { Dayjs } from 'dayjs';
 import { useState } from 'react';
 
-export function StartEndDate() {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+
+interface IProps {
+  firstval?: any;
+  secondval?: any;
+  setFirstVal: (value: any) => void;
+  setSecondVal: (value: any) => void;
+}
+
+export const StartEndDate: React.FC<IProps> = (props) => {
+  const [startDate, setStartDate] = useState(props.firstval);
+  const [endDate, setEndDate] = useState(props.secondval);
+
   const handleStartDateChange = (date: any) => {
     setStartDate(date);
+    props.setFirstVal(date)
   };
 
   const handleEndDateChange = (date: any) => {
     setEndDate(date);
+    props.setSecondVal(date)
   };
   return (
     <>
@@ -35,15 +46,21 @@ export function StartEndDate() {
   );
 }
 
-export function StartEndTime() {
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-  const handleStartTimeChange = (date: any) => {
-    setStartTime(date);
+
+export const StartEndTime: React.FC<IProps> = (props) => {
+
+  const [startTime, setStartTime] = useState(props.firstval);
+  const [endTime, setEndTime] = useState(props.secondval);
+
+
+  const handleStartTimeChange = (time: any) => {
+    setStartTime(time);
+    props.setFirstVal(time)
   };
 
-  const handleEndTimeChange = (date: any) => {
-    setEndTime(date);
+  const handleEndTimeChange = (time: any) => {
+    setEndTime(time);
+    props.setSecondVal(time)
   };
   return (
     <>
@@ -100,15 +117,21 @@ export function MonthToMonth() {
     </>
   );
 }
-export function YearToYear() {
-  const [startYear, setStartYear] = useState(null);
-  const [endYear, setEndYear] = useState(null);
+
+export const YearToYear: React.FC<IProps> = (props) => {
+  const [startYear, setStartYear] = useState(props.firstval);
+  const [endYear, setEndYear] = useState(props.secondval);
+
+
+  
   const handleStartYearChange = (date: any) => {
     setStartYear(date);
+    props.setFirstVal(date)
   };
 
   const handleEndYearChange = (date: any) => {
     setEndYear(date);
+    props.setSecondVal(date)
   };
   return (
     <>

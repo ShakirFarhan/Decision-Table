@@ -1,3 +1,39 @@
+function isDate(value: any): boolean {
+  return new Date(value) instanceof Date;
+}
+
+
+function isDateBetween(startDate: Date, endDate: Date, dateToCheck: Date): boolean {
+  return startDate <= dateToCheck && dateToCheck <= endDate;
+}
+
+
+function isYearbetween(startDate: Date, endDate: Date, dateToCheck: any): boolean {
+  console.log(startDate)
+  console.log(endDate)
+  return new Date(startDate).getFullYear() <= dateToCheck && dateToCheck <= new Date(endDate).getFullYear();
+}
+
+
+function isValidTime(timeString: string): boolean {
+  const timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+  return timeRegex.test(timeString);
+}
+
+
+function convertTimeStringToDate(timeString: string): Date {
+  const today = new Date(); // Get the current date
+  const [hours, minutes] = timeString.split(':'); // Split the time string into hours and minutes
+
+  // Set the time components to the current date
+  today.setHours(Number(hours));
+  today.setMinutes(Number(minutes));
+  today.setSeconds(0);
+  today.setMilliseconds(0);
+
+  return today;
+}
+
 export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
   if (colDatatype === 'String') {
     if (selectedOption?.toLowerCase() !== undefined) return 'single-input';
@@ -46,7 +82,7 @@ export const getSpecialTypeLabels = (selectedOption: any) => {
     return '≥';
   } else if (selectedOption.toLowerCase() === 'less than or equal to') {
     return '≤';
-  }  else {
+  } else {
     return selectedOption;
   }
 };
@@ -65,13 +101,14 @@ export const checkValidity = (type: any, value: any) => {
     type.value.type !== undefined &&
     value !== undefined
   ) {
+    console.log({ allvales: type.value.value })
+    console.log(type.value.type)
     const maintype = type.value.type.toLowerCase()
     const findRegex = forString.find(value => value.id === maintype);
-    console.log({ maintype });
-    if (maintype === "any"){
+    if (maintype === "any") {
       return true;
     }
-    else if (maintype === 'capital'){
+    else if (maintype === 'capital') {
       const pattern = new RegExp(findRegex!.regex);
       return pattern.test(value);
     }
@@ -83,44 +120,67 @@ export const checkValidity = (type: any, value: any) => {
       const pattern = new RegExp(findRegex!.regex);
       return pattern.test(value);
     }
-    else if(maintype === 'equal'){
-      return type.value.value === value
+    else if (maintype === 'equal') {
+      return type.value.value.firstval === value
     }
-    else if(maintype === 'does not equal'){
-      return type.value.value !== value
+    else if (maintype === 'does not equal') {
+      return type.value.value.firstval !== value
     }
-    else if(maintype === 'greater than'){
-      return type.value.value < value
+    else if (maintype === 'greater than') {
+      return type.value.value.firstval < value
     }
-    else if(maintype === 'less than'){
-      return type.value.value > value
+    else if (maintype === 'less than') {
+      return type.value.value.firstval > value
     }
-    else if(maintype === 'greater than or equal to'){
-      return type.value.value <= value
+    else if (maintype === 'greater than or equal to') {
+      return type.value.value.firstval <= value
     }
-    else if(maintype === 'less than or equal to'){
-      return type.value.value >= value
+    else if (maintype === 'less than or equal to') {
+      return type.value.value.firstval >= value
     }
-    else if(maintype === 'is even'){
+    else if (maintype === 'is even') {
       return value % 2 === 0;
     }
-    else if(maintype === 'is odd'){
+    else if (maintype === 'is odd') {
       return value % 2 !== 0
     }
-    else if(maintype === 'is negative'){
+    else if (maintype === 'is negative') {
       return value < 0
     }
-    else if(maintype === 'is zero'){
+    else if (maintype === 'is zero') {
       return value === 0
     }
-    else if(maintype === 'is not zero'){
+    else if (maintype === 'is not zero') {
       return value !== 0
     }
-    else if(maintype === 'is a multiple of'){
-      return value * value === type.value.value
+    else if (maintype === 'is a multiple of') {
+      return value * value === type.value.value.firstval
     }
-    else if(maintype === 'is not a multiple of'){
-      return value * value !== type.value.value
+    else if (maintype === 'is not a multiple of') {
+      return value * value !== type.value.value.firstval
+    }
+    else if (maintype === 'between') {
+
+      if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval) && !isValidTime(value)) {
+        return isDateBetween(type.value.value.firstval, type.value.value.secondval, new Date(value))
+      }
+      else if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval) && isValidTime(value)){
+        const timeToDate = convertTimeStringToDate(value);
+        return isDateBetween(type.value.value.firstval, type.value.value.secondval, timeToDate)
+      }
+      else {
+        return value > type.value.value.firstval && value < type.value.value.secondval
+      }
+    } else if (maintype === 'from daytime to daytime'){
+      if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval) && isValidTime(value)) {
+        const timeToDate = convertTimeStringToDate(value);
+        return isDateBetween(type.value.value.firstval, type.value.value.secondval, timeToDate)
+      }
+    }
+    else if (maintype === 'from year to year'){
+      if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval)) {
+        return isYearbetween(type.value.value.firstval, type.value.value.secondval, value)
+      }
     }
     // return type.value.value < value ? true : false;
   }

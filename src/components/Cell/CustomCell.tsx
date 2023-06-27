@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Button, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
@@ -24,17 +24,28 @@ interface IProps {
 const CustomCell: React.FC<IProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
-  const [editingValue, setEditingValue] = useState(
-    props && props.cellValue && props.cellValue.mainval
+
+  
+
+  // fetching row type from store
+  let rowDataTypes = rowDataType.find(
+    (value) =>
+      value.key === props.column.colId && value.rowIndex === props.rowIndex
   );
   const [selectedOption, setSelectedOption] = useState(
-    props && props.cellValue && props.cellValue.type
+    rowDataTypes && rowDataTypes.value && rowDataTypes.value.type
   );
+
+  const [editingValue, setEditingValue] = useState(
+    rowDataTypes && rowDataTypes.value && rowDataTypes.value.value
+  );
+
+  console.log({valuesnew:editingValue})
 
   const [hovering, setHovering] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditingValue(event.target.value);
+  const handleChange = (value: any) => {
+    setEditingValue(value);
   };
 
   const handleChangeOption = (value: any) => {
@@ -71,11 +82,8 @@ const CustomCell: React.FC<IProps> = (props) => {
       colKey: props.column.getId(),
     });
   };
-  // fetching row type from store
-  let rowDataTypes = rowDataType.find(
-    (value) =>
-      value.key === props.column.colId && value.rowIndex === props.rowIndex
-  );
+
+  
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>
@@ -141,7 +149,7 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-
+                      
                       <InputTypes
                         dataType={props?.column?.colDef?.dataType}
                         selectedOption={selectedOption}

@@ -1,5 +1,5 @@
 import { Input } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getTypeOfInput } from '../../../utils';
 import {
   DateTimePicker,
@@ -16,6 +16,21 @@ function InputTypes({
   dataType,
   selectedOption,
 }: any) {
+
+  const [firstval, setFirstVal] = useState(editingValue && editingValue.firstval)
+  const [secondval, setSecondVal] = useState(editingValue && editingValue.secondval)
+
+  useEffect(() => {
+    const value = {
+      firstval: firstval,
+      secondval: secondval
+    }
+
+    handleChange(value);
+  },[firstval, secondval])
+
+
+
   if (getTypeOfInput(dataType, selectedOption) === 'single-input') {
     return (
       <Input
@@ -26,9 +41,9 @@ function InputTypes({
           marginBottom: '12px',
         }}
         className="px-[10px] py-[4px] border-[1.7px]"
-        placeholder={editingValue || 'Enter'}
-        value={editingValue}
-        onChange={handleChange}
+        placeholder={firstval || 'Enter'}
+        value={firstval}
+        onChange={(event) => setFirstVal(event.target.value)}
       />
     );
   } else if (getTypeOfInput(dataType, selectedOption) === 'two-input') {
@@ -42,9 +57,9 @@ function InputTypes({
             marginBottom: '12px',
           }}
           className="px-[10px] py-[4px] border-[1.7px]"
-          placeholder={editingValue || 'Enter'}
-          value={editingValue}
-          onChange={handleChange}
+          placeholder={firstval || 'Enter'}
+          value={firstval}
+          onChange={(event) => setFirstVal(event.target.value)}
         />
         <Input
           style={{
@@ -54,25 +69,25 @@ function InputTypes({
             marginBottom: '12px',
           }}
           className="px-[10px] py-[4px] border-[1.7px]"
-          placeholder={editingValue || 'Enter'}
-          value={editingValue}
-          onChange={handleChange}
+          placeholder={secondval || 'Enter'}
+          value={secondval}
+          onChange={(event) => setSecondVal(event.target.value)}
         />
       </>
     );
   } else if (getTypeOfInput(dataType, selectedOption) === 'date-inputs') {
-    return <StartEndDate />;
+    return <StartEndDate firstval={firstval} setFirstVal={setFirstVal} secondval={secondval} setSecondVal={setSecondVal}/>;
   } else if (
     getTypeOfInput(dataType, selectedOption) === 'time-inputs' ||
     getTypeOfInput(dataType, selectedOption) === 'day-time-inputs'
   ) {
-    return <StartEndTime />;
+    return <StartEndTime firstval={firstval} setFirstVal={setFirstVal} secondval={secondval} setSecondVal={setSecondVal} />;
   } else if (
     getTypeOfInput(dataType, selectedOption) === 'month-month-inputs'
   ) {
     return <MonthToMonth />;
   } else if (getTypeOfInput(dataType, selectedOption) === 'year-year-inputs') {
-    return <YearToYear />;
+    return <YearToYear firstval={firstval} setFirstVal={setFirstVal} secondval={secondval} setSecondVal={setSecondVal} />;
   } else if (getTypeOfInput(dataType, selectedOption) === 'date-time-inputs') {
     return <DateTimePicker />;
   } else {

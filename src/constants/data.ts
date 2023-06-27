@@ -140,11 +140,11 @@ export const headerTypes = [
     type: 'Time',
     options: [{ id: 'between', value: 'Between', regex: '' }],
   },
-  {
-    id: 7,
-    type: 'Date Time',
-    options: [{ id: 'between', value: 'Between', regex: '' }],
-  },
+  // {
+  //   id: 7,
+  //   type: 'Date Time',
+  //   options: [{ id: 'between', value: 'Between', regex: '' }],
+  // },
   {
     id: 7,
     type: 'Day Time Duration',
@@ -153,11 +153,11 @@ export const headerTypes = [
     ],
   },
   {
-    id: 7,
+    id: 8,
     type: 'Year Month Duration',
     options: [
       { id: 'fromyeartoyear', value: 'From year to year', regex: '' },
-      { id: 'frommonthtomonth', value: 'From Month to Month', regex: '' },
+      // { id: 'frommonthtomonth', value: 'From Month to Month', regex: '' },
     ],
   },
 ];
