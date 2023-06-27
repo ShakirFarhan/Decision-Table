@@ -133,12 +133,12 @@ export const headerTypes = [
   {
     id: 5,
     type: 'Date',
-    options: [{ id: 'between', value: 'Between', regex: '' }],
+    options: [{ id: 'between', value: 'Between Date', regex: '' }],
   },
   {
     id: 6,
     type: 'Time',
-    options: [{ id: 'between', value: 'Between', regex: '' }],
+    options: [{ id: 'between', value: 'Between Time', regex: '' }],
   },
   // {
   //   id: 7,

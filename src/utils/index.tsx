@@ -1,5 +1,5 @@
 function isDate(value: any): boolean {
-  return new Date(value) instanceof Date;
+  return value instanceof Date;
 }
 
 
@@ -9,8 +9,6 @@ function isDateBetween(startDate: Date, endDate: Date, dateToCheck: Date): boole
 
 
 function isYearbetween(startDate: Date, endDate: Date, dateToCheck: any): boolean {
-  console.log(startDate)
-  console.log(endDate)
   return new Date(startDate).getFullYear() <= dateToCheck && dateToCheck <= new Date(endDate).getFullYear();
 }
 
@@ -52,9 +50,9 @@ export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
       return 'single-input';
     }
   } else if (colDatatype === 'Date') {
-    if (selectedOption?.toLowerCase() === 'between') return 'date-inputs';
+    if (selectedOption?.toLowerCase() === 'between date') return 'date-inputs';
   } else if (colDatatype === 'Time') {
-    if (selectedOption?.toLowerCase() === 'between') return 'time-inputs';
+    if (selectedOption?.toLowerCase() === 'between time') return 'time-inputs';
   } else if (colDatatype === 'Date Time') {
     if (selectedOption?.toLowerCase() === 'between') return 'date-time-inputs';
   } else if (colDatatype === 'Day Time Duration') {
@@ -160,29 +158,28 @@ export const checkValidity = (type: any, value: any) => {
       return value * value !== type.value.value.firstval
     }
     else if (maintype === 'between') {
-
+      return value > type.value.value.firstval && value < type.value.value.secondval
+    }
+    else if (maintype === 'between date') {
       if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval) && !isValidTime(value)) {
         return isDateBetween(type.value.value.firstval, type.value.value.secondval, new Date(value))
       }
-      else if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval) && isValidTime(value)){
-        const timeToDate = convertTimeStringToDate(value);
-        return isDateBetween(type.value.value.firstval, type.value.value.secondval, timeToDate)
-      }
-      else {
-        return value > type.value.value.firstval && value < type.value.value.secondval
-      }
-    } else if (maintype === 'from daytime to daytime'){
+    }
+    else if (maintype === 'between time') {
+      const timeToDate = convertTimeStringToDate(value);
+      return isDateBetween(type.value.value.firstval, type.value.value.secondval, timeToDate)
+    }
+    else if (maintype === 'from daytime to daytime') {
       if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval) && isValidTime(value)) {
         const timeToDate = convertTimeStringToDate(value);
         return isDateBetween(type.value.value.firstval, type.value.value.secondval, timeToDate)
       }
     }
-    else if (maintype === 'from year to year'){
+    else if (maintype === 'from year to year') {
       if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval)) {
         return isYearbetween(type.value.value.firstval, type.value.value.secondval, value)
       }
     }
-    // return type.value.value < value ? true : false;
   }
 
   return true;

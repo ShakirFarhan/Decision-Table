@@ -1,5 +1,4 @@
 import { DatePicker, TimePicker } from 'antd';
-import type { Dayjs } from 'dayjs';
 import { useState } from 'react';
 
 
@@ -123,7 +122,7 @@ export const YearToYear: React.FC<IProps> = (props) => {
   const [endYear, setEndYear] = useState(props.secondval);
 
 
-  
+
   const handleStartYearChange = (date: any) => {
     setStartYear(date);
     props.setFirstVal(date)

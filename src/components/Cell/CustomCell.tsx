@@ -40,7 +40,6 @@ const CustomCell: React.FC<IProps> = (props) => {
     rowDataTypes && rowDataTypes.value && rowDataTypes.value.value
   );
 
-  console.log({valuesnew:editingValue})
 
   const [hovering, setHovering] = useState(false);
 
