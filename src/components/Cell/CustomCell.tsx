@@ -99,8 +99,8 @@ const CustomCell: React.FC<IProps> = (props) => {
             )}
 
             <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-              {/* {props && props?.cellValue && props?.cellValue} */}
-              {rowDataTypes?.value?.value}
+              {props && props?.cellValue && props?.cellValue}
+              {/* {rowDataTypes?.value?.value} */}
             </span>
             <Popover
               placement="bottomRight"
@@ -150,7 +150,7 @@ const CustomCell: React.FC<IProps> = (props) => {
                         className="px-[10px] py-[4px] border-[1.7px]"
                       />
                       <Button
-                        className="w-full"
+                        className="w-full bg-blue-400"
                         type="primary"
                         htmlType="submit"
                       >

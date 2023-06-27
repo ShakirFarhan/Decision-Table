@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { headerTypes } from '../../constants/data';
 import { defaultProps } from '../../constants/interfaces';
 import '../css/typesoption.css';
+import { Button } from 'antd';
 const TypesOptions: React.FC<defaultProps> = ({
   id,
   type,
@@ -25,7 +26,7 @@ const TypesOptions: React.FC<defaultProps> = ({
     <>
       <form
         onSubmit={handleOnSubmit}
-        className="modal-options flex flex-col gap-y-[12px] px-[10px] py-[8px] bg-[var(--primary-bg)] w-[270px] h-[230px]"
+        className="modal-options flex flex-col gap-y-[12px] px-[10px] py-[8px] bg-[var(--primary-bg)] w-[270px] h-[280px] border-r-2"
       >
         <input
           name="col-name"
@@ -36,7 +37,7 @@ const TypesOptions: React.FC<defaultProps> = ({
           className="px-[10px] py-[4px] border-[1.7px] border-[var(--primary-border)] bg-[var(--primary-bg)] text-[var(--primary-color)] col-input outline-0"
         />
         <select
-          className="px-[10px] py-[4px] text-[var(--primary-color)] border-[1.7px] border-[var(--primary-border)] text-[var(--primary-color)] bg-[var(--primary-bg)]"
+          className="px-[10px] py-[4px] border-[1.7px] border-[var(--primary-border)] text-[var(--primary-color)] bg-[var(--primary-bg)]"
           value={selectedOption}
           onChange={handleSelectedOptions}
         >
@@ -60,24 +61,30 @@ const TypesOptions: React.FC<defaultProps> = ({
           })}
         </select>
         <input
-          className="px-[10px] py-[4px] text-[var(--primary-color)] border-[1.7px] border-[var(--primary-border)] bg-[var(--primary-bg)] text-[var(--primary-color)] col-other-input outline-0"
+          className="px-[10px] py-[4px]  border-[1.7px] border-[var(--primary-border)] bg-[var(--primary-bg)] text-[var(--primary-color)] col-other-input outline-0"
           name="description"
           type="text"
           placeholder="Description"
         />
         <input
-          className="px-[10px] py-[4px] text-[var(--primary-color)] border-[1.7px] border-[var(--primary-border)] bg-[var(--primary-bg)] text-[var(--primary-color)] col-other-input outline-0"
+          className="px-[10px] py-[4px] border-[1.7px] border-[var(--primary-border)] bg-[var(--primary-bg)] text-[var(--primary-color)] col-other-input outline-0"
           name="default"
           type="text"
           placeholder="Default Value"
         />
         <input
-          className="px-[10px] py-[4px] text-[var(--primary-color)] border-[1.7px] border-[var(--primary-border)] bg-[var(--primary-bg)] text-[var(--primary-color)] col-other-input outline-0"
+          className="px-[10px] py-[4px]  border-[1.7px] border-[var(--primary-border)] bg-[var(--primary-bg)] text-[var(--primary-color)] col-other-input outline-0"
           name="expression"
           type="text"
           placeholder="Expression"
         />
-        <button type="submit" className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-[100%]">Submit</button>
+        <Button
+          className="w-full bg-blue-400"
+          type="primary"
+          htmlType="submit"
+        >
+          Submit
+        </Button>
       </form>
     </>
   );

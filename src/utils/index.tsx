@@ -46,31 +46,83 @@ export const getSpecialTypeLabels = (selectedOption: any) => {
     return '≥';
   } else if (selectedOption.toLowerCase() === 'less than or equal to') {
     return '≤';
-  } else if (selectedOption.toLowerCase() === 'less than') {
-    return '<';
-  } else if (selectedOption.toLowerCase() === 'less than') {
-    return '<';
-  } else if (selectedOption.toLowerCase() === 'less than') {
-    return '<';
-  } else {
+  }  else {
     return selectedOption;
   }
 };
-export const checkTypeAndRender = (type: any) => {
-  console.log(type);
-  // this is portion will be used to check the cell type and render reusable component based on that as input field
-
-  return null;
-};
 
 export const checkValidity = (type: any, value: any) => {
+
+  const forString = [
+    { id: 'capital', regex: '^[A-Z]+$' },
+    { id: 'small', regex: '^[a-z]+$' },
+    { id: 'alpha numeric', regex: '^[A-Za-z0-9]+$' },
+  ]
+
   if (
     type &&
     type.value &&
-    type.value.value !== undefined &&
+    type.value.type !== undefined &&
     value !== undefined
   ) {
-    return type.value.value < value ? true : false;
+    const maintype = type.value.type.toLowerCase()
+    const findRegex = forString.find(value => value.id === maintype);
+    console.log({ maintype });
+    if (maintype === "any"){
+      return true;
+    }
+    else if (maintype === 'capital'){
+      const pattern = new RegExp(findRegex!.regex);
+      return pattern.test(value);
+    }
+    else if (maintype === 'small') {
+      const pattern = new RegExp(findRegex!.regex);
+      return pattern.test(value);
+    }
+    else if (maintype === 'alpha numeric') {
+      const pattern = new RegExp(findRegex!.regex);
+      return pattern.test(value);
+    }
+    else if(maintype === 'equal'){
+      return type.value.value === value
+    }
+    else if(maintype === 'does not equal'){
+      return type.value.value !== value
+    }
+    else if(maintype === 'greater than'){
+      return type.value.value < value
+    }
+    else if(maintype === 'less than'){
+      return type.value.value > value
+    }
+    else if(maintype === 'greater than or equal to'){
+      return type.value.value <= value
+    }
+    else if(maintype === 'less than or equal to'){
+      return type.value.value >= value
+    }
+    else if(maintype === 'is even'){
+      return value % 2 === 0;
+    }
+    else if(maintype === 'is odd'){
+      return value % 2 !== 0
+    }
+    else if(maintype === 'is negative'){
+      return value < 0
+    }
+    else if(maintype === 'is zero'){
+      return value === 0
+    }
+    else if(maintype === 'is not zero'){
+      return value !== 0
+    }
+    else if(maintype === 'is a multiple of'){
+      return value * value === type.value.value
+    }
+    else if(maintype === 'is not a multiple of'){
+      return value * value !== type.value.value
+    }
+    // return type.value.value < value ? true : false;
   }
 
   return true;
