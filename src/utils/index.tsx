@@ -1,5 +1,5 @@
 function isDate(value: any): boolean {
-  return value instanceof Date;
+  return new Date(value) instanceof Date;
 }
 
 
@@ -161,7 +161,7 @@ export const checkValidity = (type: any, value: any) => {
       return value > type.value.value.firstval && value < type.value.value.secondval
     }
     else if (maintype === 'between date') {
-      if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval) && !isValidTime(value)) {
+      if (isDate(type.value.value.firstval) && isDate(type.value.value.secondval)) {
         return isDateBetween(type.value.value.firstval, type.value.value.secondval, new Date(value))
       }
     }
