@@ -2,12 +2,13 @@ import '../css/table.css';
 import { optionsData } from '../../constants/data';
 import { CiMenuKebab } from 'react-icons/ci';
 import { Popover } from 'antd';
+import { useStore } from '../../store';
 interface colInterface {
   id: string;
-  handleOptions: (id: string, selectedOption: string) => void;
 }
 
-function ColOptions({ handleOptions, id }: colInterface) {
+function ColOptions({ id }: colInterface) {
+  const { handleOptions } = useStore((store) => store);
   return (
     <>
       <Popover
@@ -23,7 +24,7 @@ function ColOptions({ handleOptions, id }: colInterface) {
                     onClick={() => {
                       handleOptions(id, data.key);
                     }}
-                    key={data.key}  
+                    key={data.key}
                   >
                     {data.function}
                   </p>

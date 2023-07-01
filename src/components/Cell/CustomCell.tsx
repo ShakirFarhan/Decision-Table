@@ -5,7 +5,6 @@ import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
-
 import { getSpecialTypeLabels, checkValidity, getCellValue } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
 
@@ -19,7 +18,7 @@ interface IProps {
   data?: any;
   api?: any;
   rowIndex?: any;
-  handleAddRow: () => void;
+  // handleAddRow: () => void;
 }
 const CustomCell: React.FC<IProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);

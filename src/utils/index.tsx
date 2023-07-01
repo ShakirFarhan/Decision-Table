@@ -197,66 +197,18 @@ export const checkValidity = (type: any, value: any) => {
 
   return true;
 };
-const dateObject = {
-  $D: 26,
-  $H: 15,
-  $L: 'en',
-  $M: 5,
-  $W: 1,
-  $d: new Date('Mon Jun 26 2023 15:03:03 GMT+0530 (India Standard Time)'),
-  $m: 3,
-  $ms: 88,
-  $s: 3,
-  $u: undefined,
-  $x: {},
-  $y: 2023,
-};
-
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-const days = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-];
 
 const getFormattedValue = (value: any) => {
   return String(value).padStart(2, '0');
 };
-// Month Date YEAR TIME
-// const formattedDate = `${months[dateObject.$M - 1]} ${getFormattedValue(
-//   dateObject.$D
-// )}, ${dateObject.$y}, ${getFormattedValue(dateObject.$H)}:${getFormattedValue(
-//   dateObject.$m
-// )}:${getFormattedValue(dateObject.$s)}`;
-
-const formattedDate = `${getFormattedValue(dateObject.$D)}:${getFormattedValue(
-  dateObject.$M
-)}:${dateObject.$y}`;
 
 export const getCellValue = (colDataType: any, cellValueObject: any) => {
   if (colDataType) {
+    console.log(colDataType);
     if (
       colDataType.toLowerCase() === 'string' ||
       colDataType.toLowerCase() === 'number' ||
-      colDataType.toLowerCase() === 'booleon'
+      colDataType.toLowerCase() === 'boolean'
     ) {
       if (cellValueObject) {
         if (!cellValueObject.secondval) {

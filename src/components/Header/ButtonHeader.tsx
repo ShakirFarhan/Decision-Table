@@ -1,9 +1,11 @@
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { useStore } from '../../store';
 type props = {
   name: string;
   onClick?: () => void;
 };
 function ButtonHeader({ name, onClick }: props) {
+  const { addWhenColumnDefs, addThenColumnDefs } = useStore((store) => store);
   if (name !== 'Annotations') {
     return (
       <div
@@ -16,7 +18,14 @@ function ButtonHeader({ name, onClick }: props) {
             {name}
           </span>
           <AiFillPlusCircle
-            onClick={onClick}
+            // onClick={onClick}
+            onClick={() => {
+              if (name?.toLowerCase() === 'then') {
+                addThenColumnDefs();
+              } else {
+                addWhenColumnDefs();
+              }
+            }}
             className="fill-[grey] w-[22px] h-[22px] hover:cursor-pointer"
           />
         </div>

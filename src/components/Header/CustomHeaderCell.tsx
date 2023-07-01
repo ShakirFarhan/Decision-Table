@@ -8,7 +8,7 @@ import TypesOptions from './TypesOptions';
 import { hitRatioOptions } from '../../constants/data';
 import { Popover } from 'antd';
 import '../css/customCell.css';
-
+import { useStore } from '../../store';
 const AnyCol = () => {
   return (
     <div className="w-[183px] h-[360px] flex flex-col gap-y-[-40px] bg-[#fff] shadow-xl z-50 scroll leading-[22px]">
@@ -34,12 +34,10 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   dataType,
   id,
   userColumn,
-  onColumnChange,
-  handlePin,
-  handleOptions,
 }) => {
   const [pinned, setPinned] = useState(true);
   const [hover, setHover] = useState(false);
+  const { handlePin } = useStore((store) => store);
   const handlePinning = () => {
     setPinned((data) => {
       return !data;
@@ -67,14 +65,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
             <Popover
               placement="bottomLeft"
               overlayClassName="custom-popover"
-              content={
-                <TypesOptions
-                  id={id}
-                  type={dataType}
-                  column={label}
-                  onColumnChange={onColumnChange}
-                />
-              }
+              content={<TypesOptions id={id} type={dataType} column={label} />}
               trigger="click"
             >
               <div className="flex flex-col items-start justify-start gap-y-2 cursor-pointer w-full">
@@ -107,9 +98,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
                       : 'h-[13.5px] w-[15px] fill-[var(--secondary-color)]'
                   }
                 />
-                {id !== 'id' ? (
-                  <ColOptions handleOptions={handleOptions} id={id} />
-                ) : null}
+                {id !== 'id' ? <ColOptions id={id} /> : null}
               </div>
             )}
           </div>

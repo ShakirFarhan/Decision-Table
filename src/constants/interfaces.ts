@@ -55,35 +55,19 @@ export interface columnHeaderProps {
   dataType: string;
   id: string;
   userColumn: boolean;
-  onColumnChange: (
-    colId: string,
-    newHeaderName: string,
-    newTypeName: string
-  ) => void;
-  handlePin: (id: string) => void;
-  setWhenColumnDefs?: Dispatch<SetStateAction<columnInterface[]>>;
-  newCol?: boolean;
-  handleOptions: (id: string, task: string) => void;
 }
 export interface defaultProps {
   id: string;
   type: string;
   column: string;
-  onColumnChange: (
-    colId: string,
-    newHeaderName: string,
-    newFieldName: string
-    // id: string
-  ) => void;
 }
-
 
 export interface inputFieldProps {
-  editingValue: any,
-  handleChange: any
+  editingValue: any;
+  handleChange: any;
 }
 
-export type handleEditCol = (
+export type handleEditColInterface = (
   colId: string,
   newHeaderName: string,
   newTypeName: string
