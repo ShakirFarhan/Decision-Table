@@ -12,25 +12,25 @@ import {
 function InputTypes({
   editingValue,
   handleChange,
-
   dataType,
   selectedOption,
 }: any) {
-
-  const [firstval, setFirstVal] = useState(editingValue && editingValue.firstval)
-  const [secondval, setSecondVal] = useState(editingValue && editingValue.secondval)
+  const [firstval, setFirstVal] = useState(
+    editingValue && editingValue.firstval
+  );
+  const [secondval, setSecondVal] = useState(
+    editingValue && editingValue.secondval
+  );
 
   useEffect(() => {
     const value = {
       firstval: firstval,
-      secondval: secondval
-    }
+      secondval: secondval,
+    };
 
     handleChange(value);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[firstval, secondval])
-
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstval, secondval]);
 
   if (getTypeOfInput(dataType, selectedOption) === 'single-input') {
     return (
@@ -41,10 +41,13 @@ function InputTypes({
           color: 'var(--primary-color)',
           marginBottom: '12px',
         }}
+        type={dataType.toLowerCase() === 'number' ? 'number' : 'text'}
         className="px-[10px] py-[4px] border-[1.7px]"
         placeholder={firstval || 'Enter'}
         value={firstval}
-        onChange={(event) => setFirstVal(event.target.value)}
+        onChange={(event) => {
+          setFirstVal(event.target.value);
+        }}
       />
     );
   } else if (getTypeOfInput(dataType, selectedOption) === 'two-input') {
@@ -57,6 +60,7 @@ function InputTypes({
             color: 'var(--primary-color)',
             marginBottom: '12px',
           }}
+          type={dataType.toLowerCase() === 'number' ? 'number' : 'text'}
           className="px-[10px] py-[4px] border-[1.7px]"
           placeholder={firstval || 'Enter'}
           value={firstval}
@@ -69,6 +73,7 @@ function InputTypes({
             color: 'var(--primary-color)',
             marginBottom: '12px',
           }}
+          type={dataType.toLowerCase() === 'number' ? 'number' : 'text'}
           className="px-[10px] py-[4px] border-[1.7px]"
           placeholder={secondval || 'Enter'}
           value={secondval}
@@ -77,18 +82,39 @@ function InputTypes({
       </>
     );
   } else if (getTypeOfInput(dataType, selectedOption) === 'date-inputs') {
-    return <StartEndDate firstval={firstval} setFirstVal={setFirstVal} secondval={secondval} setSecondVal={setSecondVal}/>;
+    return (
+      <StartEndDate
+        firstval={firstval}
+        setFirstVal={setFirstVal}
+        secondval={secondval}
+        setSecondVal={setSecondVal}
+      />
+    );
   } else if (
     getTypeOfInput(dataType, selectedOption) === 'time-inputs' ||
     getTypeOfInput(dataType, selectedOption) === 'day-time-inputs'
   ) {
-    return <StartEndTime firstval={firstval} setFirstVal={setFirstVal} secondval={secondval} setSecondVal={setSecondVal} />;
+    return (
+      <StartEndTime
+        firstval={firstval}
+        setFirstVal={setFirstVal}
+        secondval={secondval}
+        setSecondVal={setSecondVal}
+      />
+    );
   } else if (
     getTypeOfInput(dataType, selectedOption) === 'month-month-inputs'
   ) {
     return <MonthToMonth />;
   } else if (getTypeOfInput(dataType, selectedOption) === 'year-year-inputs') {
-    return <YearToYear firstval={firstval} setFirstVal={setFirstVal} secondval={secondval} setSecondVal={setSecondVal} />;
+    return (
+      <YearToYear
+        firstval={firstval}
+        setFirstVal={setFirstVal}
+        secondval={secondval}
+        setSecondVal={setSecondVal}
+      />
+    );
   } else if (getTypeOfInput(dataType, selectedOption) === 'date-time-inputs') {
     return <DateTimePicker />;
   } else {

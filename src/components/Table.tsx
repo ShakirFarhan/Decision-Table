@@ -554,22 +554,6 @@ const Table = () => {
     document.body.className = mode + '-theme';
   }, [mode]);
   // using this to stop re-render of this below use effect
-  const isFirstRender = useRef(true);
-
-  // this one will create a column without any value of header name and it's type
-  // useEffect(() => {
-  //   if (isFirstRender.current) {
-  //     isFirstRender.current = false;
-  //     if (columnDefs[1].children.length <= 1) {
-  //       // this function is calling to add column at first render
-  //       handleAddWhenCol();
-  //     }
-  //   }
-  // }, [columnDefs, handleAddWhenCol]);
-
-  // const onBtExport = useCallback(() => {
-  //   gridRef.current.api.exportDataAsExcel();
-  // }, []);
 
   //  converts the data available in the table to excel and then it downloads it
   const onBtExport = useCallback(() => {
