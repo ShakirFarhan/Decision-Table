@@ -7,30 +7,39 @@ interface CellRendererParams {
 
 type CellRendererParamsInterface = (params: any) => CellRendererParams;
 
-interface children {
+export interface children {
   id: string;
-  headerName: string;
-  headerClass: string;
+  headerName?: string;
+  headerClass?: string;
   field: string;
-  type: string;
+  dataType?: string;
+  suppressMovable?: any;
   disableColumnMenu?: boolean;
   headerComponent: (() => JSX.Element) | any;
+  sortable?: boolean;
   headerProps?: any;
   cellRendererFramework?: any;
+  previousIndex?: any;
   cellRendererParams?: CellRendererParamsInterface;
   pinned?: 'left' | 'right';
+  isPinned?: boolean;
+  editable?: boolean;
   width?: number;
   maxWidth?: number;
   minWidth?: number;
   lockPosition?: string;
 }
 export interface columnInterface {
-  id: string;
-  headerName: string;
-  headerClass: string;
-  children: [children];
+  id?: string;
+  headerName?: string;
+  headerClass?: string;
+  suppressMovable?: any;
+  children: children[];
+  lockPosition?: boolean;
   cellRendererFramework?: any;
+  minWidth?: number;
   cellRendererParams?: CellRendererParamsInterface;
+  headerGroupComponent?: () => any;
 }
 export interface rowType {
   id?: number | string;
@@ -48,30 +57,45 @@ export interface columnHeaderProps {
   dataType: string;
   id: string;
   userColumn: boolean;
-  onColumnChange: (
-    colId: string,
-    newHeaderName: string,
-    newTypeName: string
-  ) => void;
-  handlePin: (id: string) => void;
-  setWhenColumnDefs?: Dispatch<SetStateAction<columnInterface[]>>;
-  newCol?: boolean;
-  handleOptions: (id: string, task: string) => void;
 }
-export interface defaultProps {
+export interface TypesOptionProps {
   id: string;
   type: string;
   column: string;
-  onColumnChange: (
-    colId: string,
-    newHeaderName: string,
-    newFieldName: string
-    // id: string
-  ) => void;
 }
 
-export type handleEditCol = (
+export interface inputFieldProps {
+  editingValue: any;
+  handleChange: any;
+}
+
+export type handleEditColInterface = (
   colId: string,
   newHeaderName: string,
   newTypeName: string
 ) => void;
+
+export interface customCellProps {
+  onEdit: (params: any) => void;
+  cellValue?: any;
+  id?: any;
+  column?: any;
+  node?: any;
+  value?: any;
+  data?: any;
+  api?: any;
+  rowIndex?: any;
+}
+
+export interface anyColCellProps {
+  cellValue?: string;
+  id?: any;
+  data?: any;
+}
+
+export interface buttonHeaderProps {
+  name: string;
+}
+export interface colOptionsProps {
+  id: string;
+}

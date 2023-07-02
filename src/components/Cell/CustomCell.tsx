@@ -1,36 +1,35 @@
 import React, { FormEvent, useState } from 'react';
-import { Input, Popover } from 'antd';
+import { Button, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
-import { containsSpecialValue, headerTypes } from '../../constants/data';
-
-interface IProps {
-  onEdit: (params: any) => void;
-  cellValue?: any;
-  id?: any;
-  column?: any;
-  node?: any;
-  value?: any;
-  data?: any;
-  api?: any;
-  rowIndex?: any;
-  handleAddRow: () => void;
-}
-const CustomCell: React.FC<IProps> = (props) => {
-  const { editRowData } = useStore((store) => store);
+import { headerTypes } from '../../constants/data';
+import { getSpecialTypeLabels, checkValidity, getCellValue } from '../../utils';
+import InputTypes from './InputFields/InputTypes';
+import { customCellProps } from '../../constants/interfaces';
+const CustomCell: React.FC<customCellProps> = (props) => {
+  const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
-  const [editingValue, setEditingValue] = useState(
-    props && props.cellValue && props.cellValue.mainval
+
+  // fetching row type from store
+  let rowDataTypes = rowDataType.find(
+    (value) =>
+      value.key === props.column.colId && value.rowIndex === props.rowIndex
   );
+  const colDataType = props?.column?.colDef?.dataType;
   const [selectedOption, setSelectedOption] = useState(
-    props && props.cellValue && props.cellValue.type
+    rowDataTypes && rowDataTypes.value && rowDataTypes.value.type
   );
+
+  const [editingValue, setEditingValue] = useState(
+    rowDataTypes && rowDataTypes.value && rowDataTypes.value.value
+  );
+
   const [hovering, setHovering] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditingValue(event.target.value);
+  const handleChange = (value: any) => {
+    setEditingValue(value);
   };
 
   const handleChangeOption = (value: any) => {
@@ -43,6 +42,7 @@ const CustomCell: React.FC<IProps> = (props) => {
   const handleMouseLeave = () => {
     setHovering(false);
   };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     props.api.startEditingCell({
       rowIndex: props.rowIndex,
@@ -52,44 +52,70 @@ const CustomCell: React.FC<IProps> = (props) => {
     const cellValueNew = {
       type: selectedOption,
       value: editingValue,
-      mainval: editingValue,
     };
+    editRowDataType(
+      props,
+      props.node.rowIndex,
+      props.column.colId,
+      cellValueNew
+    );
+    setClicked(false);
     props.api.stopEditing({
       rowIndex: props.rowIndex,
       colKey: props.column.getId(),
     });
-    editRowData(props, props.node.rowIndex, props.column.colId, cellValueNew);
   };
+  const cellValue = getCellValue(colDataType, rowDataTypes?.value?.value);
 
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>
         <div
-          className="w-[100%] h-full  border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)] bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer"
+          className={`w-[100%] h-full ${
+            checkValidity(rowDataTypes, props.cellValue) === false
+              ? 'border-x-[1px] border-red-500 border-y-[1px]'
+              : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'
+          }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
           onMouseEnter={() => handleMouseEnter(props.id)}
           onMouseLeave={handleMouseLeave}
         >
           <div className="flex items-center justify-start h-[40px] select-none px-3 gap-x-3 customCell">
-            {props && props.cellValue && props.cellValue.type && (
-              <div className="rounded-0 bg-[var(--primary-border)] tracking-[1px] h-[25px]  flex items-center cellType">
-                {containsSpecialValue(props.cellValue.type) ? (
-                  <span className="flex items-center font-medium text-[var(--primary-color)] w-[26px] pl-2 py-0">
-                    {props.cellValue.type}
-                  </span>
-                ) : (
-                  <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
-                    {props.cellValue.type}
-                  </span>
-                )}
+            {rowDataTypes?.value?.type && (
+              <div className="rounded-0 bg-[var(--primary-border)]  tracking-[1px] h-[25px]  flex items-center cellType ">
+                <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
+                  {/* here we are only showing the type. and based on this we will validate the cells */}
+                  {getSpecialTypeLabels(rowDataTypes.value.type)}
+                </span>
               </div>
             )}
-
-            <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-              {props && props?.cellValue && props?.cellValue?.mainval}
-            </span>
+            {cellValue ? (
+              typeof cellValue === 'string' ? (
+                <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
+                  {cellValue}
+                </span>
+              ) : (
+                <>
+                  <div className="flex items-center">
+                    [
+                    <span className="text-[13px] font-medium text-[var(--primary-color)]">
+                      {cellValue ? cellValue[0] : ''}
+                    </span>
+                    -
+                    <span className="text-[13px] font-medium text-[var(--primary-color)]">
+                      {cellValue ? cellValue[1] : ''}
+                    </span>
+                    ]
+                  </div>
+                </>
+              )
+            ) : (
+              ''
+            )}
+            {/* </span> */}
             <Popover
               placement="bottomRight"
               overlayClassName="custom-popover"
+              open={clicked}
               onOpenChange={(visible) => {
                 if (!visible) {
                   setClicked(false);
@@ -98,7 +124,7 @@ const CustomCell: React.FC<IProps> = (props) => {
               content={
                 <>
                   <div className="w-[240px] p-3 bg-[var(--primary-bg)] -rounded-[20px]">
-                    <Form onFinish={handleSubmit}>
+                    <Form className="flex flex-col" onFinish={handleSubmit}>
                       <Select
                         style={{
                           backgroundColor: 'var(--primary-bg)',
@@ -106,13 +132,15 @@ const CustomCell: React.FC<IProps> = (props) => {
                           color: 'var(--primary-color)',
                         }}
                         className="w-full rounded-0 mb-3 select "
-                        defaultValue={selectedOption || 'Default'}
+                        defaultValue={
+                          rowDataTypes?.value?.type &&
+                          rowDataTypes !== undefined
+                            ? rowDataTypes.value.type
+                            : 'Default'
+                        }
                         onChange={handleChangeOption}
                         options={headerTypes
-                          .find(
-                            (value) =>
-                              value.type === props?.column?.colDef?.dataType
-                          )
+                          .find((value) => value.type === colDataType)
                           ?.options.map((data) => {
                             return {
                               label: data?.value,
@@ -120,18 +148,21 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-                      <Input
-                        style={{
-                          backgroundColor: 'var(--primary-bg)',
-                          borderColor: 'var(--primary-border)',
-                          color: 'var(--primary-color)',
-                        }}
+
+                      <InputTypes
+                        dataType={colDataType}
+                        selectedOption={selectedOption}
+                        editingValue={editingValue}
+                        handleChange={handleChange}
                         className="px-[10px] py-[4px] border-[1.7px]"
-                        placeholder={editingValue || 'Enter'}
-                        value={editingValue}
-                        onChange={handleChange}
                       />
-                      <button type="submit"></button>
+                      <Button
+                        className="w-full bg-blue-400"
+                        type="primary"
+                        htmlType="submit"
+                      >
+                        Submit
+                      </Button>
                     </Form>
                   </div>
                 </>
