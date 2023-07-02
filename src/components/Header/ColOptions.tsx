@@ -3,11 +3,8 @@ import { optionsData } from '../../constants/data';
 import { CiMenuKebab } from 'react-icons/ci';
 import { Popover } from 'antd';
 import { useStore } from '../../store';
-interface colInterface {
-  id: string;
-}
-
-function ColOptions({ id }: colInterface) {
+import { colOptionsProps } from '../../constants/interfaces';
+function ColOptions({ id }: colOptionsProps) {
   const { handleOptions } = useStore((store) => store);
   return (
     <>

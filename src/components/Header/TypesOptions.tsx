@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { headerTypes } from '../../constants/data';
-import { defaultProps } from '../../constants/interfaces';
+import { TypesOptionProps } from '../../constants/interfaces';
 import '../css/typesoption.css';
 import { Button } from 'antd';
 import { useStore } from '../../store';
-const TypesOptions: React.FC<defaultProps> = ({ id, type, column }) => {
+const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
   const [selectedOption, setSelectedOption] = useState(type || 'None');
   const [columnName, setColumnName] = useState(column);
   const { handleEditCol } = useStore((store) => store);

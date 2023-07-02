@@ -1,23 +1,19 @@
 import { create } from 'zustand';
-import { columnInterface } from './constants/interfaces';
+import { children, columnInterface } from './constants/interfaces';
 import { devtools } from 'zustand/middleware';
 import CustomCell from './components/Cell/CustomCell';
 import CustomHeaderCell from './components/Header/CustomHeaderCell';
 import AnyColCell from './components/Cell/AnyColCell';
 import ButtonHeader from './components/Header/ButtonHeader';
 import uuid from 'react-uuid';
-
 let whenID = uuid();
 let thenID = uuid();
-
 export interface zustandStoreInterface {
   whenRowData: any[];
   rowDataType: any[];
-  whenColDefs: columnInterface[];
   thenRowData: any[];
-  thenColData: columnInterface[];
   pinnedColumn: any;
-  colDefs: any[];
+  colDefs: columnInterface[];
   gridRef: any;
   mode: 'light' | 'dark';
   handleOptions: (id: any, typeOfOperation: any) => void;
@@ -26,12 +22,9 @@ export interface zustandStoreInterface {
   handleAddRow: () => void;
   addThenColumnDefs: () => void;
   addWhenColumnDefs: () => void;
-  setPinnedColumn: (colId: string) => void;
   editRowData: (core: any, rowIndex: any, colId: any, value: any) => void;
   editRowDataType: (core: any, rowIndex: any, colId: any, value: any) => void;
   addRow: (whenColData: any, thenColData: any) => void;
-  setWhenColDefs: (whenColData: any) => void;
-  editWhenCol: (updatedDef: any) => void;
   duplicateRule: (id: number) => void;
   deleteRule: (id: number) => void;
   clearRule: (id: number) => void;
@@ -149,7 +142,7 @@ export const useStore = create<
               />
             ),
             cellRendererFramework: CustomCell,
-            cellRendererParams: (params: any, columnDefs: any) => ({
+            cellRendererParams: (params: any) => ({
               onEdit: () => {
                 params.api.startEditingCell({
                   rowIndex: params.node.rowIndex,
@@ -184,7 +177,7 @@ export const useStore = create<
               />
             ),
             cellRendererFramework: CustomCell,
-            cellRendererParams: (params: any, columnDefs: any) => ({
+            cellRendererParams: (params: any) => ({
               onEdit: () => {
                 params.api.startEditingCell({
                   rowIndex: params.node.rowIndex,
@@ -482,9 +475,9 @@ export const useStore = create<
     // function used to pin a column
     handlePin: (id) =>
       set((store) => {
-        const updatedColumnDefs = [...store.colDefs];
-        const whenCol = updatedColumnDefs[1].children;
-        const thenCol = updatedColumnDefs[2].children;
+        const updatedColumnDefs: columnInterface[] = [...store.colDefs];
+        const whenCol: children[] = updatedColumnDefs[1].children;
+        const thenCol: children[] = updatedColumnDefs[2].children;
 
         const whenColIndex = whenCol.findIndex((col: any) => col.id === id);
         const thenColIndex = thenCol.findIndex((col: any) => col.id === id);
@@ -503,7 +496,7 @@ export const useStore = create<
             whenCol.splice(0, 0, selectedColumn);
           }
         }
-        if (thenCol !== -1) {
+        if (thenColIndex !== -1) {
           const selectedColumn = thenCol[thenColIndex];
           if (selectedColumn) {
             if (selectedColumn.isPinned) {
@@ -574,14 +567,6 @@ export const useStore = create<
           rowDataType: allrowdata,
         };
       }),
-    setWhenColDefs: (whenColData) =>
-      set(
-        (store) => ({
-          whenColDefs: [...store.whenColDefs, whenColData],
-        }),
-        false,
-        'Set When Col'
-      ),
 
     editRowDataType: (core, rowIndex, colId, value) =>
       set((store) => {
@@ -650,26 +635,5 @@ export const useStore = create<
           thenRowData: newThenRowData,
         };
       }),
-    editWhenCol: (updatedDef) =>
-      set(
-        (store) => ({
-          whenColDefs: updatedDef,
-        }),
-        false,
-        'Edit Col'
-      ),
-    setPinnedColumn: (colId) =>
-      set((store) => ({
-        whenColDefs: store.whenColDefs.map((col) => {
-          if (col.id === colId) {
-            store.pinnedColumn = colId;
-            return {
-              ...col,
-              pinned: 'left',
-            };
-          }
-          return col;
-        }),
-      })),
   }))
 );

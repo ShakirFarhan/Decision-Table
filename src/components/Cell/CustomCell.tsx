@@ -7,20 +7,8 @@ import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
 import { getSpecialTypeLabels, checkValidity, getCellValue } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
-
-interface IProps {
-  onEdit: (params: any) => void;
-  cellValue?: any;
-  id?: any;
-  column?: any;
-  node?: any;
-  value?: any;
-  data?: any;
-  api?: any;
-  rowIndex?: any;
-  // handleAddRow: () => void;
-}
-const CustomCell: React.FC<IProps> = (props) => {
+import { customCellProps } from '../../constants/interfaces';
+const CustomCell: React.FC<customCellProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
 
@@ -65,7 +53,6 @@ const CustomCell: React.FC<IProps> = (props) => {
       type: selectedOption,
       value: editingValue,
     };
-    console.log(cellValueNew);
     editRowDataType(
       props,
       props.node.rowIndex,
@@ -79,7 +66,7 @@ const CustomCell: React.FC<IProps> = (props) => {
     });
   };
   const cellValue = getCellValue(colDataType, rowDataTypes?.value?.value);
-  console.log(JSON.stringify(cellValue));
+
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>

@@ -7,7 +7,7 @@ interface CellRendererParams {
 
 type CellRendererParamsInterface = (params: any) => CellRendererParams;
 
-interface children {
+export interface children {
   id: string;
   headerName?: string;
   headerClass?: string;
@@ -19,6 +19,7 @@ interface children {
   sortable?: boolean;
   headerProps?: any;
   cellRendererFramework?: any;
+  previousIndex?: any;
   cellRendererParams?: CellRendererParamsInterface;
   pinned?: 'left' | 'right';
   isPinned?: boolean;
@@ -34,6 +35,7 @@ export interface columnInterface {
   headerClass?: string;
   suppressMovable?: any;
   children: children[];
+  lockPosition?: boolean;
   cellRendererFramework?: any;
   minWidth?: number;
   cellRendererParams?: CellRendererParamsInterface;
@@ -56,7 +58,7 @@ export interface columnHeaderProps {
   id: string;
   userColumn: boolean;
 }
-export interface defaultProps {
+export interface TypesOptionProps {
   id: string;
   type: string;
   column: string;
@@ -72,3 +74,28 @@ export type handleEditColInterface = (
   newHeaderName: string,
   newTypeName: string
 ) => void;
+
+export interface customCellProps {
+  onEdit: (params: any) => void;
+  cellValue?: any;
+  id?: any;
+  column?: any;
+  node?: any;
+  value?: any;
+  data?: any;
+  api?: any;
+  rowIndex?: any;
+}
+
+export interface anyColCellProps {
+  cellValue?: string;
+  id?: any;
+  data?: any;
+}
+
+export interface buttonHeaderProps {
+  name: string;
+}
+export interface colOptionsProps {
+  id: string;
+}

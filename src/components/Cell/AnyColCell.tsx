@@ -6,14 +6,8 @@ import { Popover } from 'antd';
 import '../css/table.css';
 import { rowOptions } from '../../constants/data';
 import { useStore } from '../../store';
-interface IProps {
-  cellValue?: string;
-  // whenRowData?: any;
-  id?: any;
-  data?: any;
-}
-
-const AnyColCell: React.FC<IProps> = (props) => {
+import { anyColCellProps } from '../../constants/interfaces';
+const AnyColCell: React.FC<anyColCellProps> = (props) => {
   const { duplicateRule, deleteRule, clearRule, colDefs, addRow } = useStore(
     (store) => store
   );

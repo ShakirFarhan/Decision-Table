@@ -99,7 +99,6 @@ const Table = () => {
 
   return (
     <DashBoardLayout
-      // cell code
       handleRedo={() => ''}
       handleUndo={() => ''}
       downloadCSV={csvDownload}
