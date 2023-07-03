@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { columnInterface, rowType } from './constants/interfaces';
+import { columnInterface } from './constants/interfaces';
 import { devtools } from 'zustand/middleware';
 
 export interface zustandStoreInterface {

@@ -21,11 +21,12 @@ interface IProps {
   rowIndex?: any;
   handleAddRow: () => void;
 }
+
 const CustomCell: React.FC<IProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
 
-  
+  console.log(props);
 
   // fetching row type from store
   let rowDataTypes = rowDataType.find(
