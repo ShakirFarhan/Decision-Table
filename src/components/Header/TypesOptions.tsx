@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { headerTypes } from '../../constants/data';
-import { defaultProps } from '../../constants/interfaces';
+import { TypesOptionProps } from '../../constants/interfaces';
 import '../css/typesoption.css';
 import { Button } from 'antd';
-const TypesOptions: React.FC<defaultProps> = ({
-  id,
-  type,
-  column,
-  onColumnChange,
-}) => {
+import { useStore } from '../../store';
+const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
   const [selectedOption, setSelectedOption] = useState(type || 'None');
   const [columnName, setColumnName] = useState(column);
+  const { handleEditCol } = useStore((store) => store);
   const handleSelectedOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(e.target.value);
   };
@@ -19,7 +16,7 @@ const TypesOptions: React.FC<defaultProps> = ({
   };
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
-    onColumnChange(id, columnName, selectedOption);
+    handleEditCol(id, columnName, selectedOption);
   };
 
   return (
@@ -78,11 +75,7 @@ const TypesOptions: React.FC<defaultProps> = ({
           type="text"
           placeholder="Expression"
         />
-        <Button
-          className="w-full bg-blue-400"
-          type="primary"
-          htmlType="submit"
-        >
+        <Button className="w-full bg-blue-400" type="primary" htmlType="submit">
           Submit
         </Button>
       </form>

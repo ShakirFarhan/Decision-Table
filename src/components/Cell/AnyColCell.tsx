@@ -6,16 +6,11 @@ import { Popover } from 'antd';
 import '../css/table.css';
 import { rowOptions } from '../../constants/data';
 import { useStore } from '../../store';
-interface IProps {
-  cellValue?: string;
-  whenRowData?: any;
-  id?: any;
-  data?: any;
-  handleAddRow: () => void;
-}
-
-const AnyColCell: React.FC<IProps> = (props) => {
-  const { duplicateRule, deleteRule, clearRule } = useStore((store) => store);
+import { anyColCellProps } from '../../constants/interfaces';
+const AnyColCell: React.FC<anyColCellProps> = (props) => {
+  const { duplicateRule, deleteRule, clearRule, colDefs, addRow } = useStore(
+    (store) => store
+  );
   const [hovering, setHovering] = useState(false);
   const [clicked, setClicked] = useState(false);
   const handleMouseEnter = () => {
@@ -27,6 +22,9 @@ const AnyColCell: React.FC<IProps> = (props) => {
     if (!clicked) {
       setHovering(false);
     }
+  };
+  const handleAddRow = () => {
+    addRow(colDefs, colDefs);
   };
   if (props.cellValue && props.data.button !== 'Add Rule') {
     return (
@@ -120,7 +118,7 @@ const AnyColCell: React.FC<IProps> = (props) => {
   } else if (props.data.button === 'Add Rule' && props.id === 'any-col') {
     return (
       <div
-        onClick={props.handleAddRow}
+        onClick={handleAddRow}
         className="flex items-center gap-x-2 pl-3 addRuleDiv w-fit hover:cursor-pointer"
       >
         <BsPlusCircleFill className="text-[var(--dark-grey)] plusIcon" />

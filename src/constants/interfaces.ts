@@ -7,7 +7,7 @@ interface CellRendererParams {
 
 type CellRendererParamsInterface = (params: any) => CellRendererParams;
 
-interface children {
+export interface children {
   id: string;
   headerName?: string;
   headerClass?: string;
@@ -19,6 +19,7 @@ interface children {
   sortable?: boolean;
   headerProps?: any;
   cellRendererFramework?: any;
+  previousIndex?: any;
   cellRendererParams?: CellRendererParamsInterface;
   pinned?: 'left' | 'right';
   isPinned?: boolean;
@@ -34,6 +35,7 @@ export interface columnInterface {
   headerClass?: string;
   suppressMovable?: any;
   children: children[];
+  lockPosition?: boolean;
   cellRendererFramework?: any;
   minWidth?: number;
   cellRendererParams?: CellRendererParamsInterface;
@@ -55,36 +57,45 @@ export interface columnHeaderProps {
   dataType: string;
   id: string;
   userColumn: boolean;
-  onColumnChange: (
-    colId: string,
-    newHeaderName: string,
-    newTypeName: string
-  ) => void;
-  handlePin: (id: string) => void;
-  setWhenColumnDefs?: Dispatch<SetStateAction<columnInterface[]>>;
-  newCol?: boolean;
-  handleOptions: (id: string, task: string) => void;
 }
-export interface defaultProps {
+export interface TypesOptionProps {
   id: string;
   type: string;
   column: string;
-  onColumnChange: (
-    colId: string,
-    newHeaderName: string,
-    newFieldName: string
-    // id: string
-  ) => void;
 }
-
 
 export interface inputFieldProps {
-  editingValue: any,
-  handleChange: any
+  editingValue: any;
+  handleChange: any;
 }
 
-export type handleEditCol = (
+export type handleEditColInterface = (
   colId: string,
   newHeaderName: string,
   newTypeName: string
 ) => void;
+
+export interface customCellProps {
+  onEdit: (params: any) => void;
+  cellValue?: any;
+  id?: any;
+  column?: any;
+  node?: any;
+  value?: any;
+  data?: any;
+  api?: any;
+  rowIndex?: any;
+}
+
+export interface anyColCellProps {
+  cellValue?: string;
+  id?: any;
+  data?: any;
+}
+
+export interface buttonHeaderProps {
+  name: string;
+}
+export interface colOptionsProps {
+  id: string;
+}

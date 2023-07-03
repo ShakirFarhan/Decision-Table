@@ -5,34 +5,19 @@ import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
-
-import { getSpecialTypeLabels, checkValidity } from '../../utils';
+import { getSpecialTypeLabels, checkValidity, getCellValue } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
-
-interface IProps {
-  onEdit: (params: any) => void;
-  cellValue?: any;
-  id?: any;
-  column?: any;
-  node?: any;
-  value?: any;
-  data?: any;
-  api?: any;
-  rowIndex?: any;
-  handleAddRow: () => void;
-}
-
-const CustomCell: React.FC<IProps> = (props) => {
+import { customCellProps } from '../../constants/interfaces';
+const CustomCell: React.FC<customCellProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
-
-  console.log(props);
 
   // fetching row type from store
   let rowDataTypes = rowDataType.find(
     (value) =>
       value.key === props.column.colId && value.rowIndex === props.rowIndex
   );
+  const colDataType = props?.column?.colDef?.dataType;
   const [selectedOption, setSelectedOption] = useState(
     rowDataTypes && rowDataTypes.value && rowDataTypes.value.type
   );
@@ -40,7 +25,6 @@ const CustomCell: React.FC<IProps> = (props) => {
   const [editingValue, setEditingValue] = useState(
     rowDataTypes && rowDataTypes.value && rowDataTypes.value.value
   );
-
 
   const [hovering, setHovering] = useState(false);
 
@@ -69,7 +53,6 @@ const CustomCell: React.FC<IProps> = (props) => {
       type: selectedOption,
       value: editingValue,
     };
-    console.log(cellValueNew);
     editRowDataType(
       props,
       props.node.rowIndex,
@@ -82,8 +65,8 @@ const CustomCell: React.FC<IProps> = (props) => {
       colKey: props.column.getId(),
     });
   };
+  const cellValue = getCellValue(colDataType, rowDataTypes?.value?.value);
 
-  
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>
@@ -105,11 +88,30 @@ const CustomCell: React.FC<IProps> = (props) => {
                 </span>
               </div>
             )}
-
-            <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-              {props && props?.cellValue && props?.cellValue}
-              {/* {rowDataTypes?.value?.value} */}
-            </span>
+            {cellValue ? (
+              typeof cellValue === 'string' ? (
+                <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
+                  {cellValue}
+                </span>
+              ) : (
+                <>
+                  <div className="flex items-center">
+                    [
+                    <span className="text-[13px] font-medium text-[var(--primary-color)]">
+                      {cellValue ? cellValue[0] : ''}
+                    </span>
+                    -
+                    <span className="text-[13px] font-medium text-[var(--primary-color)]">
+                      {cellValue ? cellValue[1] : ''}
+                    </span>
+                    ]
+                  </div>
+                </>
+              )
+            ) : (
+              ''
+            )}
+            {/* </span> */}
             <Popover
               placement="bottomRight"
               overlayClassName="custom-popover"
@@ -138,10 +140,7 @@ const CustomCell: React.FC<IProps> = (props) => {
                         }
                         onChange={handleChangeOption}
                         options={headerTypes
-                          .find(
-                            (value) =>
-                              value.type === props?.column?.colDef?.dataType
-                          )
+                          .find((value) => value.type === colDataType)
                           ?.options.map((data) => {
                             return {
                               label: data?.value,
@@ -149,9 +148,9 @@ const CustomCell: React.FC<IProps> = (props) => {
                             };
                           })}
                       />
-                      
+
                       <InputTypes
-                        dataType={props?.column?.colDef?.dataType}
+                        dataType={colDataType}
                         selectedOption={selectedOption}
                         editingValue={editingValue}
                         handleChange={handleChange}
