@@ -28,6 +28,7 @@ export interface zustandStoreInterface {
   duplicateRule: (id: number) => void;
   deleteRule: (id: number) => void;
   clearRule: (id: number) => void;
+  clearColumn: (id: any) => void;
   setMode: (mode: 'light' | 'dark') => void;
   setGridRef: (gridRef: any) => void;
 }
@@ -556,7 +557,22 @@ export const useStore = create<
           rowDataType: allrowdata,
         };
       }),
+    clearColumn: (columnId) =>
+      set((store) => {
+        // const allrowdata = store.rowDataType.filter(
+        //   (value) => value.colId !== columnId - 1
+        // );
+        console.log({datatypes: store.rowDataType})
+        console.log(columnId)
 
+        const newrowData = store.rowDataType.filter((value) => value.key !== columnId);
+        console.log({newrowData})
+
+
+        return {
+          rowDataType: newrowData,
+        };
+      }),
     deleteRule: (id) =>
       set((store) => {
         const allrowdata = store.rowDataType.filter(

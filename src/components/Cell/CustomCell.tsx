@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
@@ -8,23 +8,39 @@ import { headerTypes } from '../../constants/data';
 import { getSpecialTypeLabels, checkValidity, getCellValue } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
 import { customCellProps } from '../../constants/interfaces';
+
+
 const CustomCell: React.FC<customCellProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
+  const [rowDataTypes, setRowDataType] = useState<any>({}) 
+
+
+  useEffect(() => {
+    console.log("it's triggered")
+    // console.log(rowDataType)
+    // if(rowDataType.length){
+      let newtype = rowDataType.find(
+        (value) =>
+          value.key === props.column.colId && value.rowIndex === props.rowIndex
+      );
+      console.log({newtype})
+      setRowDataType(newtype);
+      setSelectedOption(newtype && newtype.value && newtype.value.type)
+      setEditingValue(newtype && newtype.value && newtype.value.value)
+    // }
+    
+  }, [rowDataType, clicked])
 
   // fetching row type from store
-  let rowDataTypes = rowDataType.find(
-    (value) =>
-      value.key === props.column.colId && value.rowIndex === props.rowIndex
-  );
+  
   const colDataType = props?.column?.colDef?.dataType;
-  const [selectedOption, setSelectedOption] = useState(
-    rowDataTypes && rowDataTypes.value && rowDataTypes.value.type
-  );
+  const [selectedOption, setSelectedOption] = useState();
 
-  const [editingValue, setEditingValue] = useState(
-    rowDataTypes && rowDataTypes.value && rowDataTypes.value.value
-  );
+  const [editingValue, setEditingValue] = useState();
+
+  console.log({selectedOption})
+  console.log({editingValue})
 
   const [hovering, setHovering] = useState(false);
 
@@ -42,6 +58,8 @@ const CustomCell: React.FC<customCellProps> = (props) => {
   const handleMouseLeave = () => {
     setHovering(false);
   };
+
+  // console.log(props)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     props.api.startEditingCell({
@@ -65,17 +83,18 @@ const CustomCell: React.FC<customCellProps> = (props) => {
       colKey: props.column.getId(),
     });
   };
+
   const cellValue = getCellValue(colDataType, rowDataTypes?.value?.value);
+
 
   if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
     return (
       <>
         <div
-          className={`w-[100%] h-full ${
-            checkValidity(rowDataTypes, props.cellValue) === false
+          className={`w-[100%] h-full ${checkValidity(rowDataTypes, props.cellValue) === false
               ? 'border-x-[1px] border-red-500 border-y-[1px]'
               : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'
-          }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
+            }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
           onMouseEnter={() => handleMouseEnter(props.id)}
           onMouseLeave={handleMouseLeave}
         >
@@ -134,7 +153,7 @@ const CustomCell: React.FC<customCellProps> = (props) => {
                         className="w-full rounded-0 mb-3 select "
                         defaultValue={
                           rowDataTypes?.value?.type &&
-                          rowDataTypes !== undefined
+                            rowDataTypes !== undefined
                             ? rowDataTypes.value.type
                             : 'Default'
                         }

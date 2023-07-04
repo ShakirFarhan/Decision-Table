@@ -105,8 +105,8 @@ export const checkValidity = (type: any, value: any) => {
     type.value.type !== undefined &&
     value !== undefined
   ) {
-    console.log({ allvales: type.value.value });
-    console.log(type.value.type);
+    // console.log({ allvales: type.value.value });
+    // console.log(type.value.type);
     const maintype = type.value.type.toLowerCase();
     const findRegex = forString.find((value) => value.id === maintype);
     if (maintype === 'any') {
@@ -204,7 +204,7 @@ const getFormattedValue = (value: any) => {
 
 export const getCellValue = (colDataType: any, cellValueObject: any) => {
   if (colDataType) {
-    console.log(colDataType);
+    // console.log(colDataType);
     if (
       colDataType.toLowerCase() === 'string' ||
       colDataType.toLowerCase() === 'number' ||
