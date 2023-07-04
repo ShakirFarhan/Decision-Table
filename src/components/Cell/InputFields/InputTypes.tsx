@@ -22,6 +22,8 @@ function InputTypes({
     editingValue && editingValue.secondval
   );
 
+
+// console.log({editingValue})
   useEffect(() => {
     const value = {
       firstval: firstval,

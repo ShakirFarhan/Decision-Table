@@ -559,16 +559,7 @@ export const useStore = create<
       }),
     clearColumn: (columnId) =>
       set((store) => {
-        // const allrowdata = store.rowDataType.filter(
-        //   (value) => value.colId !== columnId - 1
-        // );
-        console.log({datatypes: store.rowDataType})
-        console.log(columnId)
-
         const newrowData = store.rowDataType.filter((value) => value.key !== columnId);
-        console.log({newrowData})
-
-
         return {
           rowDataType: newrowData,
         };

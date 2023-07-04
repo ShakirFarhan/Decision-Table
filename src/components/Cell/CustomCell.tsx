@@ -13,34 +13,36 @@ import { customCellProps } from '../../constants/interfaces';
 const CustomCell: React.FC<customCellProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
-  const [rowDataTypes, setRowDataType] = useState<any>({}) 
+  const [rowDataTypes, setRowDataType] = useState<any>({})
+  const [loading, setLoading] = useState(false)
+  const [cellValue, setCellValue] = useState()
 
 
   useEffect(() => {
-    console.log("it's triggered")
-    // console.log(rowDataType)
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 10)
     // if(rowDataType.length){
-      let newtype = rowDataType.find(
-        (value) =>
-          value.key === props.column.colId && value.rowIndex === props.rowIndex
-      );
-      console.log({newtype})
-      setRowDataType(newtype);
-      setSelectedOption(newtype && newtype.value && newtype.value.type)
-      setEditingValue(newtype && newtype.value && newtype.value.value)
+    let newtype = rowDataType.find(
+      (value) =>
+        value.key === props.column.colId && value.rowIndex === props.rowIndex
+    );
+
+    setRowDataType(newtype);
+    setSelectedOption(newtype && newtype.value && newtype.value.type)
+    setEditingValue(newtype && newtype.value && newtype.value.value)
+    setCellValue(newtype && newtype.value && newtype.value.value && getCellValue(colDataType, newtype.value.value))
     // }
     
-  }, [rowDataType, clicked])
+  }, [rowDataType])
 
   // fetching row type from store
-  
+
   const colDataType = props?.column?.colDef?.dataType;
   const [selectedOption, setSelectedOption] = useState();
 
   const [editingValue, setEditingValue] = useState();
-
-  console.log({selectedOption})
-  console.log({editingValue})
 
   const [hovering, setHovering] = useState(false);
 
@@ -59,7 +61,6 @@ const CustomCell: React.FC<customCellProps> = (props) => {
     setHovering(false);
   };
 
-  // console.log(props)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     props.api.startEditingCell({
@@ -84,16 +85,17 @@ const CustomCell: React.FC<customCellProps> = (props) => {
     });
   };
 
-  const cellValue = getCellValue(colDataType, rowDataTypes?.value?.value);
+  // const cellValue = rowDataTypes && rowDataTypes.value && rowDataTypes.value.value && getCellValue(colDataType, rowDataTypes.value.value);
+  console.log(cellValue);
 
 
-  if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
+  if (props.data.button !== 'Add Rule' && props.id !== 'any-col' && !loading) {
     return (
       <>
         <div
           className={`w-[100%] h-full ${checkValidity(rowDataTypes, props.cellValue) === false
-              ? 'border-x-[1px] border-red-500 border-y-[1px]'
-              : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'
+            ? 'border-x-[1px] border-red-500 border-y-[1px]'
+            : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'
             }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
           onMouseEnter={() => handleMouseEnter(props.id)}
           onMouseLeave={handleMouseLeave}

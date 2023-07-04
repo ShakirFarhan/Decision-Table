@@ -204,8 +204,10 @@ const getFormattedValue = (value: any) => {
 
 export const getCellValue = (colDataType: any, cellValueObject: any) => {
   if (colDataType) {
-    // console.log(colDataType);
+    console.log(colDataType);
+    console.log(cellValueObject);
     if (
+      colDataType.toLowerCase() === 'none' ||
       colDataType.toLowerCase() === 'string' ||
       colDataType.toLowerCase() === 'number' ||
       colDataType.toLowerCase() === 'boolean'
@@ -218,7 +220,7 @@ export const getCellValue = (colDataType: any, cellValueObject: any) => {
         return [cellValueObject.firstval, cellValueObject.secondval];
       }
     } else {
-      if (cellValueObject) {
+      if (cellValueObject !== undefined) {
         const formattedDate1 = `${getFormattedValue(
           cellValueObject.firstval.$D
         )}:${getFormattedValue(cellValueObject.firstval.$M)}:${
