@@ -58,7 +58,12 @@ const Table = () => {
       }
     });
   }, []);
-
+  useEffect(() => {
+    // Set the grid column definitions whenever colDefs changes
+    if (gridRef.current && gridRef.current.gridOptions) {
+      gridRef.current.gridOptions.api.setColumnDefs(colDefs);
+    }
+  }, [colDefs]);
   useEffect(() => {
     document.body.className = mode + '-theme';
   }, [mode]);
@@ -88,9 +93,10 @@ const Table = () => {
       },
     });
   }, []);
-  useEffect(() => {
-    setGridRef(gridRef);
-  }, [setGridRef]);
+  // this was causing the delay
+  // useEffect(() => {
+  //   setGridRef(gridRef);
+  // }, [setGridRef]);
   const handleCellValueChanged = (value: any) => {
     const colId = value.column.colId;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -98,12 +104,7 @@ const Table = () => {
   };
 
   return (
-    <DashBoardLayout
-      handleRedo={() => ''}
-      handleUndo={() => ''}
-      downloadCSV={csvDownload}
-      downloadExcel={onBtExport}
-    >
+    <DashBoardLayout downloadCSV={csvDownload} downloadExcel={onBtExport}>
       <div className="flex flex-col max-w-[130%] bg-[var(--secondary-bg)] h-full">
         <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[var(--primary-border)]">
           <div className="flex-1 w-full h-[300px]">
@@ -122,7 +123,7 @@ const Table = () => {
               headerHeight={65}
               isFullWidthRow={isFullWidthRow}
               modules={[ExcelExportModule, CsvExportModule]} // Registering csv and excel to download
-              // suppressClickEdit={true}
+              suppressClickEdit={true}
             />
           </div>
         </div>
