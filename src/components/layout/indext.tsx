@@ -15,25 +15,21 @@ import { LuUndo, LuRedo } from 'react-icons/lu';
 import { BsZoomIn, BsZoomOut, BsSearch, BsSun } from 'react-icons/bs';
 import { TbMoonStars } from 'react-icons/tb';
 import { useStore } from '../../store';
-
 const { Header, Sider, Content } = Layout;
-
 type CardProps = {
   children: ReactNode;
   downloadCSV: () => void;
   downloadExcel: () => void;
-  handleUndo: () => void;
-  handleRedo: () => void;
 };
 
 const DashBoardLayout: React.FC<CardProps> = ({
   children,
   downloadCSV,
   downloadExcel,
-  handleUndo,
-  handleRedo,
 }) => {
-  const { mode, setMode } = useStore((store) => store);
+  const { mode, setMode, undo, redo, past, future } = useStore(
+    (store) => store
+  );
   const [collapsed, setCollapsed] = useState(true);
   const {
     token: { colorBgContainer },
@@ -136,7 +132,6 @@ const DashBoardLayout: React.FC<CardProps> = ({
         <Content
           style={{
             minHeight: 280,
-            // background: colorBgContainer,
           }}
         >
           <div className="w-[100%] h-[50px] bg-[var(--secondary-bg)] bvar(--primary-color)order-t-[1px] flex items-center justify-between">
@@ -153,18 +148,30 @@ const DashBoardLayout: React.FC<CardProps> = ({
             <div className="flex items-center gap-x-8 mr-3">
               <BsSearch className="w-[18px] h-[18px] text-[var(--primary-color)] hover:cursor-pointer" />
               <button
-                onClick={() => handleUndo()}
+                onClick={() => undo()}
                 className="hover:cursor-pointer"
                 id="undoBtn"
               >
-                <LuUndo className="w-[18px] h-[18px] text-[var(--primary-color)]" />
+                <LuUndo
+                  className={`w-[18px] h-[18px] ${
+                    past.length >= 1
+                      ? 'text-[var(--primary-color)]'
+                      : 'text-[#808080]'
+                  }`}
+                />
               </button>
               <button
-                onClick={() => handleRedo()}
+                onClick={() => redo()}
                 className="hover:cursor-pointer"
                 id="redoBtn"
               >
-                <LuRedo className="w-[18px] h-[18px] text-[var(--primary-color)]" />
+                <LuRedo
+                  className={`w-[18px] h-[18px] ${
+                    future.length >= 1
+                      ? 'text-[var(--primary-color)]'
+                      : 'text-[#808080]'
+                  }`}
+                />
               </button>
               <BsZoomIn className="w-[18px] h-[18px] text-[var(--primary-color)] hover:cursor-pointer" />
               <BsZoomOut className="w-[18px] h-[18px] text-[var(--primary-color)] hover:cursor-pointer" />
