@@ -33,7 +33,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   children,
   dataType,
   id,
-  userColumn,
+  column,
 }) => {
   const [pinned, setPinned] = useState(true);
   const [hover, setHover] = useState(false);
@@ -53,7 +53,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
     setHover(false);
   };
 
-  if (userColumn) {
+  if (column === 'when' || column === 'then' || column === 'annotations') {
     if (label !== 'annotations') {
       return (
         <>
@@ -71,7 +71,7 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
               <div className="flex flex-col items-start justify-start gap-y-2 cursor-pointer w-full">
                 {!label || label === '' ? (
                   <span className="font-normal text-[13px] text-[var(--primary-color)]">
-                    Input
+                    {column === 'when' ? 'Input' : 'Output'}
                   </span>
                 ) : (
                   <span className="font-normal text-[13px] text-[var(--primary-color)] tracking-wide">

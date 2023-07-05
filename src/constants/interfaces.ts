@@ -56,7 +56,7 @@ export interface columnHeaderProps {
   children?: any;
   dataType: string;
   id: string;
-  userColumn: boolean;
+  column: string;
 }
 export interface TypesOptionProps {
   id: string;
