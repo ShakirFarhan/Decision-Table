@@ -97,7 +97,7 @@ export const useStore = create<zustandStoreInterface>()(
                   label="Any"
                   dataType=""
                   id="any-col"
-                  userColumn={false}
+                  column={'any'}
                 />
               ),
               headerClass: 'column-header', // every column header has this class
@@ -135,7 +135,7 @@ export const useStore = create<zustandStoreInterface>()(
                   label=""
                   dataType=""
                   id={whenID}
-                  userColumn={true}
+                  column="when"
                 />
               ),
               cellRendererFramework: CustomCell,
@@ -172,7 +172,7 @@ export const useStore = create<zustandStoreInterface>()(
                   label=""
                   dataType=""
                   id={thenID}
-                  userColumn={true}
+                  column="then"
                 />
               ),
               cellRendererFramework: CustomCell,
@@ -207,7 +207,7 @@ export const useStore = create<zustandStoreInterface>()(
                   label="annotations"
                   dataType=""
                   id="annotations"
-                  userColumn={true}
+                  column="annotations"
                 />
               ),
               cellRendererFramework: CustomCell,
@@ -257,7 +257,7 @@ export const useStore = create<zustandStoreInterface>()(
                 label=""
                 dataType=""
                 id={newIndex}
-                userColumn={true}
+                column="when"
               />
             ),
             cellRendererFramework: CustomCell,
@@ -299,7 +299,7 @@ export const useStore = create<zustandStoreInterface>()(
                 label=""
                 dataType=""
                 id={newIndex}
-                userColumn={true}
+                column="then"
               />
             ),
             cellRendererFramework: CustomCell,
@@ -346,7 +346,7 @@ export const useStore = create<zustandStoreInterface>()(
                     label={newHeaderName}
                     dataType={newTypeName}
                     id={colId}
-                    userColumn={true}
+                    column="when"
                   />
                 ),
                 cellRendererParams: (params: any) => ({
@@ -374,7 +374,7 @@ export const useStore = create<zustandStoreInterface>()(
                     label={newHeaderName}
                     dataType={newTypeName}
                     id={colId}
-                    userColumn={true}
+                    column="then"
                   />
                 ),
                 cellRendererParams: (params: any) => ({

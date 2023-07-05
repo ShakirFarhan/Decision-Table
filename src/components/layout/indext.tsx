@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { Button, Layout, Menu, theme } from 'antd';
+import { Button, Layout, Menu } from 'antd';
 import {
   AiOutlineAppstore,
   AiOutlineFolder,
@@ -31,9 +31,21 @@ const DashBoardLayout: React.FC<CardProps> = ({
     (store) => store
   );
   const [collapsed, setCollapsed] = useState(true);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
+  const handleUndo = () => {
+    if (past.length >= 1) {
+      undo();
+    }
+    return;
+  };
+  const handleRedo = () => {
+    if (future.length >= 1) {
+      redo();
+    }
+    return;
+  };
   const moonIcon = <TbMoonStars size={22} className="text-black" />;
   const sunIcon = <BsSun size={22} className="text-white" />;
 
@@ -92,16 +104,16 @@ const DashBoardLayout: React.FC<CardProps> = ({
           <nav className="">
             <div className="container mx-auto flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <a href="#" className="text-[var(--primary-color)] font-bold">
+                <a href="/" className="text-[var(--primary-color)] font-bold">
                   Home
                 </a>
-                <a href="#" className="text-[var(--primary-color)]">
+                <a href="/file" className="text-[var(--primary-color)]">
                   File
                 </a>
-                <a href="#" className="text-[var(--primary-color)]">
+                <a href="/edit" className="text-[var(--primary-color)]">
                   Edit
                 </a>
-                <a href="#" className="text-[var(--primary-color)]">
+                <a href="/library" className="text-[var(--primary-color)]">
                   Library
                 </a>
               </div>
@@ -148,7 +160,7 @@ const DashBoardLayout: React.FC<CardProps> = ({
             <div className="flex items-center gap-x-8 mr-3">
               <BsSearch className="w-[18px] h-[18px] text-[var(--primary-color)] hover:cursor-pointer" />
               <button
-                onClick={() => undo()}
+                onClick={handleUndo}
                 className="hover:cursor-pointer"
                 id="undoBtn"
               >
@@ -161,7 +173,7 @@ const DashBoardLayout: React.FC<CardProps> = ({
                 />
               </button>
               <button
-                onClick={() => redo()}
+                onClick={handleRedo}
                 className="hover:cursor-pointer"
                 id="redoBtn"
               >
