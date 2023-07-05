@@ -15,6 +15,7 @@ import { LuUndo, LuRedo } from 'react-icons/lu';
 import { BsZoomIn, BsZoomOut, BsSearch, BsSun } from 'react-icons/bs';
 import { TbMoonStars } from 'react-icons/tb';
 import { useStore } from '../../store';
+import FileModal from './FileModal';
 const { Header, Sider, Content } = Layout;
 type CardProps = {
   children: ReactNode;
@@ -189,11 +190,12 @@ const DashBoardLayout: React.FC<CardProps> = ({
               <BsZoomOut className="w-[18px] h-[18px] text-[var(--primary-color)] hover:cursor-pointer" />
               {/* <BsDownload className="w-[18px] h-[21px] text-[var(--primary-color)] hover:cursor-pointer" />
               <CiExport className="w-[21px] h-[21px] text-[var(--primary-color)] hover:cursor-pointer" /> */}
+              <FileModal />
               <button
                 className="text-[var(--primary-color)]"
                 onClick={() => downloadCSV()}
               >
-                CSV
+                Export CSV
               </button>
               <button
                 className="text-[var(--primary-color)]"
