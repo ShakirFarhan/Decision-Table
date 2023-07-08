@@ -107,7 +107,7 @@ const Table = () => {
     <DashBoardLayout downloadCSV={csvDownload} downloadExcel={onBtExport}>
       <div className="flex flex-col max-w-[130%] bg-[var(--secondary-bg)] h-full">
         <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[var(--primary-border)]">
-          <div className="flex-1 w-full h-[300px]">
+          <div className="flex-1 w-full h-[400px]">
             <AgGridReact
               ref={gridRef}
               rowData={whenRowData}

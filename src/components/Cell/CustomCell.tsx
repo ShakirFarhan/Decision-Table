@@ -17,6 +17,8 @@ const CustomCell: React.FC<customCellProps> = (props) => {
   const [loading, setLoading] = useState(false)
   const [cellValue, setCellValue] = useState()
 
+  console.log(props)
+
 
   useEffect(() => {
     setLoading(true)
