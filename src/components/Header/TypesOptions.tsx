@@ -7,7 +7,7 @@ import { useStore } from '../../store';
 const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
   const [selectedOption, setSelectedOption] = useState(type || 'None');
   const [columnName, setColumnName] = useState(column);
-  const { handleEditCol } = useStore((store) => store);
+  const { handleEditCol, clearColumn } = useStore((store) => store);
   const handleSelectedOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(e.target.value);
   };
@@ -17,6 +17,7 @@ const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     handleEditCol(id, columnName, selectedOption);
+    clearColumn(id)
   };
 
   return (

@@ -1,33 +1,34 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
 import '../css/customCell.css';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
-import { getSpecialTypeLabels, checkValidity, getCellValue } from '../../utils';
+import {
+  getSpecialTypeLabels,
+  checkValidity,
+  getCellValue,
+  inputValidation,
+} from '../../utils';
 import InputTypes from './InputFields/InputTypes';
 import { customCellProps } from '../../constants/interfaces';
+
 const CustomCell: React.FC<customCellProps> = (props) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState(false);
-
+  const [rowDataTypes, setRowDataType] = useState<any>({});
+  const [loading, setLoading] = useState(false);
+  const [cellValue, setCellValue] = useState<any>();
   // fetching row type from store
-  let rowDataTypes = rowDataType.find(
-    (value) =>
-      value.key === props.column.colId && value.rowIndex === props.rowIndex
-  );
   const colDataType = props?.column?.colDef?.dataType;
-  const [selectedOption, setSelectedOption] = useState(
-    rowDataTypes && rowDataTypes.value && rowDataTypes.value.type
-  );
-
-  const [editingValue, setEditingValue] = useState(
-    rowDataTypes && rowDataTypes.value && rowDataTypes.value.value
-  );
-
-  const [hovering, setHovering] = useState(false);
-
+  const [selectedOption, setSelectedOption] = useState<string>('');
+  const [activeSelectedOption, setActiveSelectedOption] = useState<string>('');
+  const [editingValue, setEditingValue] = useState<any>('');
+  const [inputError, setInputError] = useState<boolean>(false);
+  const [hovering, setHovering] = useState<boolean>(false);
+  let columnId = props.column.colId;
+  let rowIndex = props.node.rowIndex;
   const handleChange = (value: any) => {
     setEditingValue(value);
   };
@@ -44,26 +45,75 @@ const CustomCell: React.FC<customCellProps> = (props) => {
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    console.log('Log');
-    props.api.startEditingCell({
-      rowIndex: props.rowIndex,
-      colKey: props.column.getId(),
-    });
-    props.api.setSuppressRowClickSelection(true);
-    const cellValueNew = {
-      type: selectedOption,
-      value: editingValue,
-    };
-    editRowDataType(props.node.rowIndex, props.column.colId, cellValueNew);
-    setClicked(false);
-    props.api.stopEditing({
-      rowIndex: props.rowIndex,
-      colKey: props.column.getId(),
-    });
+    if (colDataType.toLowerCase() === 'string') {
+      const isValid: boolean = inputValidation(
+        selectedOption,
+        editingValue.firstval
+      );
+      console.log(isValid);
+      setInputError(!isValid);
+      if (isValid) {
+        props.api.startEditingCell({
+          rowIndex: props.rowIndex,
+          colKey: props.column.getId(),
+        });
+        props.api.setSuppressRowClickSelection(true);
+        const cellValueNew = {
+          type: selectedOption,
+          value: editingValue,
+        };
+        editRowDataType(rowIndex, columnId, cellValueNew);
+        setClicked(false);
+        props.api.stopEditing({
+          rowIndex: props.rowIndex,
+          colKey: props.column.getId(),
+        });
+      } else {
+        return;
+      }
+      setActiveSelectedOption(selectedOption);
+    } else {
+      setInputError(false);
+      props.api.startEditingCell({
+        rowIndex: props.rowIndex,
+        colKey: props.column.getId(),
+      });
+      props.api.setSuppressRowClickSelection(true);
+      const cellValueNew = {
+        type: selectedOption,
+        value: editingValue,
+      };
+      editRowDataType(rowIndex, columnId, cellValueNew);
+      setClicked(false);
+      props.api.stopEditing({
+        rowIndex: props.rowIndex,
+        colKey: props.column.getId(),
+      });
+      setActiveSelectedOption(selectedOption);
+    }
   };
-  const cellValue = getCellValue(colDataType, rowDataTypes?.value?.value);
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 10);
+    // if(rowDataType.length){
+    let newtype = rowDataType.find(
+      (value) => value.key === columnId && value.rowIndex === props.rowIndex
+    );
 
-  if (props.data.button !== 'Add Rule' && props.id !== 'any-col') {
+    setRowDataType(newtype);
+    setSelectedOption(newtype && newtype.value && newtype.value.type);
+    setEditingValue(newtype && newtype.value && newtype.value.value);
+    setCellValue(
+      newtype &&
+        newtype.value &&
+        newtype.value.value &&
+        getCellValue(colDataType, newtype.value.value)
+    );
+    // }
+  }, [rowDataType]);
+  if (props.data.button !== 'Add Rule' && props.id !== 'any-col' && !loading) {
     return (
       <>
         <div
@@ -84,30 +134,24 @@ const CustomCell: React.FC<customCellProps> = (props) => {
                 </span>
               </div>
             )}
-            {cellValue ? (
-              typeof cellValue === 'string' ? (
-                <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-                  {cellValue}
-                </span>
-              ) : (
-                <>
-                  <div className="flex items-center">
-                    [
-                    <span className="text-[13px] font-medium text-[var(--primary-color)]">
-                      {cellValue ? cellValue[0] : ''}
-                    </span>
-                    -
-                    <span className="text-[13px] font-medium text-[var(--primary-color)]">
-                      {cellValue ? cellValue[1] : ''}
-                    </span>
-                    ]
-                  </div>
-                </>
-              )
+            {activeSelectedOption?.toLowerCase() === 'between' ? (
+              <>
+                <div className="flex items-center">
+                  [
+                  <span className="text-[13px] font-medium text-[var(--primary-color)]">
+                    {cellValue ? cellValue[0] : ''}
+                  </span>
+                  <span className="text-[13px] font-medium text-[var(--primary-color)]">
+                    - {cellValue ? cellValue[1] : ''}
+                  </span>
+                  ]
+                </div>
+              </>
             ) : (
-              ''
+              <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
+                {cellValue && cellValue[0]}
+              </span>
             )}
-            {/* </span> */}
             <Popover
               placement="bottomRight"
               overlayClassName="custom-popover"
@@ -115,6 +159,7 @@ const CustomCell: React.FC<customCellProps> = (props) => {
               onOpenChange={(visible) => {
                 if (!visible) {
                   setClicked(false);
+                  setInputError(false);
                 }
               }}
               content={
@@ -151,6 +196,7 @@ const CustomCell: React.FC<customCellProps> = (props) => {
                         editingValue={editingValue}
                         handleChange={handleChange}
                         className="px-[10px] py-[4px] border-[1.7px]"
+                        hasError={inputError}
                       />
                       <Button
                         className="w-full bg-blue-400"
