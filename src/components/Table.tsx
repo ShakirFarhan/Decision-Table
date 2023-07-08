@@ -56,12 +56,12 @@ const Table = () => {
       }
     });
   }, []);
-  useEffect(() => {
-    // Set the grid column definitions whenever colDefs changes
-    if (gridRef.current && gridRef.current.gridOptions) {
-      gridRef.current.gridOptions.api.setColumnDefs(colDefs);
-    }
-  }, [colDefs]);
+  // useEffect(() => {
+  //   // Set the grid column definitions whenever colDefs changes
+  //   if (gridRef.current && gridRef.current.gridOptions) {
+  //     gridRef.current.gridOptions.api.setColumnDefs(colDefs);
+  //   }
+  // }, [colDefs]);
   useEffect(() => {
     document.body.className = mode + '-theme';
   }, [mode]);
@@ -96,7 +96,7 @@ const Table = () => {
   const handleCellValueChanged = (value: any) => {
     const colId = value.column.colId;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    editRowData(value, value?.rowIndex, colId, value.newValue);
+    editRowData(value?.rowIndex, colId, value.newValue);
   };
 
   return (

@@ -49,17 +49,12 @@ const CustomCell: React.FC<customCellProps> = (props) => {
       rowIndex: props.rowIndex,
       colKey: props.column.getId(),
     });
-    // props.api.setSuppressRowClickSelection(true);
+    props.api.setSuppressRowClickSelection(true);
     const cellValueNew = {
       type: selectedOption,
       value: editingValue,
     };
-    editRowDataType(
-      props,
-      props.node.rowIndex,
-      props.column.colId,
-      cellValueNew
-    );
+    editRowDataType(props.node.rowIndex, props.column.colId, cellValueNew);
     setClicked(false);
     props.api.stopEditing({
       rowIndex: props.rowIndex,
