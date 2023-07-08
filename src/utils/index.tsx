@@ -206,6 +206,7 @@ export const getCellValue = (colDataType: any, cellValueObject: any) => {
   if (colDataType) {
     // console.log(colDataType);
     if (
+      colDataType.toLowerCase() === 'none' ||
       colDataType.toLowerCase() === 'string' ||
       colDataType.toLowerCase() === 'number' ||
       colDataType.toLowerCase() === 'boolean'
@@ -218,7 +219,7 @@ export const getCellValue = (colDataType: any, cellValueObject: any) => {
         return [cellValueObject.firstval, cellValueObject.secondval];
       }
     } else {
-      if (cellValueObject) {
+      if (cellValueObject !== undefined) {
         const formattedDate1 = `${getFormattedValue(
           cellValueObject.firstval.$D
         )}:${getFormattedValue(cellValueObject.firstval.$M)}:${
@@ -249,4 +250,36 @@ export function deepClone(obj: any): any {
   }
 
   return clone;
+}
+
+export function inputValidation(cellDataType: string, cellValue: any) {
+  let alphanumbericRegex = /^[a-zA-Z0-9]+$/;
+  var numberRegex = /\d/;
+  if (cellValue && cellDataType) {
+    const cellDataTypeLower = cellDataType.toLowerCase();
+    if (cellDataTypeLower === 'capital') {
+      if (
+        cellValue === cellValue.toUpperCase() &&
+        !numberRegex.test(cellValue)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (cellDataTypeLower === 'small') {
+      if (
+        cellValue === cellValue.toLowerCase() &&
+        !numberRegex.test(cellValue)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (cellDataTypeLower === 'alpha numeric') {
+      return alphanumbericRegex.test(cellValue);
+    } else {
+      return true;
+    }
+  }
+  return false;
 }

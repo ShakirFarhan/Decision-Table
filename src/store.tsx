@@ -32,6 +32,7 @@ export interface zustandStoreInterface {
   duplicateRule: (id: number) => void;
   deleteRule: (id: number) => void;
   clearRule: (id: number) => void;
+  clearColumn: (id: any) => void;
   setMode: (mode: 'light' | 'dark') => void;
   setGridRef: (ref: any) => void;
   addCsvImportColumns: (columnHeaders: any[], columnRows: any[]) => void;
@@ -258,7 +259,17 @@ export const useStore = create<zustandStoreInterface>()(
       set((store) => ({
         gridRef: ref,
       })),
-
+    clearColumn: (columnId: any) =>
+      set((store) => {
+        const newrowData = store.rowDataType.filter(
+          (value) => value.key !== columnId
+        );
+        return {
+          rowDataType: newrowData,
+          // past: [...store.past, store],
+          // future: [],
+        };
+      }),
     addWhenColumnDefs: () =>
       set((store) => {
         const newIndex = uuid();
@@ -730,8 +741,8 @@ export const useStore = create<zustandStoreInterface>()(
         const updateRowData = [...newdata];
         return {
           rowDataType: updateRowData,
-          past: [...store.past, store], // Save current state to past
-          future: [],
+          // past: [...store.past, store], // Save current state to past
+          // future: [],
         };
       }),
 
@@ -742,8 +753,8 @@ export const useStore = create<zustandStoreInterface>()(
         rowToUpdate[colId] = value;
         return {
           whenRowData: updatedRowData,
-          past: [...store.past, store], // Save current state to past
-          future: [],
+          // past: [...store.past, store], // Save current state to past
+          // future: [],
         };
       }),
 

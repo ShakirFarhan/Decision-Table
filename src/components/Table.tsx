@@ -8,7 +8,7 @@ import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
 const Table = () => {
-  const { whenRowData, mode, editRowData, colDefs, setGridRef } = useStore(
+  const { whenRowData, mode, editRowData, colDefs } = useStore(
     (store) => store
   );
   const gridRef: React.MutableRefObject<any> = useRef(null);
@@ -22,7 +22,7 @@ const Table = () => {
       width: 200,
       sortable: true,
       filter: true,
-      editable: true,
+      editable: false,
       flex: 1,
       minWidth: 300,
     }),
@@ -103,7 +103,7 @@ const Table = () => {
     <DashBoardLayout downloadCSV={csvDownload} downloadExcel={onBtExport}>
       <div className="flex flex-col max-w-[130%] bg-[var(--secondary-bg)] h-full">
         <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[var(--primary-border)]">
-          <div className="flex-1 w-full h-[300px]">
+          <div className="flex-1 w-full h-[400px]">
             <AgGridReact
               ref={gridRef}
               rowData={whenRowData}
