@@ -44,6 +44,7 @@ const CustomCell: React.FC<customCellProps> = (props) => {
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    console.log('Log');
     props.api.startEditingCell({
       rowIndex: props.rowIndex,
       colKey: props.column.getId(),
@@ -53,12 +54,7 @@ const CustomCell: React.FC<customCellProps> = (props) => {
       type: selectedOption,
       value: editingValue,
     };
-    editRowDataType(
-      props,
-      props.node.rowIndex,
-      props.column.colId,
-      cellValueNew
-    );
+    editRowDataType(props.node.rowIndex, props.column.colId, cellValueNew);
     setClicked(false);
     props.api.stopEditing({
       rowIndex: props.rowIndex,

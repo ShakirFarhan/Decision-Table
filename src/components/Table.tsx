@@ -11,7 +11,6 @@ const Table = () => {
   const { whenRowData, mode, editRowData, colDefs, setGridRef } = useStore(
     (store) => store
   );
-
   const gridRef: React.MutableRefObject<any> = useRef(null);
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
@@ -21,7 +20,6 @@ const Table = () => {
       enableValue: true,
       enablePivot: true,
       width: 200,
-      // resizable: true,
       sortable: true,
       filter: true,
       editable: true,
@@ -58,12 +56,12 @@ const Table = () => {
       }
     });
   }, []);
-  useEffect(() => {
-    // Set the grid column definitions whenever colDefs changes
-    if (gridRef.current && gridRef.current.gridOptions) {
-      gridRef.current.gridOptions.api.setColumnDefs(colDefs);
-    }
-  }, [colDefs]);
+  // useEffect(() => {
+  //   // Set the grid column definitions whenever colDefs changes
+  //   if (gridRef.current && gridRef.current.gridOptions) {
+  //     gridRef.current.gridOptions.api.setColumnDefs(colDefs);
+  //   }
+  // }, [colDefs]);
   useEffect(() => {
     document.body.className = mode + '-theme';
   }, [mode]);
@@ -94,13 +92,11 @@ const Table = () => {
     });
   }, []);
   // this was causing the delay
-  // useEffect(() => {
-  //   setGridRef(gridRef);
-  // }, [setGridRef]);
+
   const handleCellValueChanged = (value: any) => {
     const colId = value.column.colId;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    editRowData(value, value?.rowIndex, colId, value.newValue);
+    editRowData(value?.rowIndex, colId, value.newValue);
   };
 
   return (
