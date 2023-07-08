@@ -169,3 +169,18 @@ html {
 .ag-full-width-row .ag-cell-wrapper.ag-row-group {
   border: none;
 }
+/* Remove scrollbar from the table */
+/* .ag-horizontal-left-spacer::-webkit-scrollbar,
+.ag-body-horizontal-scroll-viewport::-webkit-scrollbar {
+  display: none;
+}
+.ag-body-horizontal-scroll-container,
+.ag-horizontal-left-spacer {
+  border: none;
+  outline: none;
+  background-color: #fff;
+}
+.ag-body-horizontal-scroll {
+  display: flex;
+  column-gap: 0px;
+} */

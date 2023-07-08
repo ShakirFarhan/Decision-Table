@@ -44,11 +44,12 @@ const CustomCell: React.FC<customCellProps> = (props) => {
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    console.log('Log');
     props.api.startEditingCell({
       rowIndex: props.rowIndex,
       colKey: props.column.getId(),
     });
-    props.api.setSuppressRowClickSelection(true);
+    // props.api.setSuppressRowClickSelection(true);
     const cellValueNew = {
       type: selectedOption,
       value: editingValue,

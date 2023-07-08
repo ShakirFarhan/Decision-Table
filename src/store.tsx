@@ -34,7 +34,7 @@ export interface zustandStoreInterface {
   deleteRule: (id: number) => void;
   clearRule: (id: number) => void;
   setMode: (mode: 'light' | 'dark') => void;
-  setGridRef: (gridRef: any) => void;
+  setGridRef: (ref: any) => void;
   addCsvImportColumns: (columnHeaders: any[], columnRows: any[]) => void;
 }
 
@@ -131,6 +131,22 @@ export const useStore = create<zustandStoreInterface>()(
               dataType: '',
               isPinned: false,
               sortable: true,
+              comparator: (
+                valueA: any,
+                valueB: any,
+                nodeA: any,
+                nodeB: any,
+                isDescending: any
+              ) => {
+                console.log(valueA);
+                console.log(valueB);
+                console.log(nodeA);
+                console.log(nodeB);
+                console.log(isDescending);
+
+                // if (valueA === valueB) return 0;
+                // return valueA > valueB ? 1 : -1;
+              },
               headerComponent: () => (
                 <CustomHeaderCell
                   label=""
@@ -237,10 +253,13 @@ export const useStore = create<zustandStoreInterface>()(
       thenRowData: [],
       pinnedColumn: null,
       mode: 'light',
-      setGridRef: (gridRef) =>
+      setGridRef: (ref) =>
         set((store) => ({
-          gridRef: gridRef,
+          gridRef: ref,
+          // past: [...store.past, store],
+          // future: [],
         })),
+
       addWhenColumnDefs: () =>
         set((store) => {
           const newIndex = uuid();
@@ -500,12 +519,14 @@ export const useStore = create<zustandStoreInterface>()(
           } else if (typeOfOperation.includes('a-z')) {
             const columnState =
               store.gridRef.current?.columnApi?.getColumnState();
-            const sortedColumns = columnState.map((column: any) => {
+            console.log(columnState);
+            const sortedColumns = columnState?.map((column: any) => {
               if (column.colId === id) {
                 return { ...column, sort: 'asc' }; // Apply ascending sorting to the specified column
               } else {
                 return { ...column, sort: null }; // Remove sorting from other columns
               }
+              // console.log()
             });
 
             store.gridRef.current?.columnApi?.applyColumnState({
@@ -634,11 +655,14 @@ export const useStore = create<zustandStoreInterface>()(
       duplicateRule: (id) =>
         set((store) => {
           const whenRowData = deepClone(store.whenRowData);
+
           const duplicatedRow = {
             ...whenRowData[id - 1],
             any: store.whenRowData.length,
           };
           whenRowData.splice(whenRowData.length - 1, 0, duplicatedRow);
+
+          console.log(store.rowDataType);
 
           return {
             whenRowData: whenRowData,
