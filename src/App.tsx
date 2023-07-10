@@ -3,7 +3,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import Table from './components/Table';
 
 function App() {
-  return <Table />;
+  return <Table rows={[]} columns={['Name','Image','Fight']} />;
 }
 
 export default App;

@@ -27,7 +27,7 @@ const FileModal: React.FC = () => {
         let columnHeaders: any = [];
         let columnValues: any = [];
         results.data.map((data: any) => {
-          columnHeaders.push(Object.keys(data));
+          columnHeaders.push(Object.keys(data));  
           columnValues.push(Object.values(data));
           return null;
         });

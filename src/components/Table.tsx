@@ -7,8 +7,9 @@ import { AgGridReact } from 'ag-grid-react';
 import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
-const Table = () => {
-  const { whenRowData, mode, editRowData, colDefs } = useStore(
+import { rowsAndCols } from '../constants/interfaces';
+const Table: React.FC<rowsAndCols> = (props) => {
+  const { whenRowData, mode, editRowData, colDefs, addRowsByProps } = useStore(
     (store) => store
   );
   const gridRef: React.MutableRefObject<any> = useRef(null);
@@ -28,6 +29,17 @@ const Table = () => {
     }),
     []
   );
+
+  const renderPropsRows = useCallback( () => {
+    console.log("calling twice")
+    if (props.columns.length > 0) {
+      addRowsByProps(props.columns, props.rows)
+    }
+  },[props])
+
+  useEffect(()=> {
+    renderPropsRows()
+  }, [])
 
   const isFullWidthRow = useCallback((params: any) => {
     return params.rowNode.data.fullWidth;
@@ -67,7 +79,7 @@ const Table = () => {
   }, [mode]);
   // using this to stop re-render of this below use effect
 
-  //  converts the data available in the table to excel and then it downloads it
+  //  converts the data available in the table to excel and then it downloads it  
   const onBtExport = useCallback(() => {
     gridRef.current.api.exportDataAsExcel({
       fileName: 'exported_table.xlsx',

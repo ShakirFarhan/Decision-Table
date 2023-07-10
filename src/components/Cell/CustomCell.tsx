@@ -35,7 +35,7 @@ const CustomCell: React.FC<customCellProps> = (props) => {
 
   const handleChangeOption = (value: any) => {
     setSelectedOption(value);
-  };
+  }
   const handleMouseEnter = (id: any) => {
     setHovering(true);
   };
@@ -43,6 +43,8 @@ const CustomCell: React.FC<customCellProps> = (props) => {
   const handleMouseLeave = () => {
     setHovering(false);
   };
+
+
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (colDataType.toLowerCase() === 'string') {

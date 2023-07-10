@@ -64,6 +64,11 @@ export interface TypesOptionProps {
   column: string;
 }
 
+export interface rowsAndCols {
+  rows: any[];
+  columns: any[];
+}
+
 export interface inputFieldProps {
   editingValue: any;
   handleChange: any;

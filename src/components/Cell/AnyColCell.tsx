@@ -66,7 +66,7 @@ const AnyColCell: React.FC<anyColCellProps> = (props) => {
                               : () => {
                                   const id: number = parseInt(
                                     props.cellValue || '0'
-                                  );
+                                  );  
                                   clearRule(id);
                                 }
                           }
