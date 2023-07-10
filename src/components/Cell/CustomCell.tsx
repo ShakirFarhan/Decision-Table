@@ -48,6 +48,7 @@ const CustomCell: React.FC<customCellProps> = (props) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (colDataType.toLowerCase() === 'string') {
+      
       const isValid: boolean = inputValidation(
         selectedOption,
         editingValue.firstval
@@ -151,7 +152,7 @@ const CustomCell: React.FC<customCellProps> = (props) => {
               </>
             ) : (
               <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-                {cellValue && cellValue[0]}
+                {cellValue && cellValue}
               </span>
             )}
             <Popover

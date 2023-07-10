@@ -731,10 +731,18 @@ export const useStore = create<zustandStoreInterface>()(
         };
         whenRowData.splice(whenRowData.length - 1, 0, duplicatedRow);
 
-        console.log(store.rowDataType);
+
+        const datatypesNew = store.rowDataType.filter(value => value.rowIndex === (id - 1)).map((item) => {
+          return {
+            key: item.key,
+            rowIndex: store.whenRowData.length - 1,
+            value: item.value
+          }
+        })
 
         return {
           whenRowData: whenRowData,
+          rowDataType: [...store.rowDataType, ...datatypesNew],
           past: [...store.past, deepClone(store)], // Save current state to past
           future: [],
         };

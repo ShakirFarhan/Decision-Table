@@ -40,8 +40,8 @@ function convertTimeStringToDate(timeString: string): Date {
 }
 
 export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
-  if (colDatatype === 'String') {
-    if (selectedOption?.toLowerCase() !== undefined) return 'single-input';
+  if (colDatatype === 'String' || 'None') {
+    return 'single-input';
   } else if (colDatatype === 'Number') {
     if (selectedOption?.toLowerCase() === 'between') {
       return 'two-input';
@@ -253,6 +253,7 @@ export function deepClone(obj: any): any {
 }
 
 export function inputValidation(cellDataType: string, cellValue: any) {
+  console.log(cellDataType,cellValue)
   let alphanumbericRegex = /^[a-zA-Z0-9]+$/;
   var numberRegex = /\d/;
   if (cellValue && cellDataType) {
@@ -280,6 +281,8 @@ export function inputValidation(cellDataType: string, cellValue: any) {
     } else {
       return true;
     }
+  }else if(cellDataType === undefined){
+    return true
   }
-  return false;
+  else return false
 }
