@@ -9,9 +9,14 @@ import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
 import { rowsAndCols, Column, Row } from '../constants/interfaces';
 const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
-  const { whenRowData, mode,rowDataType, editRowData, colDefs, addRowsByProps } = useStore(
-    (store) => store
-  );
+  const {
+    whenRowData,
+    mode,
+    rowDataType,
+    editRowData,
+    colDefs,
+    addRowsByProps,
+  } = useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
@@ -30,16 +35,16 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
     []
   );
 
-  const renderPropsRows = useCallback( () => {
-    console.log("calling twice")
+  const renderPropsRows = useCallback(() => {
+    console.log('calling twice');
     if (props.initialValues.columns?.length) {
-      addRowsByProps(props.initialValues.columns, props.initialValues.rows)
+      addRowsByProps(props.initialValues.columns, props.initialValues.rows);
     }
-  },[props])
+  }, [props]);
 
-  useEffect(()=> {
-    renderPropsRows()
-  }, [])
+  useEffect(() => {
+    renderPropsRows();
+  }, []);
 
   const isFullWidthRow = useCallback((params: any) => {
     return params.rowNode.data.fullWidth;
@@ -68,18 +73,13 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
       }
     });
   }, []);
-  // useEffect(() => {
-  //   // Set the grid column definitions whenever colDefs changes
-  //   if (gridRef.current && gridRef.current.gridOptions) {
-  //     gridRef.current.gridOptions.api.setColumnDefs(colDefs);
-  //   }
-  // }, [colDefs]);
+
   useEffect(() => {
     document.body.className = mode + '-theme';
   }, [mode]);
   // using this to stop re-render of this below use effect
 
-  //  converts the data available in the table to excel and then it downloads it  
+  //  converts the data available in the table to excel and then it downloads it
   const onBtExport = useCallback(() => {
     gridRef.current.api.exportDataAsExcel({
       fileName: 'exported_table.xlsx',
@@ -104,11 +104,9 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
     });
   }, []);
 
-
   // const handleCellValueChanged = (value: any) => {
   //   console.log(value);
   // };
-
 
   useEffect(() => {
     const whenCol = colDefs[1].children.map((item, index) => {
@@ -116,28 +114,27 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
         id: item.id,
         name: item.headerName,
         type: item.dataType,
-        isPinned: item.isPinned
-      }
-    })
+        isPinned: item.isPinned,
+      };
+    });
     const thenCol = colDefs[2].children.map((item, index) => {
       return {
         id: item.id,
         name: item.headerName,
         type: item.dataType,
-        isPinned: item.isPinned
-      }
-    })
-    const allCols = [...whenCol, ...thenCol]
-
+        isPinned: item.isPinned,
+      };
+    });
+    const allCols = [...whenCol, ...thenCol];
 
     const newData: rowsAndCols<Column, Row> = {
       initialValues: {
         rows: rowDataType,
-        columns: allCols
+        columns: allCols,
       },
-    }
-    props && props.callbackfunc !== undefined && props.callbackfunc(newData)
-  },[rowDataType, colDefs])
+    };
+    props && props.callbackfunc !== undefined && props.callbackfunc(newData);
+  }, [rowDataType, colDefs]);
 
   return (
     <DashBoardLayout downloadCSV={csvDownload} downloadExcel={onBtExport}>
