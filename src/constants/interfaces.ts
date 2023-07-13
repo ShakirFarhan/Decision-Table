@@ -65,8 +65,11 @@ export interface TypesOptionProps {
 }
 
 export interface rowsAndCols {
-  rows: any[];
-  columns: any[];
+  initialValues:{
+    rows: [],
+    columns: []
+  },
+  callbackfunc: Function
 }
 
 export interface inputFieldProps {

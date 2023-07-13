@@ -23,7 +23,7 @@ const FileModal: React.FC = () => {
     Papa.parse(e.target.files[0], {
       header: true,
       skipEmptyLines: true,
-      complete: function (results) {
+      complete: function (results: { data: any[]; }) {
         let columnHeaders: any = [];
         let columnValues: any = [];
         results.data.map((data: any) => {
