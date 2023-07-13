@@ -40,7 +40,7 @@ const FileModal: React.FC = () => {
   };
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary"  onClick={showModal} className='bg-[#1677ff]'>
         Import CSV
       </Button>
       <Modal

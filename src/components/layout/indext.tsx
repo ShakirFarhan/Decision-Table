@@ -152,7 +152,7 @@ const DashBoardLayout: React.FC<CardProps> = ({
               <BsArrowLeft className="w-[20px] h-[20px] text-[var(--primary-color)]" />
               <div className="flex items-center gap-x-1">
                 <h5 className="text-[17px] font-medium text-[var(--black-shade)]">
-                  DecisionTableA
+                  DecisionTable
                 </h5>
 
                 <AiOutlineEdit className="w-[20px] h-[20px] text-[var(--primary-color)]" />
