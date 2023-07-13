@@ -39,8 +39,6 @@ const CustomCell: React.FC<customCellProps> = (props) => {
   const handleMouseEnter = (id: any) => {
     setHovering(true);
   };
-  console.log(props.cellValue, colDataType)
-  console.log(props)
   const handleMouseLeave = () => {
     setHovering(false);
   };

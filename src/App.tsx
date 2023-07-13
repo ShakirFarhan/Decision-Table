@@ -4,7 +4,7 @@ import Table from './components/Table';
 
 function App() {
   const handleInputValues = (data: any)=> {
-    console.log(data);
+    console.log({data});
   }
 
 

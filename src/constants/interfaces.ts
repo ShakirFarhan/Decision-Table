@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 interface CellRendererParams {
   onEdit: () => void;
   cellValue: any;
@@ -64,12 +62,27 @@ export interface TypesOptionProps {
   column: string;
 }
 
-export interface rowsAndCols {
+export interface Row {
+  key?: string;
+  rowIndex?: number;
+  value?: any
+  // Add more properties as needed
+}
+
+export interface Column {
+  id?: string;
+  headerName?: string;
+  dataType?: string,
+  isPinned?: boolean,
+  // Add more properties as needed
+}
+
+export interface rowsAndCols<Columns, Rows> {
   initialValues:{
-    rows: [],
-    columns: []
+    rows: Rows[],
+    columns: Columns[]
   },
-  callbackfunc: Function
+  callbackfunc?: Function
 }
 
 export interface inputFieldProps {

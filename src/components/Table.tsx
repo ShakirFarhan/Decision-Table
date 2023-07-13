@@ -7,9 +7,9 @@ import { AgGridReact } from 'ag-grid-react';
 import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
-import { rowsAndCols } from '../constants/interfaces';
-const Table: React.FC<rowsAndCols> = (props) => {
-  const { whenRowData, mode, editRowData, colDefs, addRowsByProps } = useStore(
+import { rowsAndCols, Column, Row } from '../constants/interfaces';
+const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
+  const { whenRowData, mode,rowDataType, editRowData, colDefs, addRowsByProps } = useStore(
     (store) => store
   );
   const gridRef: React.MutableRefObject<any> = useRef(null);
@@ -32,7 +32,7 @@ const Table: React.FC<rowsAndCols> = (props) => {
 
   const renderPropsRows = useCallback( () => {
     console.log("calling twice")
-    if (props.initialValues.columns.length > 0) {
+    if (props.initialValues.columns?.length) {
       addRowsByProps(props.initialValues.columns, props.initialValues.rows)
     }
   },[props])
@@ -103,13 +103,41 @@ const Table: React.FC<rowsAndCols> = (props) => {
       },
     });
   }, []);
-  // this was causing the delay
 
-  const handleCellValueChanged = (value: any) => {
-    const colId = value.column.colId;
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    editRowData(value?.rowIndex, colId, value.newValue);
-  };
+
+  // const handleCellValueChanged = (value: any) => {
+  //   console.log(value);
+  // };
+
+
+  useEffect(() => {
+    const whenCol = colDefs[1].children.map((item, index) => {
+      return {
+        id: item.id,
+        name: item.headerName,
+        type: item.dataType,
+        isPinned: item.isPinned
+      }
+    })
+    const thenCol = colDefs[2].children.map((item, index) => {
+      return {
+        id: item.id,
+        name: item.headerName,
+        type: item.dataType,
+        isPinned: item.isPinned
+      }
+    })
+    const allCols = [...whenCol, ...thenCol]
+
+
+    const newData: rowsAndCols<Column, Row> = {
+      initialValues: {
+        rows: rowDataType,
+        columns: allCols
+      },
+    }
+    props && props.callbackfunc !== undefined && props.callbackfunc(newData)
+  },[rowDataType, colDefs])
 
   return (
     <DashBoardLayout downloadCSV={csvDownload} downloadExcel={onBtExport}>
@@ -123,7 +151,6 @@ const Table: React.FC<rowsAndCols> = (props) => {
               defaultColDef={defaultColDef}
               className={`ag-theme-alpine`}
               gridOptions={gridOptions}
-              onCellValueChanged={handleCellValueChanged}
               // onCellValueChanged={handleCellValueChanged} - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
               rowDragManaged={true}
               animateRows={true}
