@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
-import Papa from 'papaparse';
 import { useStore } from '../../store';
+import { Column } from '../../constants/interfaces';
+import { convertFile } from '../../utils';
+// import * as XLSX from 'xlsx';
 const FileModal: React.FC = () => {
   const { addCsvImportColumns } = useStore((store) => store);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [columnHeaders, setColumnHeaders] = useState<any[]>([]);
+  const [columnHeaders, setColumnHeaders] = useState<Column[]>([]);
   const [columnsRows, setColumnRows] = useState<any[]>([]);
-
+  const [data, setData] = useState<any[]>([]);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -20,27 +22,23 @@ const FileModal: React.FC = () => {
     setIsModalOpen(false);
   };
   const handleFile = (e: any) => {
-    Papa.parse(e.target.files[0], {
-      header: true,
-      skipEmptyLines: true,
-      complete: function (results: { data: any[]; }) {
-        let columnHeaders: any = [];
-        let columnValues: any = [];
-        results.data.map((data: any) => {
-          columnHeaders.push(Object.keys(data));  
-          columnValues.push(Object.values(data));
-          return null;
-        });
-
-        setColumnHeaders(columnHeaders[0]);
-        setColumnRows(columnValues);
-        // setNewColumns([...newColumns, ...results.data]);
-      },
-    });
+    // convertFile(e.target.files[0], setColumnHeaders);
+    // const reader = new FileReader();
+    // reader.readAsBinaryString(e.target.files[0]);
+    // reader.onloadend = (e) => {
+    //   const data = e.target?.result;
+    //   const workbook = XLSX.read(data, { type: 'binary' });
+    //   const sheetName = workbook.SheetNames[0];
+    //   const sheet = workbook.Sheets[sheetName];
+    //   const parsedData = XLSX.utils.sheet_to_json(sheet);
+    //   setData(parsedData);
+    // };
   };
+
+  console.log(columnHeaders);
   return (
     <>
-      <Button type="primary"  onClick={showModal} className='bg-[#1677ff]'>
+      <Button type="primary" onClick={showModal} className="bg-[#1677ff]">
         Import CSV
       </Button>
       <Modal
@@ -50,7 +48,12 @@ const FileModal: React.FC = () => {
         onCancel={handleCancel}
       >
         <div>
-          <input onChange={handleFile} type="file" accept=".csv" name="file" />
+          <input
+            onChange={handleFile}
+            type="file"
+            accept=".xlsx, .xls"
+            name="file"
+          />
         </div>
       </Modal>
     </>
