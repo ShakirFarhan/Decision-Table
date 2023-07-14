@@ -1,4 +1,5 @@
 import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
 function isDate(value: any): boolean {
   return new Date(value) instanceof Date;
 }
@@ -286,6 +287,28 @@ export function inputValidation(cellDataType: string, cellValue: any) {
     return true;
   } else return false;
 }
+const checkImportData = (columnHeaders: any, setColumnHeaders: any) => {
+  columnHeaders.map((data: object) => {
+    const inputString = JSON.stringify(data);
+    const regex = /{([^:]+):([^}]+)}/;
+    const matches = inputString.match(regex);
+    if (matches) {
+      const key = matches[1].trim();
+      const value = matches[2].trim();
+      setColumnHeaders((prev: any) => [
+        ...prev,
+        {
+          headerName: key,
+          id: Date.now().toString(),
+          dataType: value,
+          isPinned: false,
+        },
+      ]);
+    } else {
+      console.log('Invalid input format');
+    }
+  });
+};
 export const convertFile = (file: File, setColumnHeaders: any) => {
   if (file.type === 'text/csv') {
     Papa.parse(file, {
@@ -299,35 +322,23 @@ export const convertFile = (file: File, setColumnHeaders: any) => {
           innerColumnValues.push(Object.values(data));
           return null;
         });
-        innerColumnHeaders[0].map((data: object) => {
-          const inputString = JSON.stringify(data);
-          const regex = /{([^:]+):([^}]+)}/;
-          const matches = inputString.match(regex);
-          if (matches) {
-            const key = matches[1].trim();
-            const value = matches[2].trim();
-            setColumnHeaders((prev: any) => [
-              ...prev,
-              {
-                headerName: key,
-                id: Date.now().toString(),
-                dataType: value,
-                isPinned: false,
-              },
-            ]);
-          } else {
-            console.log('Invalid input format');
-          }
-        });
+        console.log(innerColumnHeaders[0]);
+        checkImportData(innerColumnHeaders[0], setColumnHeaders);
       },
     });
   } else {
-    Papa.parse(file, {
-      complete: (result) => {
-        const jsonData = result.data; // The parsed JSON data
-        // Use the jsonData as needed
-        console.log(jsonData);
-      },
-    });
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target?.result as ArrayBuffer);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData: any = XLSX.utils.sheet_to_json(worksheet, {
+        header: 1,
+      });
+      checkImportData(jsonData[0], setColumnHeaders);
+    };
+
+    reader.readAsArrayBuffer(file);
   }
 };

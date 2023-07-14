@@ -3,13 +3,13 @@ import { Button, Modal } from 'antd';
 import { useStore } from '../../store';
 import { Column } from '../../constants/interfaces';
 import { convertFile } from '../../utils';
-// import * as XLSX from 'xlsx';
+
 const FileModal: React.FC = () => {
   const { addCsvImportColumns } = useStore((store) => store);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [columnHeaders, setColumnHeaders] = useState<Column[]>([]);
   const [columnsRows, setColumnRows] = useState<any[]>([]);
-  const [data, setData] = useState<any[]>([]);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -20,19 +20,10 @@ const FileModal: React.FC = () => {
   const handleSubmit = () => {
     addCsvImportColumns(columnHeaders, columnsRows);
     setIsModalOpen(false);
+    setColumnHeaders([]);
   };
   const handleFile = (e: any) => {
     convertFile(e.target.files[0], setColumnHeaders);
-    // const reader = new FileReader();
-    // reader.readAsBinaryString(e.target.files[0]);
-    // reader.onloadend = (e) => {
-    //   const data = e.target?.result;
-    //   const workbook = XLSX.read(data, { type: 'binary' });
-    //   const sheetName = workbook.SheetNames[0];
-    //   const sheet = workbook.Sheets[sheetName];
-    //   const parsedData = XLSX.utils.sheet_to_json(sheet);
-    //   setData(parsedData);
-    // };
   };
 
   console.log(columnHeaders);
