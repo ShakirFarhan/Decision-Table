@@ -22,7 +22,7 @@ const FileModal: React.FC = () => {
     setIsModalOpen(false);
   };
   const handleFile = (e: any) => {
-    // convertFile(e.target.files[0], setColumnHeaders);
+    convertFile(e.target.files[0], setColumnHeaders);
     // const reader = new FileReader();
     // reader.readAsBinaryString(e.target.files[0]);
     // reader.onloadend = (e) => {
@@ -51,7 +51,7 @@ const FileModal: React.FC = () => {
           <input
             onChange={handleFile}
             type="file"
-            accept=".xlsx, .xls"
+            accept=".xlsx, .xls, .csv"
             name="file"
           />
         </div>
