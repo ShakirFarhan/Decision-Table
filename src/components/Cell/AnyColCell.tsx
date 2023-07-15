@@ -32,7 +32,7 @@ const AnyColCell: React.FC<anyColCellProps> = (props) => {
         <div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="flex items-center w-full h-full justify-between h-[40px] gap-x-0 css-class"
+          className="flex items-center w-full h-full justify-between gap-x-0 css-class"
         >
           <button className="hover:bg-[var(--cell-hover)] h-full px-1 text-[var(--dark-grey)]">
             <CgMenuGridO className="h-[19px] w-[19px]" />
@@ -66,7 +66,7 @@ const AnyColCell: React.FC<anyColCellProps> = (props) => {
                               : () => {
                                   const id: number = parseInt(
                                     props.cellValue || '0'
-                                  );
+                                  );  
                                   clearRule(id);
                                 }
                           }

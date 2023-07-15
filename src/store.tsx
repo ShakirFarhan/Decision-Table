@@ -34,6 +34,7 @@ export interface zustandStoreInterface {
   clearRule: (id: number) => void;
   clearColumn: (id: any) => void;
   setMode: (mode: 'light' | 'dark') => void;
+  addRowsByProps: (columns: any[], rows: any[]) => void;
   setGridRef: (ref: any) => void;
   addCsvImportColumns: (columnHeaders: any[], columnRows: any[]) => void;
 }
@@ -270,6 +271,65 @@ export const useStore = create<zustandStoreInterface>()(
           // future: [],
         };
       }),
+    addRowsByProps: (columns, rows) =>
+      set((store) => {
+        const newColDefs: any = deepClone(store.colDefs);
+        console.log({ newColDefs });
+        newColDefs[1].children = [];
+        columns.map((header) => {
+          const id = uuid();
+          const updated = {
+            id: id,
+            headerName: header,
+            field: id,
+            dataType: 'None',
+            sortable: true,
+            isPinned: false,
+            headerComponent: () => (
+              <CustomHeaderCell
+                label={header}
+                dataType="None"
+                id={id}
+                column="when"
+              />
+            ),
+            cellRendererFramework: CustomCell,
+            cellRendererParams: (params: any) => ({
+              onEdit: () => {
+                params.api.startEditingCell({
+                  rowIndex: params.node.rowIndex,
+                  colKey: params.column.colId,
+                });
+              },
+              cellValue: params.value,
+            }),
+            headerClass: 'column-header',
+          };
+
+          newColDefs[1].children.push(updated);
+          return null;
+        });
+        const newWhenRowData = [...store.whenRowData];
+
+        for (let i = 0; i < rows.length; i++) {
+          const newRowData = Object.fromEntries(
+            newColDefs.map((header: any, index: number) => {
+              if (header.id === 'hit') {
+                return ['any', store.whenRowData.length];
+              }
+              return [header.field, ''];
+            })
+          );
+
+          // Inserting the new row at the second-to-last position
+          newWhenRowData.splice(newWhenRowData.length - 1, 0, newRowData);
+        }
+
+        return {
+          whenRowData: newWhenRowData,
+          colDefs: newColDefs,
+        };
+      }),
     addWhenColumnDefs: () =>
       set((store) => {
         const newIndex = uuid();
@@ -436,20 +496,19 @@ export const useStore = create<zustandStoreInterface>()(
     addCsvImportColumns: (columnHeaders, columnRows) =>
       set((store) => {
         const newColDefs: any = deepClone(store.colDefs);
-        columnHeaders.map((header) => {
-          const id = Date.now().toString();
+        columnHeaders.map((data) => {
           const updated = {
-            id: id,
-            headerName: header,
-            field: id,
-            dataType: 'None',
+            id: data.id,
+            headerName: data.headerName,
+            field: data.id,
+            dataType: data.dataType,
             sortable: true,
-            isPinned: false,
+            isPinned: data.isPinned,
             headerComponent: () => (
               <CustomHeaderCell
-                label={header}
-                dataType="None"
-                id={id}
+                label={data.headerName}
+                dataType={data.dataType}
+                id={data.id}
                 column="when"
               />
             ),
@@ -469,27 +528,28 @@ export const useStore = create<zustandStoreInterface>()(
           newColDefs[1].children.push(updated);
           return null;
         });
-        const newWhenRowData = [...store.whenRowData];
+        // const newWhenRowData = [...store.whenRowData];
 
-        for (let i = 0; i < columnRows.length; i++) {
-          const newRowData = Object.fromEntries(
-            newColDefs.map((header: any, index: number) => {
-              if (header.id === 'hit') {
-                return ['any', store.whenRowData.length];
-              }
-              return [header.field, ''];
-            })
-          );
+        // for (let i = 0; i < columnRows.length; i++) {
+        //   const newRowData = Object.fromEntries(
+        //     newColDefs.map((header: any, index: number) => {
+        //       if (header.id === 'hit') {
+        //         return ['any', store.whenRowData.length];
+        //       }
+        //       return [header.field, ''];
+        //     })
+        //   );
 
-          // Inserting the new row at the second-to-last position
-          newWhenRowData.splice(newWhenRowData.length - 1, 0, newRowData);
-        }
+        //   // Inserting the new row at the second-to-last position
+        //   newWhenRowData.splice(newWhenRowData.length - 1, 0, newRowData);
+        // }
 
         return {
-          whenRowData: newWhenRowData,
+          // whenRowData: newWhenRowData,
           colDefs: newColDefs,
         };
       }),
+
     handleOptions: (id, typeOfOperation) =>
       set((store) => {
         if (typeOfOperation.includes('remove')) {
@@ -670,10 +730,19 @@ export const useStore = create<zustandStoreInterface>()(
         };
         whenRowData.splice(whenRowData.length - 1, 0, duplicatedRow);
 
-        console.log(store.rowDataType);
+        const datatypesNew = store.rowDataType
+          .filter((value) => value.rowIndex === id - 1)
+          .map((item) => {
+            return {
+              key: item.key,
+              rowIndex: store.whenRowData.length - 1,
+              value: item.value,
+            };
+          });
 
         return {
           whenRowData: whenRowData,
+          rowDataType: [...store.rowDataType, ...datatypesNew],
           past: [...store.past, deepClone(store)], // Save current state to past
           future: [],
         };

@@ -33,9 +33,7 @@ function InputTypes({
     handleChange(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firstval, secondval]);
-  console.log('has error ' + hasError);
   if (getTypeOfInput(dataType, selectedOption) === 'single-input') {
-    console.log('single');
     return (
       <Input
         style={{
