@@ -128,16 +128,9 @@ export const useStore = create<zustandStoreInterface>()(
             headerClass: 'column-header', // every column header has this class
             cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
             cellRendererParams: (params: any) => ({
-              // to control its behavior and appearance.
-              onEdit: () => {
-                // User defined function
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               id: 'any-col',
               cellValue: params.node.rowIndex + 1,
+              button: params.data.button,
             }),
           },
         ],
@@ -163,13 +156,11 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
+              columnId: params.column.colId,
+              colDataType: params?.column?.colDef?.dataType,
+              rowIndex: params.rowIndex,
+              button: params.data.button,
             }),
             headerClass: 'column-header',
           },
@@ -187,7 +178,6 @@ export const useStore = create<zustandStoreInterface>()(
             field: thenID,
             isPinned: false,
             dataType: '',
-
             headerComponent: () => (
               <CustomHeaderCell
                 label=""
@@ -198,13 +188,11 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
+              columnId: params.column.colId,
+              colDataType: params?.column?.colDef?.dataType,
+              rowIndex: params.rowIndex,
+              button: params.data.button,
             }),
             headerClass: 'column-header',
           },
@@ -232,14 +220,11 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
-              // id: columnDefs.length === 1 ? 'first-col' : '',
+              columnId: params.column.colId,
+              colDataType: params?.column?.colDef?.dataType,
+              rowIndex: params.rowIndex,
+              button: params.data.button,
             }),
           },
         ],
@@ -295,12 +280,6 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
             }),
             headerClass: 'column-header',
@@ -352,13 +331,11 @@ export const useStore = create<zustandStoreInterface>()(
           ),
           cellRendererFramework: CustomCell,
           cellRendererParams: (params: any) => ({
-            onEdit: () => {
-              params.api.startEditingCell({
-                rowIndex: params.node.rowIndex,
-                colKey: params.column.colId,
-              });
-            },
             cellValue: params.value,
+            columnId: params.column.colId,
+            colDataType: params?.column?.colDef?.dataType,
+            rowIndex: params.rowIndex,
+            button: params.data.button,
           }),
           headerClass: 'column-header',
         };
@@ -394,13 +371,11 @@ export const useStore = create<zustandStoreInterface>()(
           ),
           cellRendererFramework: CustomCell,
           cellRendererParams: (params: any) => ({
-            onEdit: () => {
-              params.api.startEditingCell({
-                rowIndex: params.node.rowIndex,
-                colKey: params.column.colId,
-              });
-            },
             cellValue: params.value,
+            columnId: params.column.colId,
+            colDataType: params?.column?.colDef?.dataType,
+            rowIndex: params.rowIndex,
+            button: params.data.button,
           }),
           headerClass: 'column-header',
         };
@@ -442,12 +417,6 @@ export const useStore = create<zustandStoreInterface>()(
               ),
               cellRendererParams: (params: any) => ({
                 ...existingCellRendererParams(params),
-                onEdit: () => {
-                  params.api.startEditingCell({
-                    rowIndex: params.node.rowIndex,
-                    colKey: params.column.colId,
-                  });
-                },
               }),
             };
             whenCol[whenColIndex] = updatedWhenCol;
@@ -470,12 +439,6 @@ export const useStore = create<zustandStoreInterface>()(
               ),
               cellRendererParams: (params: any) => ({
                 ...existingCellRendererParams(params),
-                onEdit: () => {
-                  params.api.startEditingCell({
-                    rowIndex: params.node.rowIndex,
-                    colKey: params.column.colId,
-                  });
-                },
               }),
             };
             thenCol[thenColIndex] = updatedThenCol;
@@ -514,12 +477,6 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
             }),
             headerClass: 'column-header',

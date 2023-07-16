@@ -42,8 +42,8 @@ function convertTimeStringToDate(timeString: string): Date {
 }
 
 export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
-  if (colDatatype === 'String' || 'None') {
-    return 'single-input';
+  if (colDatatype === 'String') {
+    if (selectedOption?.toLowerCase() !== undefined) return 'single-input';
   } else if (colDatatype === 'Number') {
     if (selectedOption?.toLowerCase() === 'between') {
       return 'two-input';
