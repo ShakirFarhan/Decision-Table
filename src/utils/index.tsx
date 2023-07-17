@@ -28,7 +28,7 @@ function isValidTime(timeString: string): boolean {
   return timeRegex.test(timeString);
 }
 
-function convertTimeStringToDate(timeString: string): Date {
+export function convertTimeStringToDate(timeString: string): Date {
   const today = new Date(); // Get the current date
   const [hours, minutes] = timeString.split(':'); // Split the time string into hours and minutes
 
@@ -39,6 +39,15 @@ function convertTimeStringToDate(timeString: string): Date {
   today.setMilliseconds(0);
 
   return today;
+}
+
+
+export function formatDate(dateString: Date) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
 }
 
 export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
