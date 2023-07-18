@@ -1,7 +1,6 @@
 import { DatePicker, TimePicker } from 'antd';
 import { useState } from 'react';
 
-
 interface IProps {
   firstval?: any;
   secondval?: any;
@@ -12,15 +11,14 @@ interface IProps {
 export const StartEndDate: React.FC<IProps> = (props) => {
   const [startDate, setStartDate] = useState(props.firstval);
   const [endDate, setEndDate] = useState(props.secondval);
-
   const handleStartDateChange = (date: any) => {
     setStartDate(date);
-    props.setFirstVal(date)
+    props.setFirstVal(date);
   };
 
   const handleEndDateChange = (date: any) => {
     setEndDate(date);
-    props.setSecondVal(date)
+    props.setSecondVal(date);
   };
   return (
     <>
@@ -43,23 +41,20 @@ export const StartEndDate: React.FC<IProps> = (props) => {
       </div>
     </>
   );
-}
-
+};
 
 export const StartEndTime: React.FC<IProps> = (props) => {
-
   const [startTime, setStartTime] = useState(props.firstval);
   const [endTime, setEndTime] = useState(props.secondval);
 
-
   const handleStartTimeChange = (time: any) => {
     setStartTime(time);
-    props.setFirstVal(time)
+    props.setFirstVal(time);
   };
 
   const handleEndTimeChange = (time: any) => {
     setEndTime(time);
-    props.setSecondVal(time)
+    props.setSecondVal(time);
   };
   return (
     <>
@@ -82,7 +77,7 @@ export const StartEndTime: React.FC<IProps> = (props) => {
       </div>
     </>
   );
-}
+};
 
 export function MonthToMonth() {
   const [startDate, setStartDate] = useState(null);
@@ -121,16 +116,14 @@ export const YearToYear: React.FC<IProps> = (props) => {
   const [startYear, setStartYear] = useState(props.firstval);
   const [endYear, setEndYear] = useState(props.secondval);
 
-
-
   const handleStartYearChange = (date: any) => {
     setStartYear(date);
-    props.setFirstVal(date)
+    props.setFirstVal(date);
   };
 
   const handleEndYearChange = (date: any) => {
     setEndYear(date);
-    props.setSecondVal(date)
+    props.setSecondVal(date);
   };
   return (
     <>
@@ -153,7 +146,7 @@ export const YearToYear: React.FC<IProps> = (props) => {
       </div>
     </>
   );
-}
+};
 export function DateTimePicker() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);

@@ -7,12 +7,12 @@ import '../css/table.css';
 import { rowOptions } from '../../constants/data';
 import { useStore } from '../../store';
 import { anyColCellProps } from '../../constants/interfaces';
-const AnyColCell: React.FC<anyColCellProps> = (props) => {
+const AnyColCell: React.FC<anyColCellProps> = ({ cellValue, button, id }) => {
   const { duplicateRule, deleteRule, clearRule, colDefs, addRow } = useStore(
     (store) => store
   );
-  const [hovering, setHovering] = useState(false);
-  const [clicked, setClicked] = useState(false);
+  const [hovering, setHovering] = useState<boolean>(false);
+  const [clicked, setClicked] = useState<boolean>(false);
   const handleMouseEnter = () => {
     setHovering(true);
     setClicked(false);
@@ -26,7 +26,7 @@ const AnyColCell: React.FC<anyColCellProps> = (props) => {
   const handleAddRow = () => {
     addRow(colDefs, colDefs);
   };
-  if (props.cellValue && props.data.button !== 'Add Rule') {
+  if (cellValue && button !== 'Add Rule') {
     return (
       <>
         <div
@@ -58,15 +58,11 @@ const AnyColCell: React.FC<anyColCellProps> = (props) => {
                           onClick={
                             data.key === 'delete'
                               ? () => {
-                                  const id: number = parseInt(
-                                    props.cellValue || '0'
-                                  );
+                                  const id: number = parseInt(cellValue || '0');
                                   deleteRule(id);
                                 }
                               : () => {
-                                  const id: number = parseInt(
-                                    props.cellValue || '0'
-                                  );  
+                                  const id: number = parseInt(cellValue || '0');
                                   clearRule(id);
                                 }
                           }
@@ -81,9 +77,7 @@ const AnyColCell: React.FC<anyColCellProps> = (props) => {
                         onClick={
                           data.key === 'duplicate'
                             ? () => {
-                                const id: number = parseInt(
-                                  props.cellValue || '0'
-                                );
+                                const id: number = parseInt(cellValue || '0');
                                 duplicateRule(id);
                               }
                             : () => {}
@@ -108,14 +102,14 @@ const AnyColCell: React.FC<anyColCellProps> = (props) => {
           ) : (
             <div className="px-[11px] max-w-[28px]">
               <span className="text-[15px] font-normal text-[var(--primary-color)] ">
-                {props.cellValue}
+                {cellValue}
               </span>
             </div>
           )}
         </div>
       </>
     );
-  } else if (props.data.button === 'Add Rule' && props.id === 'any-col') {
+  } else if (button === 'Add Rule' && id === 'any-col') {
     return (
       <div
         onClick={handleAddRow}
