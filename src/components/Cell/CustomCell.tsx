@@ -38,7 +38,7 @@ const CustomCell: React.FC<customCellProps> = ({
   const [clicked, setClicked] = useState<boolean>(false);
   const [cellData, setCellData] = useState<Row>({}); // this contains the individual cell data
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<string>('');
+  // const [selectedOption, setSelectedOption] = useState<string>('');
   const [activeSelectedOption, setActiveSelectedOption] = useState<string>('');
   const [editingValue, setEditingValue] =
     useState<editingValue>(defaultEditingValue); // try looking into this state too.
@@ -49,7 +49,7 @@ const CustomCell: React.FC<customCellProps> = ({
     setEditingValue(value);
   };
   const handleChangeOption = (value: string) => {
-    setSelectedOption(value);
+    setActiveSelectedOption(value);
   };
   const handleMouseEnter = () => {
     setHovering(true);
@@ -61,7 +61,7 @@ const CustomCell: React.FC<customCellProps> = ({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (colDataType.toLowerCase() === 'string') {
       const isValid: boolean = inputValidation(
-        selectedOption,
+        activeSelectedOption,
         editingValue.firstval
       );
 
@@ -73,7 +73,7 @@ const CustomCell: React.FC<customCellProps> = ({
         });
         api.setSuppressRowClickSelection(true);
         const cellValueNew = {
-          type: selectedOption,
+          type: activeSelectedOption,
           value: editingValue,
         };
         editRowDataType(rowIndex, columnId, cellValueNew);
@@ -85,7 +85,7 @@ const CustomCell: React.FC<customCellProps> = ({
       } else {
         return;
       }
-      setActiveSelectedOption(selectedOption);
+      setActiveSelectedOption(activeSelectedOption);
     } else {
       setInputError(false);
       api.startEditingCell({
@@ -94,7 +94,7 @@ const CustomCell: React.FC<customCellProps> = ({
       });
       api.setSuppressRowClickSelection(true);
       const cellValueNew = {
-        type: selectedOption,
+        type: activeSelectedOption,
         value: editingValue,
       };
       editRowDataType(rowIndex, columnId, cellValueNew);
@@ -103,7 +103,7 @@ const CustomCell: React.FC<customCellProps> = ({
         rowIndex: rowIndex,
         colKey: columnId,
       });
-      setActiveSelectedOption(selectedOption);
+      setActiveSelectedOption(activeSelectedOption);
     }
   };
   useEffect(() => {
@@ -116,7 +116,8 @@ const CustomCell: React.FC<customCellProps> = ({
     );
 
     setCellData(newtype);
-    setSelectedOption(newtype?.value?.type ? newtype.value.type : '');
+    setActiveSelectedOption(newtype?.value?.type ? newtype.value.type : '');
+    // setSelectedOption(newtype?.value?.type ? newtype.value.type : '');
     setEditingValue(
       newtype?.value?.value ? newtype.value.value : defaultEditingValue
     );
@@ -128,11 +129,6 @@ const CustomCell: React.FC<customCellProps> = ({
     //     getCellValue(colDataType, newtype.value.value)
     // );
   }, [rowDataType]);
-
-
-  console.log({ activeSelectedOption })
-  console.log(cellData)
-
 
 
   if (button !== 'Add Rule' && id !== 'any-col' && !loading) {
@@ -221,7 +217,7 @@ const CustomCell: React.FC<customCellProps> = ({
 
                       <InputTypes
                         dataType={colDataType}
-                        selectedOption={selectedOption}
+                        selectedOption={activeSelectedOption}
                         editingValue={editingValue}
                         handleChange={handleChange}
                         className="px-[10px] py-[4px] border-[1.7px]"
