@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
@@ -14,7 +15,8 @@ import {
   formatDate,
 } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
-import { Row, customCellProps } from '../../constants/interfaces';
+import { customCellProps } from '../../constants/interfaces';
+import { Row } from '../../constants/decisiontabledatatype';
 
 type editingValue = {
   firstval: string;

@@ -1,11 +1,10 @@
 import { create } from 'zustand';
 // import { immer } from 'zustand/middleware/immer';
 import {
-  Row,
   children,
   columnInterface,
-  cellValue,
 } from './constants/interfaces';
+import { cellValue, Row } from './constants/decisiontabledatatype';
 import { devtools } from 'zustand/middleware';
 import CustomCell from './components/Cell/CustomCell';
 import CustomHeaderCell from './components/Header/CustomHeaderCell';
@@ -467,7 +466,7 @@ export const useStore = create<zustandStoreInterface>()(
           };
         }
       }),
-    addCsvImportColumns: (columnHeaders, columnRows) =>
+    addCsvImportColumns: (columnHeaders, columnRows?) =>
       set((store) => {
         const newColDefs: any = deepClone(store.colDefs);
         columnHeaders.map((data) => {

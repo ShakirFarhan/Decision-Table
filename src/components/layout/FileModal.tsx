@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { useStore } from '../../store';
-import { Column } from '../../constants/interfaces';
+import { Column } from '../../constants/decisiontabledatatype';
 import { convertFile } from '../../utils';
 
 const FileModal: React.FC = () => {
   const { addCsvImportColumns } = useStore((store) => store);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [columnHeaders, setColumnHeaders] = useState<Column[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [columnsRows, setColumnRows] = useState<any[]>([]);
 
   const showModal = () => {

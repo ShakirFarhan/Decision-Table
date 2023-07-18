@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStore } from '../store';
 import './css/table.css';
 import 'ag-grid-community/styles/ag-grid.css';
@@ -7,13 +8,12 @@ import { AgGridReact } from 'ag-grid-react';
 // import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 // import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
-import { rowsAndCols, Column, Row } from '../constants/interfaces';
+import { rowsAndCols, Column, Row } from '../constants/decisiontabledatatype';
 const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
   const {
     whenRowData,
     mode,
     rowDataType,
-    editRowData,
     colDefs,
     addRowsByProps,
   } = useStore((store) => store);

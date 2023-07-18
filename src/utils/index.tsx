@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 function isDate(value: any): boolean {
