@@ -58,7 +58,7 @@ export interface TypesOptionProps {
   type: string;
   column: string;
 }
-interface cellValue {
+export interface cellValue {
   type: string;
   value: {
     firstval: string;
@@ -67,9 +67,9 @@ interface cellValue {
 }
 
 export interface Row {
-  key?: string;
-  rowIndex?: number;
-  value?: cellValue;
+  key: string;
+  rowIndex: number;
+  value: cellValue;
   // Add more properties as needed
 }
 
@@ -92,7 +92,7 @@ export interface customCellProps {
   collCellValue: string;
   columnId: string;
   colDataType: string;
-  rowIndex: string;
+  rowIndex: number;
   button?: string;
   api: any;
   id?: string;

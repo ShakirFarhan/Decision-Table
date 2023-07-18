@@ -9,9 +9,9 @@ import {
   getSpecialTypeLabels,
   checkValidity,
   inputValidation,
-  getCellValue,
-  convertTimeStringToDate,
-  formatDate
+  // getCellValue,
+  // convertTimeStringToDate,
+  formatDate,
 } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
 import { Row, customCellProps } from '../../constants/interfaces';
@@ -33,18 +33,15 @@ const CustomCell: React.FC<customCellProps> = ({
   api,
   id,
 }) => {
-  // check celldata.json file in root folder, to know what is getting stored in the following states
   const { editRowDataType, rowDataType } = useStore((store) => store);
   const [clicked, setClicked] = useState<boolean>(false);
-  const [cellData, setCellData] = useState<Row>({}); // this contains the individual cell data
+  const [cellData, setCellData] = useState<Row>(); // this contains the individual cell data
   const [loading, setLoading] = useState<boolean>(false);
-  // const [selectedOption, setSelectedOption] = useState<string>('');
   const [activeSelectedOption, setActiveSelectedOption] = useState<string>('');
   const [editingValue, setEditingValue] =
-    useState<editingValue>(defaultEditingValue); // try looking into this state too.
+    useState<editingValue>(defaultEditingValue);
   const [inputError, setInputError] = useState<boolean>(false);
   const [hovering, setHovering] = useState<boolean>(false);
-  // const [cellValue, setCellValue] = useState<any>(); // we dont need this state
   const handleChange = (value: editingValue) => {
     setEditingValue(value);
   };
@@ -57,6 +54,9 @@ const CustomCell: React.FC<customCellProps> = ({
   const handleMouseLeave = () => {
     setHovering(false);
   };
+  let cellDataFirstValue: string | undefined = cellData?.value?.value?.firstval;
+  let cellDataSecondValue: string | undefined =
+    cellData?.value?.value?.secondval;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (colDataType.toLowerCase() === 'string') {
@@ -111,34 +111,25 @@ const CustomCell: React.FC<customCellProps> = ({
     setTimeout(() => {
       setLoading(false);
     }, 10);
-    let newtype: Row = rowDataType.find(
+    let newtype: Row | undefined = rowDataType.find(
       (value) => value.key === columnId && value.rowIndex === rowIndex
     );
-
-    setCellData(newtype);
+    if (newtype) setCellData(newtype);
     setActiveSelectedOption(newtype?.value?.type ? newtype.value.type : '');
-    // setSelectedOption(newtype?.value?.type ? newtype.value.type : '');
     setEditingValue(
       newtype?.value?.value ? newtype.value.value : defaultEditingValue
     );
-
-    // setCellValue(
-    //   newtype &&
-    //     newtype.value &&
-    //     newtype.value.value &&
-    //     getCellValue(colDataType, newtype.value.value)
-    // );
   }, [rowDataType]);
-
 
   if (button !== 'Add Rule' && id !== 'any-col' && !loading) {
     return (
       <>
         <div
-          className={`w-[100%] h-full ${checkValidity(cellData, collCellValue) === false
-            ? 'border-x-[1px] border-red-500 border-y-[1px]'
-            : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'
-            }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
+          className={`w-[100%] h-full ${
+            checkValidity(cellData, collCellValue) === false
+              ? 'border-x-[1px] border-red-500 border-y-[1px]'
+              : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'
+          }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -151,31 +142,33 @@ const CustomCell: React.FC<customCellProps> = ({
                 </span>
               </div>
             )}
-            
+
             {activeSelectedOption?.toLowerCase() === 'between' ? (
               <>
                 <div className="flex items-center">
                   [
                   <span className="text-[13px] font-medium text-[var(--primary-color)]">
-                    {/* below line in working fine except if the coldatatype is date, In line 114 [setCellData(newType)] its not setting date values properly */}
-                    {typeof cellData?.value?.value?.firstval == 'string' ? cellData?.value?.value?.firstval : cellData?.value?.value?.firstval !== undefined && formatDate(new Date(cellData?.value?.value?.firstval))}
-                    {/* {cellValue && cellValue[0]} */}
+                    {typeof cellDataFirstValue == 'string'
+                      ? cellDataFirstValue
+                      : cellDataFirstValue !== undefined &&
+                        formatDate(new Date(cellDataFirstValue))}
                   </span>
                   <span className="text-[13px] font-medium text-[var(--primary-color)] ms-1">
-                    {/* below line in working fine except if the coldatatype is date */}
-                    {/* - {cellData?.value?.value?.secondval}-{' '} */}
-                    - {typeof cellData?.value?.value?.secondval == 'string' ? cellData?.value?.value?.secondval : cellData?.value?.value?.secondval !== undefined && formatDate(new Date(cellData?.value?.value?.secondval))}
-
-                    {/* {cellValue && cellValue[1]} */}
+                    -{' '}
+                    {typeof cellDataSecondValue == 'string'
+                      ? cellDataSecondValue
+                      : cellDataSecondValue !== undefined &&
+                        formatDate(new Date(cellDataSecondValue))}
                   </span>
                   ]
                 </div>
               </>
             ) : (
               <span className="text-[12px] font-medium text-[var(--primary-color)] tracking-wide">
-                {/* below line in working fine except if the coldatatype is date */}
-                {typeof cellData?.value?.value?.firstval == 'string' ? cellData?.value?.value?.firstval : cellData?.value?.value?.firstval !== undefined && formatDate(new Date(cellData?.value?.value?.firstval))}
-                {/* {cellValue && cellValue[0]} */}
+                {typeof cellDataFirstValue == 'string'
+                  ? cellDataFirstValue
+                  : cellDataFirstValue !== undefined &&
+                    formatDate(new Date(cellDataFirstValue))}
               </span>
             )}
             <Popover
@@ -256,5 +249,3 @@ const CustomCell: React.FC<customCellProps> = ({
 };
 
 export default CustomCell;
-
-

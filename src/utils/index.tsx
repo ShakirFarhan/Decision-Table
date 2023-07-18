@@ -41,7 +41,6 @@ export function convertTimeStringToDate(timeString: string): Date {
   return today;
 }
 
-
 export function formatDate(dateString: Date) {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, '0');
@@ -52,7 +51,11 @@ export function formatDate(dateString: Date) {
 
 export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
   if (colDatatype === 'String') {
-    if (selectedOption?.toLowerCase() !== undefined) return 'single-input';
+    if (
+      selectedOption?.toLowerCase() !== undefined &&
+      selectedOption?.toLowerCase() !== ''
+    )
+      return 'single-input';
   } else if (colDatatype === 'Number') {
     if (selectedOption?.toLowerCase() === 'between') {
       return 'two-input';
@@ -116,8 +119,6 @@ export const checkValidity = (type: any, value: any) => {
     type.value.type !== undefined &&
     value !== undefined
   ) {
-    // console.log({ allvales: type.value.value });
-    // console.log(type.value.type);
     const maintype = type.value.type.toLowerCase();
     const findRegex = forString.find((value) => value.id === maintype);
     if (maintype === 'any') {
@@ -215,7 +216,6 @@ const getFormattedValue = (value: any) => {
 
 export const getCellValue = (colDataType: any, cellValueObject: any) => {
   if (colDataType) {
-    // console.log(colDataType);
     if (
       colDataType.toLowerCase() === 'none' ||
       colDataType.toLowerCase() === 'string' ||
@@ -264,7 +264,6 @@ export function deepClone(obj: any): any {
 }
 
 export function inputValidation(cellDataType: string, cellValue: any) {
-  console.log(cellDataType, cellValue);
   let alphanumbericRegex = /^[a-zA-Z0-9]+$/;
   var numberRegex = /\d/;
   if (cellValue && cellDataType) {
@@ -331,7 +330,6 @@ export const convertFile = (file: File, setColumnHeaders: any) => {
           innerColumnValues.push(Object.values(data));
           return null;
         });
-        console.log(innerColumnHeaders[0]);
         checkImportData(innerColumnHeaders[0], setColumnHeaders);
       },
     });

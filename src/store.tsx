@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 // import { immer } from 'zustand/middleware/immer';
-import { children, columnInterface } from './constants/interfaces';
+import {
+  Row,
+  children,
+  columnInterface,
+  cellValue,
+} from './constants/interfaces';
 import { devtools } from 'zustand/middleware';
 import CustomCell from './components/Cell/CustomCell';
 import CustomHeaderCell from './components/Header/CustomHeaderCell';
@@ -12,27 +17,34 @@ let whenID = uuid();
 let thenID = uuid();
 export interface zustandStoreInterface {
   whenRowData: any[];
-  rowDataType: any[];
-  past: any[];
-  future: any[];
-  pinnedColumn: any;
+  rowDataType: Row[];
+  past: zustandStoreInterface[];
+  future: zustandStoreInterface[];
+  // pinnedColumn: any;
   colDefs: columnInterface[];
   gridRef: any;
   mode: 'light' | 'dark';
   undo: () => void;
   redo: () => void;
-  handleOptions: (id: any, typeOfOperation: any) => void;
-  handleEditCol: (id: any, newHeaderName: any, newTypeName: any) => void;
-  handlePin: (id: any) => void;
+  handleOptions: (id: string, typeOfOperation: string) => void;
+  handleEditCol: (
+    id: string,
+    newHeaderName: string,
+    newTypeName: string
+  ) => void;
+  handlePin: (id: string) => void;
   addThenColumnDefs: () => void;
   addWhenColumnDefs: () => void;
-  editRowData: (rowIndex: any, colId: any, value: any) => void;
-  editRowDataType: (rowIndex: any, colId: any, value: any) => void;
-  addRow: (whenColData: any, thenColData: any) => void;
+  editRowData: (rowIndex: number, colId: string, value: cellValue) => void;
+  editRowDataType: (rowIndex: number, colId: string, value: cellValue) => void;
+  addRow: (
+    whenColData: columnInterface[],
+    thenColData: columnInterface[]
+  ) => void;
   duplicateRule: (id: number) => void;
   deleteRule: (id: number) => void;
   clearRule: (id: number) => void;
-  clearColumn: (id: any) => void;
+  clearColumn: (id: string) => void;
   setMode: (mode: 'light' | 'dark') => void;
   addRowsByProps: (columns: any[], rows: any[]) => void;
   setGridRef: (ref: any) => void;
@@ -239,7 +251,7 @@ export const useStore = create<zustandStoreInterface>()(
     ],
     thenColData: [],
 
-    pinnedColumn: null,
+    // pinnedColumn: null,
     mode: 'light',
     setGridRef: (ref) =>
       set((store) => ({
@@ -259,7 +271,6 @@ export const useStore = create<zustandStoreInterface>()(
     addRowsByProps: (columns, rows) =>
       set((store) => {
         const newColDefs: any = deepClone(store.colDefs);
-        console.log({ newColDefs });
         newColDefs[1].children = [];
         columns.map((header) => {
           const id = uuid();
@@ -547,7 +558,7 @@ export const useStore = create<zustandStoreInterface>()(
         } else if (typeOfOperation.includes('a-z')) {
           const columnState =
             store.gridRef.current?.columnApi?.getColumnState();
-          console.log(columnState);
+
           const sortedColumns = columnState?.map((column: any) => {
             if (column.colId === id) {
               return { ...column, sort: 'asc' }; // Apply ascending sorting to the specified column
