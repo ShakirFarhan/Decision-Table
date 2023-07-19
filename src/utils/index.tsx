@@ -1,3 +1,5 @@
+import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
 function isDate(value: any): boolean {
   return new Date(value) instanceof Date;
 }
@@ -26,7 +28,7 @@ function isValidTime(timeString: string): boolean {
   return timeRegex.test(timeString);
 }
 
-function convertTimeStringToDate(timeString: string): Date {
+export function convertTimeStringToDate(timeString: string): Date {
   const today = new Date(); // Get the current date
   const [hours, minutes] = timeString.split(':'); // Split the time string into hours and minutes
 
@@ -39,9 +41,21 @@ function convertTimeStringToDate(timeString: string): Date {
   return today;
 }
 
+export function formatDate(dateString: Date) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+}
+
 export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
-  if (colDatatype === 'String' || 'None') {
-    return 'single-input';
+  if (colDatatype === 'String') {
+    if (
+      selectedOption?.toLowerCase() !== undefined &&
+      selectedOption?.toLowerCase() !== ''
+    )
+      return 'single-input';
   } else if (colDatatype === 'Number') {
     if (selectedOption?.toLowerCase() === 'between') {
       return 'two-input';
@@ -105,8 +119,6 @@ export const checkValidity = (type: any, value: any) => {
     type.value.type !== undefined &&
     value !== undefined
   ) {
-    // console.log({ allvales: type.value.value });
-    // console.log(type.value.type);
     const maintype = type.value.type.toLowerCase();
     const findRegex = forString.find((value) => value.id === maintype);
     if (maintype === 'any') {
@@ -204,7 +216,6 @@ const getFormattedValue = (value: any) => {
 
 export const getCellValue = (colDataType: any, cellValueObject: any) => {
   if (colDataType) {
-    // console.log(colDataType);
     if (
       colDataType.toLowerCase() === 'none' ||
       colDataType.toLowerCase() === 'string' ||
@@ -253,7 +264,6 @@ export function deepClone(obj: any): any {
 }
 
 export function inputValidation(cellDataType: string, cellValue: any) {
-  console.log(cellDataType,cellValue)
   let alphanumbericRegex = /^[a-zA-Z0-9]+$/;
   var numberRegex = /\d/;
   if (cellValue && cellDataType) {
@@ -281,8 +291,61 @@ export function inputValidation(cellDataType: string, cellValue: any) {
     } else {
       return true;
     }
-  }else if(cellDataType === undefined){
-    return true
-  }
-  else return false
+  } else if (cellDataType === undefined) {
+    return true;
+  } else return false;
 }
+const checkImportData = (columnHeaders: any, setColumnHeaders: any) => {
+  columnHeaders.map((data: object) => {
+    const inputString = JSON.stringify(data);
+    const regex = /{([^:]+):([^}]+)}/;
+    const matches = inputString.match(regex);
+    if (matches) {
+      const key = matches[1].trim();
+      const value = matches[2].trim();
+      setColumnHeaders((prev: any) => [
+        ...prev,
+        {
+          headerName: key,
+          id: Date.now().toString(),
+          dataType: value,
+          isPinned: false,
+        },
+      ]);
+    } else {
+      console.log('Invalid input format');
+    }
+  });
+};
+export const convertFile = (file: File, setColumnHeaders: any) => {
+  if (file.type === 'text/csv') {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: function (results: { data: any[] }) {
+        let innerColumnHeaders: any = [];
+        let innerColumnValues: any = [];
+        results.data.map((data: any) => {
+          innerColumnHeaders.push(Object.keys(data));
+          innerColumnValues.push(Object.values(data));
+          return null;
+        });
+        checkImportData(innerColumnHeaders[0], setColumnHeaders);
+      },
+    });
+  } else {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target?.result as ArrayBuffer);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData: any = XLSX.utils.sheet_to_json(worksheet, {
+        header: 1,
+      });
+      checkImportData(jsonData[0], setColumnHeaders);
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+};

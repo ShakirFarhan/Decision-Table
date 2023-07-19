@@ -16,14 +16,12 @@ function InputTypes({
   selectedOption,
   hasError,
 }: any) {
-  const [firstval, setFirstVal] = useState(
+  const [firstval, setFirstVal] = useState<string>(
     editingValue && editingValue.firstval
   );
-  const [secondval, setSecondVal] = useState(
+  const [secondval, setSecondVal] = useState<string>(
     editingValue && editingValue.secondval
   );
-
-  // console.log({editingValue})
   useEffect(() => {
     const value = {
       firstval: firstval,

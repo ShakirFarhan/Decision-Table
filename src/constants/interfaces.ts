@@ -1,6 +1,7 @@
+import React, { ReactNode } from 'react';
 interface CellRendererParams {
-  onEdit: () => void;
-  cellValue: any;
+  cellValue: string;
+  id?: string;
 }
 
 type CellRendererParamsInterface = (params: any) => CellRendererParams;
@@ -11,12 +12,11 @@ export interface children {
   headerClass?: string;
   field: string;
   dataType?: string;
-  suppressMovable?: any;
+  suppressMovable?: boolean;
   disableColumnMenu?: boolean;
-  headerComponent: (() => JSX.Element) | any;
+  headerComponent: () => JSX.Element;
   sortable?: boolean;
-  headerProps?: any;
-  cellRendererFramework?: any;
+  cellRendererFramework?: React.FC<customCellProps> | React.FC<anyColCellProps>;
   previousIndex?: any;
   cellRendererParams?: CellRendererParamsInterface;
   pinned?: 'left' | 'right';
@@ -31,13 +31,11 @@ export interface columnInterface {
   id?: string;
   headerName?: string;
   headerClass?: string;
-  suppressMovable?: any;
+  suppressMovable?: boolean;
   children: children[];
   lockPosition?: boolean;
-  cellRendererFramework?: any;
   minWidth?: number;
-  cellRendererParams?: CellRendererParamsInterface;
-  headerGroupComponent?: () => any;
+  headerGroupComponent?: () => JSX.Element;
 }
 export interface rowType {
   id?: number | string;
@@ -46,12 +44,11 @@ export interface rowType {
   phone?: number | string;
 }
 export interface IProps {
-  onEdit: (params: any) => void;
   cellValue: string;
 }
 export interface columnHeaderProps {
   label: string;
-  children?: any;
+  children?: ReactNode;
   dataType: string;
   id: string;
   column: string;
@@ -61,57 +58,50 @@ export interface TypesOptionProps {
   type: string;
   column: string;
 }
+export interface cellValue {
+  type: string;
+  value: {
+    firstval: string;
+    secondval: string;
+  };
+}
 
 export interface Row {
-  key?: string;
-  rowIndex?: number;
-  value?: any
+  key: string;
+  rowIndex: number;
+  value: cellValue;
   // Add more properties as needed
 }
 
 export interface Column {
   id?: string;
   headerName?: string;
-  dataType?: string,
-  isPinned?: boolean,
+  dataType?: string;
+  isPinned?: boolean;
   // Add more properties as needed
 }
 
 export interface rowsAndCols<Columns, Rows> {
-  initialValues:{
-    rows: Rows[],
-    columns: Columns[]
-  },
-  callbackfunc?: Function
+  initialValues: {
+    rows: Rows[];
+    columns: Columns[];
+  };
+  callbackfunc?: Function;
 }
-
-export interface inputFieldProps {
-  editingValue: any;
-  handleChange: any;
-}
-
-export type handleEditColInterface = (
-  colId: string,
-  newHeaderName: string,
-  newTypeName: string
-) => void;
-
 export interface customCellProps {
-  onEdit: (params: any) => void;
-  cellValue?: any;
-  id?: any;
-  column?: any;
-  node?: any;
-  value?: any;
-  data?: any;
-  api?: any;
-  rowIndex?: any;
+  collCellValue: string;
+  columnId: string;
+  colDataType: string;
+  rowIndex: number;
+  button?: string;
+  api: any;
+  id?: string;
 }
 
 export interface anyColCellProps {
-  cellValue?: string;
-  id?: any;
-  data?: any;
+  cellValue: string;
+  id: string;
+  button: string;
 }
 
 export interface buttonHeaderProps {

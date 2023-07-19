@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 // import { immer } from 'zustand/middleware/immer';
-import { children, columnInterface } from './constants/interfaces';
+import {
+  Row,
+  children,
+  columnInterface,
+  cellValue,
+} from './constants/interfaces';
 import { devtools } from 'zustand/middleware';
 import CustomCell from './components/Cell/CustomCell';
 import CustomHeaderCell from './components/Header/CustomHeaderCell';
@@ -12,27 +17,34 @@ let whenID = uuid();
 let thenID = uuid();
 export interface zustandStoreInterface {
   whenRowData: any[];
-  rowDataType: any[];
-  past: any[];
-  future: any[];
-  pinnedColumn: any;
+  rowDataType: Row[];
+  past: zustandStoreInterface[];
+  future: zustandStoreInterface[];
+  // pinnedColumn: any;
   colDefs: columnInterface[];
   gridRef: any;
   mode: 'light' | 'dark';
   undo: () => void;
   redo: () => void;
-  handleOptions: (id: any, typeOfOperation: any) => void;
-  handleEditCol: (id: any, newHeaderName: any, newTypeName: any) => void;
-  handlePin: (id: any) => void;
+  handleOptions: (id: string, typeOfOperation: string) => void;
+  handleEditCol: (
+    id: string,
+    newHeaderName: string,
+    newTypeName: string
+  ) => void;
+  handlePin: (id: string) => void;
   addThenColumnDefs: () => void;
   addWhenColumnDefs: () => void;
-  editRowData: (rowIndex: any, colId: any, value: any) => void;
-  editRowDataType: (rowIndex: any, colId: any, value: any) => void;
-  addRow: (whenColData: any, thenColData: any) => void;
+  editRowData: (rowIndex: number, colId: string, value: cellValue) => void;
+  editRowDataType: (rowIndex: number, colId: string, value: cellValue) => void;
+  addRow: (
+    whenColData: columnInterface[],
+    thenColData: columnInterface[]
+  ) => void;
   duplicateRule: (id: number) => void;
   deleteRule: (id: number) => void;
   clearRule: (id: number) => void;
-  clearColumn: (id: any) => void;
+  clearColumn: (id: string) => void;
   setMode: (mode: 'light' | 'dark') => void;
   addRowsByProps: (columns: any[], rows: any[]) => void;
   setGridRef: (ref: any) => void;
@@ -129,16 +141,9 @@ export const useStore = create<zustandStoreInterface>()(
             headerClass: 'column-header', // every column header has this class
             cellRendererFramework: AnyColCell, // It indicates that there is a customised component called "CustomCell" that functions as a cell. This component allows us to customise the cell's appearance.
             cellRendererParams: (params: any) => ({
-              // to control its behavior and appearance.
-              onEdit: () => {
-                // User defined function
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               id: 'any-col',
               cellValue: params.node.rowIndex + 1,
+              button: params.data.button,
             }),
           },
         ],
@@ -164,13 +169,11 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
+              columnId: params.column.colId,
+              colDataType: params?.column?.colDef?.dataType,
+              rowIndex: params.rowIndex,
+              button: params.data.button,
             }),
             headerClass: 'column-header',
           },
@@ -188,7 +191,6 @@ export const useStore = create<zustandStoreInterface>()(
             field: thenID,
             isPinned: false,
             dataType: '',
-
             headerComponent: () => (
               <CustomHeaderCell
                 label=""
@@ -199,13 +201,11 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
+              columnId: params.column.colId,
+              colDataType: params?.column?.colDef?.dataType,
+              rowIndex: params.rowIndex,
+              button: params.data.button,
             }),
             headerClass: 'column-header',
           },
@@ -233,14 +233,11 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
-              // id: columnDefs.length === 1 ? 'first-col' : '',
+              columnId: params.column.colId,
+              colDataType: params?.column?.colDef?.dataType,
+              rowIndex: params.rowIndex,
+              button: params.data.button,
             }),
           },
         ],
@@ -255,7 +252,7 @@ export const useStore = create<zustandStoreInterface>()(
     ],
     thenColData: [],
 
-    pinnedColumn: null,
+    // pinnedColumn: null,
     mode: 'light',
     setGridRef: (ref) =>
       set((store) => ({
@@ -275,7 +272,6 @@ export const useStore = create<zustandStoreInterface>()(
     addRowsByProps: (columns, rows) =>
       set((store) => {
         const newColDefs: any = deepClone(store.colDefs);
-        console.log({newColDefs})
         newColDefs[1].children = [];
         columns.map((header) => {
           const id = uuid();
@@ -296,12 +292,6 @@ export const useStore = create<zustandStoreInterface>()(
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
             }),
             headerClass: 'column-header',
@@ -353,13 +343,11 @@ export const useStore = create<zustandStoreInterface>()(
           ),
           cellRendererFramework: CustomCell,
           cellRendererParams: (params: any) => ({
-            onEdit: () => {
-              params.api.startEditingCell({
-                rowIndex: params.node.rowIndex,
-                colKey: params.column.colId,
-              });
-            },
             cellValue: params.value,
+            columnId: params.column.colId,
+            colDataType: params?.column?.colDef?.dataType,
+            rowIndex: params.rowIndex,
+            button: params.data.button,
           }),
           headerClass: 'column-header',
         };
@@ -395,13 +383,11 @@ export const useStore = create<zustandStoreInterface>()(
           ),
           cellRendererFramework: CustomCell,
           cellRendererParams: (params: any) => ({
-            onEdit: () => {
-              params.api.startEditingCell({
-                rowIndex: params.node.rowIndex,
-                colKey: params.column.colId,
-              });
-            },
             cellValue: params.value,
+            columnId: params.column.colId,
+            colDataType: params?.column?.colDef?.dataType,
+            rowIndex: params.rowIndex,
+            button: params.data.button,
           }),
           headerClass: 'column-header',
         };
@@ -443,12 +429,6 @@ export const useStore = create<zustandStoreInterface>()(
               ),
               cellRendererParams: (params: any) => ({
                 ...existingCellRendererParams(params),
-                onEdit: () => {
-                  params.api.startEditingCell({
-                    rowIndex: params.node.rowIndex,
-                    colKey: params.column.colId,
-                  });
-                },
               }),
             };
             whenCol[whenColIndex] = updatedWhenCol;
@@ -471,12 +451,6 @@ export const useStore = create<zustandStoreInterface>()(
               ),
               cellRendererParams: (params: any) => ({
                 ...existingCellRendererParams(params),
-                onEdit: () => {
-                  params.api.startEditingCell({
-                    rowIndex: params.node.rowIndex,
-                    colKey: params.column.colId,
-                  });
-                },
               }),
             };
             thenCol[thenColIndex] = updatedThenCol;
@@ -497,31 +471,24 @@ export const useStore = create<zustandStoreInterface>()(
     addCsvImportColumns: (columnHeaders, columnRows) =>
       set((store) => {
         const newColDefs: any = deepClone(store.colDefs);
-        columnHeaders.map((header) => {
-          const id = Date.now().toString();
+        columnHeaders.map((data) => {
           const updated = {
-            id: id,
-            headerName: header,
-            field: id,
-            dataType: 'None',
+            id: data.id,
+            headerName: data.headerName,
+            field: data.id,
+            dataType: data.dataType,
             sortable: true,
-            isPinned: false,
+            isPinned: data.isPinned,
             headerComponent: () => (
               <CustomHeaderCell
-                label={header}
-                dataType="None"
-                id={id}
+                label={data.headerName}
+                dataType={data.dataType}
+                id={data.id}
                 column="when"
               />
             ),
             cellRendererFramework: CustomCell,
             cellRendererParams: (params: any) => ({
-              onEdit: () => {
-                params.api.startEditingCell({
-                  rowIndex: params.node.rowIndex,
-                  colKey: params.column.colId,
-                });
-              },
               cellValue: params.value,
             }),
             headerClass: 'column-header',
@@ -530,24 +497,24 @@ export const useStore = create<zustandStoreInterface>()(
           newColDefs[1].children.push(updated);
           return null;
         });
-        const newWhenRowData = [...store.whenRowData];
+        // const newWhenRowData = [...store.whenRowData];
 
-        for (let i = 0; i < columnRows.length; i++) {
-          const newRowData = Object.fromEntries(
-            newColDefs.map((header: any, index: number) => {
-              if (header.id === 'hit') {
-                return ['any', store.whenRowData.length];
-              }
-              return [header.field, ''];
-            })
-          );
+        // for (let i = 0; i < columnRows.length; i++) {
+        //   const newRowData = Object.fromEntries(
+        //     newColDefs.map((header: any, index: number) => {
+        //       if (header.id === 'hit') {
+        //         return ['any', store.whenRowData.length];
+        //       }
+        //       return [header.field, ''];
+        //     })
+        //   );
 
-          // Inserting the new row at the second-to-last position
-          newWhenRowData.splice(newWhenRowData.length - 1, 0, newRowData);
-        }
+        //   // Inserting the new row at the second-to-last position
+        //   newWhenRowData.splice(newWhenRowData.length - 1, 0, newRowData);
+        // }
 
         return {
-          whenRowData: newWhenRowData,
+          // whenRowData: newWhenRowData,
           colDefs: newColDefs,
         };
       }),
@@ -592,7 +559,7 @@ export const useStore = create<zustandStoreInterface>()(
         } else if (typeOfOperation.includes('a-z')) {
           const columnState =
             store.gridRef.current?.columnApi?.getColumnState();
-          console.log(columnState);
+
           const sortedColumns = columnState?.map((column: any) => {
             if (column.colId === id) {
               return { ...column, sort: 'asc' }; // Apply ascending sorting to the specified column
@@ -732,14 +699,15 @@ export const useStore = create<zustandStoreInterface>()(
         };
         whenRowData.splice(whenRowData.length - 1, 0, duplicatedRow);
 
-
-        const datatypesNew = store.rowDataType.filter(value => value.rowIndex === (id - 1)).map((item) => {
-          return {
-            key: item.key,
-            rowIndex: store.whenRowData.length - 1,
-            value: item.value
-          }
-        })
+        const datatypesNew = store.rowDataType
+          .filter((value) => value.rowIndex === id - 1)
+          .map((item) => {
+            return {
+              key: item.key,
+              rowIndex: store.whenRowData.length - 1,
+              value: item.value,
+            };
+          });
 
         return {
           whenRowData: whenRowData,
