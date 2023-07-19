@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
-import '../css/customCell.css';
+import '../css/customCell.scss';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
 import {

@@ -1,5 +1,5 @@
 import { useStore } from '../store';
-import './css/table.css';
+import './css/table.scss';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
