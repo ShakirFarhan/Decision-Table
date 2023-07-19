@@ -32,3 +32,16 @@
     "rowIndex": ""
   }
 }
+// const [newState, patches, inversePatches] = produceWithPatches(
+//   store,
+//   (draft) => {
+//     return draft;
+//   }
+// );
+// const newHistory = store.history.slice(0, store.index + 1);
+// newHistory.push({ patches, inversePatches });
+// return {
+//   ...newState,
+//   history: newHistory,
+//   index: store.index + 1,
+// };

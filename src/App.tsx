@@ -3,15 +3,19 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import Table from './components/Table';
 
 function App() {
-  const handleInputValues = (data: any)=> {
-    console.log({data});
-  }
+  const handleInputValues = (data: any) => {
+    // console.log({data});
+  };
 
-
-  return <Table initialValues={{
-    rows: [],
-    columns: []
-  }} callbackfunc={handleInputValues}  />;
+  return (
+    <Table
+      initialValues={{
+        rows: [],
+        columns: [],
+      }}
+      callbackfunc={handleInputValues}
+    />
+  );
 }
 
 export default App;
