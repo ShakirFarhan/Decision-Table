@@ -3,7 +3,7 @@ import { RxDotsHorizontal } from 'react-icons/rx';
 import { BsClock, BsPlusCircleFill } from 'react-icons/bs';
 import { CgMenuGridO } from 'react-icons/cg';
 import { Popover } from 'antd';
-import '../css/table.css';
+import '../css/table.scss';
 import { rowOptions } from '../../constants/data';
 import { useStore } from '../../store';
 import { anyColCellProps } from '../../constants/interfaces';

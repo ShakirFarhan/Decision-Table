@@ -7,7 +7,7 @@ import ColOptions from './ColOptions';
 import TypesOptions from './TypesOptions';
 import { hitRatioOptions } from '../../constants/data';
 import { Popover } from 'antd';
-import '../css/customCell.css';
+import '../css/customCell.scss';
 import { useStore } from '../../store';
 const AnyCol = () => {
   return (

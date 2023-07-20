@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { headerTypes } from '../../constants/data';
 import { TypesOptionProps } from '../../constants/interfaces';
-import '../css/typesoption.css';
+import '../css/typesoption.scss';
 import { Button } from 'antd';
 import { useStore } from '../../store';
 const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {

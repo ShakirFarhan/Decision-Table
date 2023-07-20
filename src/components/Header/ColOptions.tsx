@@ -1,4 +1,4 @@
-import '../css/table.css';
+import '../css/table.scss';
 import { optionsData } from '../../constants/data';
 import { CiMenuKebab } from 'react-icons/ci';
 import { Popover } from 'antd';
