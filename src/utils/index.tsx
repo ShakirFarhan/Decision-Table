@@ -1,5 +1,6 @@
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
+import { Row } from '../constants/interfaces';
 function isDate(value: any): boolean {
   return new Date(value) instanceof Date;
 }
@@ -49,7 +50,7 @@ export function formatDate(dateString: Date) {
   return `${day}-${month}-${year}`;
 }
 
-export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
+export const getTypeOfInput = (colDatatype: string, selectedOption: string) => {
   if (colDatatype === 'String') {
     if (
       selectedOption?.toLowerCase() !== undefined &&
@@ -88,7 +89,7 @@ export const getTypeOfInput = (colDatatype: any, selectedOption: any) => {
     }
   }
 };
-export const getSpecialTypeLabels = (selectedOption: any) => {
+export const getSpecialTypeLabels = (selectedOption: string) => {
   if (selectedOption.toLowerCase() === 'greater than') {
     return '>';
   } else if (selectedOption.toLowerCase() === 'less than') {
@@ -155,7 +156,7 @@ export const checkValidity = (type: any, value: any) => {
     } else if (maintype === 'is not zero') {
       return value !== 0;
     } else if (maintype === 'is a multiple of') {
-      return value * value === type.value.value.firstval;
+      return value * value === type?.value?.value?.firstval;
     } else if (maintype === 'is not a multiple of') {
       return value * value !== type.value.value.firstval;
     } else if (maintype === 'between') {
@@ -214,7 +215,7 @@ const getFormattedValue = (value: any) => {
   return String(value).padStart(2, '0');
 };
 
-export const getCellValue = (colDataType: any, cellValueObject: any) => {
+export const getCellValue = (colDataType: string, cellValueObject: any) => {
   if (colDataType) {
     if (
       colDataType.toLowerCase() === 'none' ||
@@ -263,7 +264,7 @@ export function deepClone(obj: any): any {
   return clone;
 }
 
-export function inputValidation(cellDataType: string, cellValue: any) {
+export function inputValidation(cellDataType: string, cellValue: string) {
   let alphanumbericRegex = /^[a-zA-Z0-9]+$/;
   var numberRegex = /\d/;
   if (cellValue && cellDataType) {

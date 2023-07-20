@@ -8,11 +8,13 @@ import { rowOptions } from '../../constants/data';
 import { useStore } from '../../store';
 import { anyColCellProps } from '../../constants/interfaces';
 const AnyColCell: React.FC<anyColCellProps> = ({ cellValue, button, id }) => {
+  // In props cell value is the value provided to that cell, for any-col cells the values will be 1,2,3...
+  // Here id is the rule id. every rule has a unique id
   const { duplicateRule, deleteRule, clearRule, colDefs, addRow } = useStore(
     (store) => store
   );
-  const [hovering, setHovering] = useState<boolean>(false);
-  const [clicked, setClicked] = useState<boolean>(false);
+  const [hovering, setHovering] = useState<boolean>(false); // checks if the Any-column cell is hovered
+  const [clicked, setClicked] = useState<boolean>(false); // if clicked is true then it will show a modal to perform operation on rules. Like delete,duplicate...
   const handleMouseEnter = () => {
     setHovering(true);
     setClicked(false);
@@ -23,6 +25,8 @@ const AnyColCell: React.FC<anyColCellProps> = ({ cellValue, button, id }) => {
       setHovering(false);
     }
   };
+
+  // Adds a rule
   const handleAddRow = () => {
     addRow(colDefs, colDefs);
   };

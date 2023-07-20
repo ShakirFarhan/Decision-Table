@@ -9,14 +9,8 @@ import { AgGridReact } from 'ag-grid-react';
 import DashBoardLayout from './layout/indext';
 import { rowsAndCols, Column, Row } from '../constants/interfaces';
 const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
-  const {
-    whenRowData,
-    mode,
-    rowDataType,
-    editRowData,
-    colDefs,
-    addRowsByProps,
-  } = useStore((store) => store);
+  const { rowData, mode, rowDataType, editRowData, colDefs, addRowsByProps } =
+    useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
@@ -36,7 +30,6 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
   );
 
   const renderPropsRows = useCallback(() => {
-    // console.log('calling twice');
     if (props.initialValues.columns?.length) {
       addRowsByProps(props.initialValues.columns, props.initialValues.rows);
     }
@@ -54,26 +47,6 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
     // other grid options...
     suppressDragLeaveHidesColumns: true,
   };
-
-  useEffect(() => {
-    window.addEventListener('error', (e) => {
-      if (e.message === 'ResizeObserver loop limit exceeded') {
-        const resizeObserverErrDiv = document.getElementById(
-          'webpack-dev-server-client-overlay-div'
-        );
-        const resizeObserverErr = document.getElementById(
-          'webpack-dev-server-client-overlay'
-        );
-        if (resizeObserverErr) {
-          resizeObserverErr.setAttribute('style', 'display: none');
-        }
-        if (resizeObserverErrDiv) {
-          resizeObserverErrDiv.setAttribute('style', 'display: none');
-        }
-      }
-    });
-  }, []);
-
   useEffect(() => {
     document.body.className = mode + '-theme';
   }, [mode]);
@@ -103,10 +76,6 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
   //     },
   //   });
   // }, []);
-
-  // const handleCellValueChanged = (value: any) => {
-  //   console.log(value);
-  // };
 
   useEffect(() => {
     const whenCol = colDefs[1].children.map((item, index) => {
@@ -143,7 +112,7 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
           <div className="flex-1 w-full h-[400px]">
             <AgGridReact
               ref={gridRef}
-              rowData={whenRowData}
+              rowData={rowData}
               columnDefs={colDefs}
               defaultColDef={defaultColDef}
               className={`ag-theme-alpine`}

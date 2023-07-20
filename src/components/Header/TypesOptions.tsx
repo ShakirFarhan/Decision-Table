@@ -5,7 +5,7 @@ import '../css/typesoption.scss';
 import { Button } from 'antd';
 import { useStore } from '../../store';
 const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
-  const [selectedOption, setSelectedOption] = useState(type || 'None');
+  const [selectedOption, setSelectedOption] = useState(type || 'None'); // selected column datatype
   const [columnName, setColumnName] = useState(column);
   const { handleEditCol, clearColumn } = useStore((store) => store);
   const handleSelectedOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -17,7 +17,7 @@ const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     handleEditCol(id, columnName, selectedOption);
-    clearColumn(id)
+    clearColumn(id);
   };
 
   return (

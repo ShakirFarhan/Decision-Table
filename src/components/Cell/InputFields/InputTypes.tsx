@@ -16,6 +16,7 @@ function InputTypes({
   selectedOption,
   hasError,
 }: any) {
+  // if the selected option of cell data is "between", then there will be 2 inputs. else only 1 input
   const [firstval, setFirstVal] = useState<string>(
     editingValue && editingValue.firstval
   );
