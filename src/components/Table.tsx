@@ -36,7 +36,7 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
   );
 
   const renderPropsRows = useCallback(() => {
-    console.log('calling twice');
+    // console.log('calling twice');
     if (props.initialValues.columns?.length) {
       addRowsByProps(props.initialValues.columns, props.initialValues.rows);
     }

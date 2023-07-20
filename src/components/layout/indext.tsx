@@ -28,7 +28,7 @@ const DashBoardLayout: React.FC<CardProps> = ({
   downloadCSV,
   downloadExcel,
 }) => {
-  const { mode, setMode, undo, redo, past, future } = useStore(
+  const { mode, setMode, undo, redo, past, index, history } = useStore(
     (store) => store
   );
   const [collapsed, setCollapsed] = useState(true);
@@ -36,16 +36,17 @@ const DashBoardLayout: React.FC<CardProps> = ({
   //   token: { colorBgContainer },
   // } = theme.useToken();
   const handleUndo = () => {
-    if (past.length >= 1) {
-      undo();
-    }
-    return;
+    // if (past.length >= 1) {
+    //   undo();
+    // }
+    // return;
+    undo();
   };
   const handleRedo = () => {
-    if (future.length >= 1) {
-      redo();
-    }
-    return;
+    // if (future.length >= 1) {
+    redo();
+    // }
+    // return;
   };
   const moonIcon = <TbMoonStars size={22} className="text-black" />;
   const sunIcon = <BsSun size={22} className="text-white" />;
@@ -167,9 +168,9 @@ const DashBoardLayout: React.FC<CardProps> = ({
               >
                 <LuUndo
                   className={`w-[18px] h-[18px] ${
-                    past.length >= 1
-                      ? 'text-[var(--primary-color)]'
-                      : 'text-[#808080]'
+                    index <= 0
+                      ? 'text-[#808080]'
+                      : 'text-[var(--primary-color)]'
                   }`}
                 />
               </button>
@@ -180,9 +181,9 @@ const DashBoardLayout: React.FC<CardProps> = ({
               >
                 <LuRedo
                   className={`w-[18px] h-[18px] ${
-                    future.length >= 1
-                      ? 'text-[var(--primary-color)]'
-                      : 'text-[#808080]'
+                    index >= history.length - 1
+                      ? 'text-[#808080]'
+                      : 'text-[var(--primary-color)]'
                   }`}
                 />
               </button>
