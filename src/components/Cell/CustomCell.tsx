@@ -2,15 +2,13 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, Popover } from 'antd';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Select, Form } from 'antd';
-import '../css/customCell.css';
+import '../css/customCell.scss';
 import { useStore } from '../../store';
 import { headerTypes } from '../../constants/data';
 import {
   getSpecialTypeLabels,
   checkValidity,
   inputValidation,
-  // getCellValue,
-  // convertTimeStringToDate,
   formatDate,
 } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
@@ -25,22 +23,28 @@ let defaultEditingValue: editingValue = {
   secondval: '',
 };
 const CustomCell: React.FC<customCellProps> = ({
-  colDataType,
-  columnId,
-  rowIndex,
+  colDataType, // this is the datatype of the column like string,number,date...
+  columnId, // the unique id of the column
+  rowIndex, // rowIndex of this particular cell
   collCellValue,
   button,
-  api,
+  api, // provided by the ag grid library itself
   id,
 }) => {
   const { editRowDataType, rowDataType } = useStore((store) => store);
+  // if clicked is true it will display a popup where we can input the values to the cells
   const [clicked, setClicked] = useState<boolean>(false);
-  const [cellData, setCellData] = useState<Row>(); // this contains the individual cell data
+  // This contains the individual cell data
+  const [cellData, setCellData] = useState<Row>();
   const [loading, setLoading] = useState<boolean>(false);
+  // this contains the selectedOption of a cell eg: if cell value has [equals 20]. here the selectedOption is equals. In short selected options can be any value from cellDatatype which is selected
   const [activeSelectedOption, setActiveSelectedOption] = useState<string>('');
+  // Stores the handlechange function values of the cell input popup
   const [editingValue, setEditingValue] =
     useState<editingValue>(defaultEditingValue);
+  // checks if the input value doesn't suit the cell datatype. eg: for string type columm, we have a cell value of [capital test]. here the cell value(test) doesn't suit the cell type(capital) because cell value is of small letter. it will set error to true
   const [inputError, setInputError] = useState<boolean>(false);
+  // if this is true then pen icon will get displayed in cell. to edit the cell data
   const [hovering, setHovering] = useState<boolean>(false);
   const handleChange = (value: editingValue) => {
     setEditingValue(value);
@@ -54,12 +58,14 @@ const CustomCell: React.FC<customCellProps> = ({
   const handleMouseLeave = () => {
     setHovering(false);
   };
+  // cell data has cell type(between,equals,...) and cell values, and cell values has first value and second value
   let cellDataFirstValue: string | undefined = cellData?.value?.value?.firstval;
   let cellDataSecondValue: string | undefined =
     cellData?.value?.value?.secondval;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (colDataType.toLowerCase() === 'string') {
+      // checks if the input value satisfies cellDataType
       const isValid: boolean = inputValidation(
         activeSelectedOption,
         editingValue.firstval
@@ -97,6 +103,7 @@ const CustomCell: React.FC<customCellProps> = ({
         type: activeSelectedOption,
         value: editingValue,
       };
+      // sets the new cellData
       editRowDataType(rowIndex, columnId, cellValueNew);
       setClicked(false);
       api.stopEditing({
@@ -137,7 +144,7 @@ const CustomCell: React.FC<customCellProps> = ({
             {cellData?.value?.type && (
               <div className="rounded-0 bg-[var(--primary-border)]  tracking-[1px] h-[25px]  flex items-center cellType ">
                 <span className="text-[13px] font-medium text-[var(--primary-color)] px-2">
-                  {/* here we are only showing the type. and based on this we will validate the cells */}
+                  {/* Here we are only showing the type. and based on this we will validate the cells */}
                   {getSpecialTypeLabels(cellData.value.type)}
                 </span>
               </div>

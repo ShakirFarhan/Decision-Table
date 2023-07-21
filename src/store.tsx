@@ -2,9 +2,10 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import {
   Row,
-  children,
+  decisionTableColumns,
   columnInterface,
   cellValue,
+  zustandStoreInterface,
 } from './constants/interfaces';
 import {
   produceWithPatches,
@@ -22,48 +23,17 @@ import { deepClone } from './utils';
 let whenID = uuid();
 let thenID = uuid();
 enablePatches();
-export interface zustandStoreInterface {
-  whenRowData: any[];
-  rowDataType: Row[];
-  past: zustandStoreInterface[];
-  future: zustandStoreInterface[];
-  history: any;
-  index: number;
-  colDefs: columnInterface[];
-  gridRef: any;
-  mode: 'light' | 'dark';
-  undo: () => void;
-  redo: () => void;
-  handleOptions: (id: string, typeOfOperation: string) => void;
-  handleEditCol: (
-    id: string,
-    newHeaderName: string,
-    newTypeName: string
-  ) => void;
-  handlePin: (id: string) => void;
-  addThenColumnDefs: () => void;
-  addWhenColumnDefs: () => void;
-  editRowData: (rowIndex: number, colId: string, value: cellValue) => void;
-  editRowDataType: (rowIndex: number, colId: string, value: cellValue) => void;
-  addRow: (
-    whenColData: columnInterface[],
-    thenColData: columnInterface[]
-  ) => void;
-  duplicateRule: (id: number) => void;
-  deleteRule: (id: number) => void;
-  clearRule: (id: number) => void;
-  clearColumn: (id: string) => void;
-  setMode: (mode: 'light' | 'dark') => void;
-  addRowsByProps: (columns: any[], rows: any[]) => void;
-  setGridRef: (ref: any) => void;
-  addCsvImportColumns: (columnHeaders: any[], columnRows: any[]) => void;
-}
-
+/**
+ * Undo/Redo functionality
+ *
+ * This immer-patches based implementation is based on an approach mentioned in:
+ * (https://github.com/reduxjs/redux-toolkit/issues/382#issuecomment-814986487)
+ *
+ * Also see https://techinscribed.com/implementing-undo-redo-functionality-in-redux-using-immer/
+ */
 export const useStore = create<zustandStoreInterface>()(
   devtools(
     immer((set, get, api) => ({
-      past: [],
-      future: [],
       history: [],
       index: -1,
       undo: () => {
@@ -242,14 +212,12 @@ export const useStore = create<zustandStoreInterface>()(
         },
       ],
 
-      whenRowData: [
+      rowData: [
         {
           button: 'Add Rule',
         },
       ],
       thenColData: [],
-
-      // pinnedColumn: null,
       mode: 'light',
       setGridRef: (ref) =>
         set((store) => ({
@@ -262,8 +230,6 @@ export const useStore = create<zustandStoreInterface>()(
           );
           return {
             rowDataType: newrowData,
-            // past: [...store.past, store],
-            // future: [],
           };
         }),
       addRowsByProps: (columns, rows) =>
@@ -303,24 +269,24 @@ export const useStore = create<zustandStoreInterface>()(
             newColDefs[1].children.push(updated);
             return null;
           });
-          const newWhenRowData = [...store.whenRowData];
+          const newRowData = [...store.rowData];
 
           for (let i = 0; i < rows.length; i++) {
             const newRowData = Object.fromEntries(
               newColDefs.map((header: any, index: number) => {
                 if (header.id === 'hit') {
-                  return ['any', store.whenRowData.length];
+                  return ['any', store.rowData.length];
                 }
                 return [header.field, ''];
               })
             );
 
             // Inserting the new row at the second-to-last position
-            newWhenRowData.splice(newWhenRowData.length - 1, 0, newRowData);
+            newRowData.splice(newRowData.length - 1, 0, newRowData);
           }
 
           return {
-            whenRowData: newWhenRowData,
+            rowData: newRowData,
             colDefs: newColDefs,
           };
         }),
@@ -740,8 +706,8 @@ export const useStore = create<zustandStoreInterface>()(
       handlePin: (id) =>
         set((store) => {
           const updatedColumnDefs: columnInterface[] = deepClone(store.colDefs);
-          const whenCol: children[] = updatedColumnDefs[1].children;
-          const thenCol: children[] = updatedColumnDefs[2].children;
+          const whenCol: decisionTableColumns[] = updatedColumnDefs[1].children;
+          const thenCol: decisionTableColumns[] = updatedColumnDefs[2].children;
 
           const whenColIndex = whenCol.findIndex((col: any) => col.id === id);
           const thenColIndex = thenCol.findIndex((col: any) => col.id === id);
@@ -793,24 +759,24 @@ export const useStore = create<zustandStoreInterface>()(
           const [newState, patches, inversePatches] = produceWithPatches(
             store,
             (draft) => {
-              const whenRowData = deepClone(store.whenRowData);
+              const rowData = deepClone(store.rowData);
 
               const duplicatedRow = {
-                ...whenRowData[id - 1],
-                any: store.whenRowData.length,
+                ...rowData[id - 1],
+                any: store.rowData.length,
               };
-              whenRowData.splice(whenRowData.length - 1, 0, duplicatedRow);
+              rowData.splice(rowData.length - 1, 0, duplicatedRow);
 
               const datatypesNew = store.rowDataType
                 .filter((value) => value.rowIndex === id - 1)
                 .map((item) => {
                   return {
                     key: item.key,
-                    rowIndex: store.whenRowData.length - 1,
+                    rowIndex: store.rowData.length - 1,
                     value: item.value,
                   };
                 });
-              draft.whenRowData = whenRowData;
+              draft.rowData = rowData;
               return draft;
             }
           );
@@ -831,7 +797,7 @@ export const useStore = create<zustandStoreInterface>()(
               const allrowdata = store.rowDataType.filter(
                 (value) => value.rowIndex !== id - 1
               );
-              draft.whenRowData = store.whenRowData.map((data) => {
+              draft.rowData = store.rowData.map((data) => {
                 if (data.any === id) {
                   return {
                     any: data.any,
@@ -861,9 +827,7 @@ export const useStore = create<zustandStoreInterface>()(
               const allrowdata = store.rowDataType.filter(
                 (value) => value.rowIndex !== id - 1
               );
-              draft.whenRowData = store.whenRowData.filter(
-                (data) => data.any !== id
-              );
+              draft.rowData = store.rowData.filter((data) => data.any !== id);
               draft.rowDataType = allrowdata;
               return draft;
             }
@@ -922,10 +886,10 @@ export const useStore = create<zustandStoreInterface>()(
           const [newState, patches, inversePatches] = produceWithPatches(
             store,
             (draft) => {
-              const updatedRowData = [...store.whenRowData];
+              const updatedRowData = [...store.rowData];
               const rowToUpdate = updatedRowData[rowIndex];
               rowToUpdate[colId] = value;
-              draft.whenRowData = updatedRowData;
+              draft.rowData = updatedRowData;
               return draft;
             }
           );
@@ -943,18 +907,18 @@ export const useStore = create<zustandStoreInterface>()(
           const [newState, patches, inversePatches] = produceWithPatches(
             store,
             (draft) => {
-              const newWhenRowData = [...store.whenRowData];
-              const newRowData = Object.fromEntries(
+              const newRowData = [...store.rowData];
+              const newRowDataCopy = Object.fromEntries(
                 whenColDeta.map((header: any, index: number) => {
                   if (header.id === 'hit') {
-                    return ['any', store.whenRowData.length];
+                    return ['any', store.rowData.length];
                   }
                   return [header.field, ''];
                 })
               );
               // Inserting the new row at the second-to-last position
-              newWhenRowData.splice(newWhenRowData.length - 1, 0, newRowData);
-              draft.whenRowData = newWhenRowData;
+              newRowData.splice(newRowData.length - 1, 0, newRowDataCopy);
+              draft.rowData = newRowData;
               return draft;
             }
           );

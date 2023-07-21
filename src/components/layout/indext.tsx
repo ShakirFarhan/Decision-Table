@@ -28,7 +28,7 @@ const DashBoardLayout: React.FC<CardProps> = ({
   downloadCSV,
   downloadExcel,
 }) => {
-  const { mode, setMode, undo, redo, past, index, history } = useStore(
+  const { mode, setMode, undo, redo, index, history } = useStore(
     (store) => store
   );
   const [collapsed, setCollapsed] = useState(true);
