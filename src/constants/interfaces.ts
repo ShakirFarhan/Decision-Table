@@ -42,9 +42,9 @@ export interface zustandStoreInterface {
   clearRule: (id: number) => void;
   clearColumn: (id: string) => void;
   setMode: (mode: 'light' | 'dark') => void;
-  addRowsByProps: (columns: any[], rows: any[]) => void;
+  addRowsByProps: (columns: Column[], rows: Row[]) => void;
   setGridRef: (ref: any) => void;
-  addCsvImportColumns: (columnHeaders: any[], columnRows: any[]) => void;
+  addCsvImportColumns: (columnHeaders: Column[], columnRows: Row[]) => void;
   //  handle what operation to perform on the column like delete,duplicate...
   deleteColumn: (id: string) => void;
   duplicateColumn: (id: string) => void;
@@ -54,6 +54,43 @@ export interface zustandStoreInterface {
   // duplicateColumn:(id:string)=>void
 }
 
+// Decision Table data types for column and rules
+export interface DecisionTableDataType<Column, rule> {
+  initialValues: {
+    rows: rule[];
+    columns: Column[];
+  };
+  callbackfunc?: Function;
+  mode?: 'light' | 'dark';
+}
+
+export interface Column {
+  name: string;
+  key: string;
+  isPinned?: boolean;
+  // type means the datatype of the column it can be number,string,date ...
+  type?: string;
+  description?: string;
+  defaultValue?: string;
+  expression?: string;
+  // parent means to which column group it belongs to eg: when or then
+  parent?: string;
+}
+// Row or Rule
+export interface Row {
+  key: string;
+  rowIndex: number;
+  value: cellValue;
+  columnName?: string;
+}
+export interface cellValue {
+  // cell datatype eg: between,isEven...
+  type: string;
+  value: {
+    firstval: string;
+    secondval: string;
+  };
+}
 export interface decisionTableColumns {
   // should be unique for very column
   id: string;
@@ -100,15 +137,9 @@ export interface columnInterface {
   // represents how the column header(when,then...) should look like, we can create a custom component to style the column header
   headerGroupComponent?: () => JSX.Element;
 }
-export interface rowType {
-  id?: number | string;
-  name?: string | number;
-  age?: number | string;
-  phone?: number | string;
-}
-export interface IProps {
-  cellValue: string;
-}
+
+// -------------------------
+
 export interface columnHeaderProps {
   label: string;
   children?: ReactNode;
@@ -120,51 +151,6 @@ export interface TypesOptionProps {
   id: string;
   type: string;
   column: string;
-}
-export interface cellValue {
-  type: string;
-  value: {
-    firstval: string;
-    secondval: string;
-  };
-}
-
-export interface Row {
-  key: string;
-  rowIndex: number;
-  value: cellValue;
-  // Add more properties as needed
-}
-
-export interface Column {
-  id?: string;
-  headerName?: string;
-  dataType?: string;
-  isPinned?: boolean;
-  // Add more properties as needed
-}
-
-export interface rowsAndCols<Columns, Rows> {
-  initialValues: {
-    rows: Rows[];
-    columns: Columns[];
-  };
-  callbackfunc?: Function;
-}
-export interface customCellProps {
-  collCellValue: string;
-  columnId: string;
-  colDataType: string;
-  rowIndex: number;
-  button?: string;
-  api: any;
-  id?: string;
-}
-
-export interface anyColCellProps {
-  cellValue: string;
-  id: string;
-  button: string;
 }
 
 export interface buttonHeaderProps {
@@ -182,4 +168,33 @@ interface pactches_inversePatches {
 export interface history {
   patches: pactches_inversePatches;
   inversePatches: pactches_inversePatches;
+}
+//
+
+// Cell Related Interfaces
+export interface customCellProps {
+  collCellValue: string;
+  columnId: string;
+  colDataType: string;
+  rowIndex: number;
+  button?: string;
+  api: any;
+  id?: string;
+}
+
+export interface anyColCellProps {
+  cellValue: string;
+  id: string;
+  button: string;
+}
+
+// --------------------------
+export interface rowType {
+  id?: number | string;
+  name?: string | number;
+  age?: number | string;
+  phone?: number | string;
+}
+export interface IProps {
+  cellValue: string;
 }

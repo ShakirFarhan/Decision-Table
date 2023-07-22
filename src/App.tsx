@@ -10,8 +10,26 @@ function App() {
   return (
     <Table
       initialValues={{
-        rows: [],
-        columns: [],
+        rows: [
+          // {
+          //   columnKey: '1',
+          //   columnName: 'Id',
+          //   value: {
+          //     firstValue: 'hello',
+          //     secondValue: 'shss',
+          //   },
+          // },
+        ],
+        columns: [
+          {
+            name: 'Id',
+            key: 'susbsb56sgsbsh',
+          },
+          {
+            name: 'Phone Number',
+            key: 'shgs6sysbs99nns',
+          },
+        ],
       }}
       callbackfunc={handleInputValues}
     />

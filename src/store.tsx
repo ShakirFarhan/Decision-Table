@@ -238,27 +238,24 @@ export const useStore = create<zustandStoreInterface>()(
         }),
       addRowsByProps: (columns, rows) =>
         set((store) => {
-          const [newState, patches, inversePatches] = produceWithPatches(
-            store,
-            (draft) => {
-              draft.colDefs = [];
-            }
-          );
           const newColDefs: any = deepClone(store.colDefs);
           newColDefs[1].children = [];
           columns.map((header) => {
-            const id = uuid();
+            // const id = uuid();
+            const headerName = header.name;
+            const headerType = header.type ? header.type : 'None';
+            const id = header.key;
             const updated = {
               id: id,
-              headerName: header,
+              headerName: headerName,
               field: id,
-              dataType: 'None',
-              sortable: true,
+              dataType: headerType,
+
               isPinned: false,
               headerComponent: () => (
                 <CustomHeaderCell
-                  label={header}
-                  dataType="None"
+                  label={headerName}
+                  dataType={headerType}
                   id={id}
                   column="when"
                 />
@@ -266,28 +263,31 @@ export const useStore = create<zustandStoreInterface>()(
               cellRendererFramework: CustomCell,
               cellRendererParams: (params: any) => ({
                 cellValue: params.value,
+                columnId: params.column.colId,
+                colDataType: params?.column?.colDef?.dataType,
+                rowIndex: params.rowIndex,
+                button: params.data.button,
               }),
               headerClass: 'column-header',
             };
 
             newColDefs[1].children.push(updated);
-            return null;
           });
           const newRowData = [...store.rowData];
 
-          for (let i = 0; i < rows.length; i++) {
-            const newRowData = Object.fromEntries(
-              newColDefs.map((header: any, index: number) => {
-                if (header.id === 'hit') {
-                  return ['any', store.rowData.length];
-                }
-                return [header.field, ''];
-              })
-            );
+          // for (let i = 0; i < rows.length; i++) {
+          //   const newRowData = Object.fromEntries(
+          //     newColDefs.map((header: any, index: number) => {
+          //       if (header.id === 'hit') {
+          //         return ['any', store.rowData.length];
+          //       }
+          //       return [header.field, ''];
+          //     })
+          //   );
 
-            // Inserting the new row at the second-to-last position
-            newRowData.splice(newRowData.length - 1, 0, newRowData);
-          }
+          //   // Inserting the new row at the second-to-last position
+          //   newRowData?.splice(newRowData.length - 1, 0, newRowData);
+          // }
 
           return {
             rowData: newRowData,
@@ -473,25 +473,33 @@ export const useStore = create<zustandStoreInterface>()(
       addCsvImportColumns: (columnHeaders, columnRows) =>
         set((store) => {
           const newColDefs: any = deepClone(store.colDefs);
+          const uniqId = uuid();
           columnHeaders.map((data) => {
+            const headerName = data.name;
+            const headerType = data.type ? data.type : 'None';
+            const id = data.key ? data.key : uniqId;
             const updated = {
-              id: data.id,
-              headerName: data.headerName,
-              field: data.id,
-              dataType: data.dataType,
+              id: id,
+              headerName: headerName,
+              field: id,
+              dataType: headerType,
               sortable: true,
               isPinned: data.isPinned,
               headerComponent: () => (
                 <CustomHeaderCell
-                  label={data.headerName}
-                  dataType={data.dataType}
-                  id={data.id}
+                  label={headerName}
+                  dataType={headerType}
+                  id={id}
                   column="when"
                 />
               ),
               cellRendererFramework: CustomCell,
               cellRendererParams: (params: any) => ({
                 cellValue: params.value,
+                columnId: params.column.colId,
+                colDataType: params?.column?.colDef?.dataType,
+                rowIndex: params.rowIndex,
+                button: params.data.button,
               }),
               headerClass: 'column-header',
             };
