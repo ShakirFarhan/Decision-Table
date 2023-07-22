@@ -5,7 +5,21 @@ import { Popover } from 'antd';
 import { useStore } from '../../store';
 import { colOptionsProps } from '../../constants/interfaces';
 function ColOptions({ id }: colOptionsProps) {
-  const { handleOptions } = useStore((store) => store);
+  const { deleteColumn, duplicateColumn, sortAToZ, sortZToA } = useStore(
+    (store) => store
+  );
+  const handleOptions = (id: string, typeOfOperation: string) => {
+    if (typeOfOperation === 'remove') {
+      deleteColumn(id);
+    } else if (typeOfOperation === 'duplicate') {
+      duplicateColumn(id);
+    } else if (typeOfOperation === 'copy') {
+    } else if (typeOfOperation === 'a-z') {
+      sortAToZ(id);
+    } else if (typeOfOperation === 'z-a') {
+      sortZToA(id);
+    }
+  };
   return (
     <>
       <Popover

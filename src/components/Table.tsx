@@ -7,9 +7,15 @@ import { AgGridReact } from 'ag-grid-react';
 // import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 // import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
-import { rowsAndCols, Column, Row } from '../constants/interfaces';
+import {
+  rowsAndCols,
+  Column,
+  Row,
+  columnInterface,
+} from '../constants/interfaces';
+import CustomCell from './Cell/CustomCell';
 const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
-  const { rowData, mode, rowDataType, editRowData, colDefs, addRowsByProps } =
+  const { rowData, mode, rowDataType, colDefs, addRowsByProps, setColDefs } =
     useStore((store) => store);
   const gridRef: React.MutableRefObject<any> = useRef(null);
 

@@ -18,8 +18,6 @@ export interface zustandStoreInterface {
   mode: 'light' | 'dark';
   undo: () => void;
   redo: () => void;
-  //  handle what operation to perform on the column like delete,duplicate...
-  handleOptions: (id: string, typeOfOperation: string) => void;
   // Use to edit column data of individual column
   handleEditCol: (
     id: string,
@@ -47,6 +45,13 @@ export interface zustandStoreInterface {
   addRowsByProps: (columns: any[], rows: any[]) => void;
   setGridRef: (ref: any) => void;
   addCsvImportColumns: (columnHeaders: any[], columnRows: any[]) => void;
+  //  handle what operation to perform on the column like delete,duplicate...
+  deleteColumn: (id: string) => void;
+  duplicateColumn: (id: string) => void;
+  sortAToZ: (id: string) => void;
+  sortZToA: (id: string) => void;
+  setColDefs: (colDefs: columnInterface[]) => void;
+  // duplicateColumn:(id:string)=>void
 }
 
 export interface decisionTableColumns {

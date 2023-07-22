@@ -1,0 +1,87 @@
+DecisionTable 
+
+columns: 
+    each column has: 
+        name 
+        key  ?
+        pinned/unpinned ?
+        type 
+        description ?
+        order/position ? 
+rules:
+    each rule has:
+        conditions 
+            each condition has:
+                correspondingColumnKey ?
+                conditionType
+                parameters
+                description ?
+        thenValues
+            each value has:
+                columnName
+                columnKey ?
+                type 
+                value
+
+// ----------
+
+
+// columns:
+//     each column has:
+//         name
+//         key  ?
+//         pinned/unpinned ?
+//         type
+//         description ?
+//         order/position ?
+// rules:
+//     each rule has:
+//         conditions
+//             each condition has:
+//                 correspondingColumnKey ?
+//                 conditionType
+//                 parameters
+//                 description ?
+//         thenValues
+//             each value has:
+//                 columnName
+//                 columnKey ?
+//                 type
+//                 value
+
+export interface DTColumn {
+  name: string;
+  key: string;
+  dataType: "string" | "number" | "boolean" | "date";
+  columnType: "when" | "then";
+}
+
+export type ConditionType = "is-between" | "equals" | "not-equals";
+export interface DTCondition {
+  columnKey: string;
+  conditionType: ConditionType;
+  parameters: [{
+    name: string;
+    type: "string" | "number";
+    defaultVal?: string | number;
+  }];
+  description?: string;
+}
+
+export interface DTRule {
+  conditions: DTCondition[];
+  thenColumnValues: DTThenColumnValue[];
+}
+export interface DecisionTableData {
+  columns: DTColumn[];
+  rules: DTRule[];
+}
+
+<DecisionTable initialValue={DecisionTableData} onChange={(data: DecisionTableData) => void}
+
+function convertCSVToDecisionTableData (
+  csv: File | string
+): DecisionTableData { 
+  // get column name and type from CSV, store them as when columns
+  // rules: []
+}
