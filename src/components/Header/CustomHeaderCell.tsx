@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsPinAngleFill } from 'react-icons/bs';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { columnHeaderProps } from '../../constants/interfaces';
@@ -35,9 +35,11 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   id,
   column,
 }) => {
+  const { handlePin, addWhenColumnDefs } = useStore((store) => store);
   const [pinned, setPinned] = useState(true);
   const [hover, setHover] = useState(false);
-  const { handlePin } = useStore((store) => store);
+  const [modelOpen, setModelOpen] = useState(false);
+
   const handlePinning = () => {
     setPinned((data) => {
       return !data;
@@ -52,23 +54,42 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
   const handleMouseLeave = () => {
     setHover(false);
   };
-
+  const handleClick = () => {
+    if (label !== '' || label) {
+      setModelOpen((prev) => !prev);
+    }
+    return;
+  };
+  useEffect(() => {
+    const handleopen = () => {
+      if (column === 'when' && (label === '' || !label)) {
+        setModelOpen(true);
+      } else {
+        setModelOpen(false);
+      }
+    };
+    handleopen();
+  }, [addWhenColumnDefs]);
   if (column === 'when' || column === 'then' || column === 'annotations') {
     if (label !== 'annotations') {
       return (
         <>
           <div
-            className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[var(--primary-border)] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[var(--secondary-color)] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[var(--secondary-bg)]"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[var(--primary-border)] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[var(--secondary-color)] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[var(--secondary-bg)] custom-header"
+            // onMouseEnter={handleMouseEnter}
+            // onMouseLeave={handleMouseLeave}
           >
             <Popover
               placement="bottomLeft"
               overlayClassName="custom-popover"
               content={<TypesOptions id={id} type={dataType} column={label} />}
               trigger="click"
+              open={modelOpen}
             >
-              <div className="flex flex-col items-start justify-start gap-y-2 cursor-pointer w-full">
+              <div
+                onClick={handleClick}
+                className="flex flex-col items-start justify-start gap-y-2 cursor-pointer w-full"
+              >
                 {!label || label === '' ? (
                   <span className="font-normal text-[13px] text-[var(--primary-color)]">
                     {column === 'when' ? 'Input' : 'Output'}
@@ -86,22 +107,21 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
                 {children}
               </div>
             </Popover>
-
-            {hover && label && (
-              <div className="absolute top-[6px] right-[5px] flex items-center gap-x-[7.5px] z-[99999]">
-                <RxHamburgerMenu className="h-[17px] w-[14px]" />
-                <BsPinAngleFill
-                  onClick={handlePinning}
-                  className={
-                    pinned
-                      ? 'h-[13.5px] w-[15px] fill-[grey]'
-                      : 'h-[13.5px] w-[15px] fill-[var(--secondary-color)]'
-                  }
-                />
-                {id !== 'id' ? <ColOptions id={id} /> : null}
-              </div>
-            )}
           </div>
+          {hover && label && (
+            <div className="absolute top-[6px] right-[5px] flex items-center gap-x-[7.5px]">
+              <RxHamburgerMenu className="h-[17px] w-[14px]" />
+              <BsPinAngleFill
+                onClick={handlePinning}
+                className={
+                  pinned
+                    ? 'h-[13.5px] w-[15px] fill-[grey]'
+                    : 'h-[13.5px] w-[15px] fill-[var(--secondary-color)]'
+                }
+              />
+              {id !== 'id' ? <ColOptions id={id} /> : null}
+            </div>
+          )}
         </>
       );
     }

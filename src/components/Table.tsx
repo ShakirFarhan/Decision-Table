@@ -44,8 +44,8 @@ const Table: React.FC<DecisionTableDataType<Column, Row>> = (props) => {
     return params.rowNode.data.fullWidth;
   }, []);
   useEffect(() => {
-    document.body.className = mode + '-theme';
-  }, [mode]);
+    document.body.className = props.mode + '-theme';
+  }, [props.mode]);
   useEffect(() => {
     const whenCol = colDefs[1].children.map((item, index) => {
       return {

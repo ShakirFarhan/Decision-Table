@@ -7,6 +7,7 @@ import { useStore } from '../../store';
 const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
   const [selectedOption, setSelectedOption] = useState(type || 'None'); // selected column datatype
   const [columnName, setColumnName] = useState(column);
+  const [warning, setWarning] = useState(false);
   const { handleEditCol, clearColumn } = useStore((store) => store);
   const handleSelectedOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(e.target.value);
@@ -16,8 +17,12 @@ const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
   };
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
-    handleEditCol(id, columnName, selectedOption);
-    clearColumn(id);
+    if (selectedOption.toLowerCase() !== 'none') {
+      handleEditCol(id, columnName, selectedOption);
+      clearColumn(id);
+      setWarning(false);
+    }
+    setWarning(true);
   };
 
   return (
@@ -32,10 +37,19 @@ const TypesOptions: React.FC<TypesOptionProps> = ({ id, type, column }) => {
           onChange={handleColumnName}
           value={columnName}
           placeholder="Column Name"
-          className="px-[10px] py-[4px] border-[1.7px] border-[var(--primary-border)] bg-[var(--primary-bg)] text-[var(--primary-color)] col-input outline-0"
+          className={`px-[10px] py-[4px] border-[1.7px] bg-[var(--primary-bg)] text-[var(--primary-color)] col-input outline-0 ${
+            warning && (columnName === ' ' || !columnName)
+              ? 'border-[#FF0000] border-[1px]'
+              : ''
+          }`}
         />
         <select
-          className="px-[10px] py-[4px] border-[1.7px] border-[var(--primary-border)] text-[var(--primary-color)] bg-[var(--primary-bg)]"
+          className={`px-[10px] py-[4px] border-[1.7px] border-[var(--primary-border)] text-[var(--primary-color)] bg-[var(--primary-bg)] ${
+            warning &&
+            (selectedOption === ' ' || selectedOption.toLowerCase() === 'none')
+              ? 'border-[#FF0000] border-[1px]'
+              : ''
+          }`}
           value={selectedOption}
           onChange={handleSelectedOptions}
         >

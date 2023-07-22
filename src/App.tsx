@@ -32,6 +32,7 @@ function App() {
         ],
       }}
       callbackfunc={handleInputValues}
+      mode="light"
     />
   );
 }
