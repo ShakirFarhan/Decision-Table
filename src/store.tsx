@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import {
   Row,
   decisionTableColumns,
@@ -32,6 +33,7 @@ enablePatches();
  * Also see https://techinscribed.com/implementing-undo-redo-functionality-in-redux-using-immer/
  */
 export const useStore = create<zustandStoreInterface>()(
+  // persist(
   devtools(
     immer((set, get, api) => ({
       history: [],
@@ -77,6 +79,7 @@ export const useStore = create<zustandStoreInterface>()(
           return state;
         });
       },
+
       rowDataType: [],
       gridRef: '',
       colDefs: [
@@ -219,6 +222,7 @@ export const useStore = create<zustandStoreInterface>()(
       ],
       thenColData: [],
       mode: 'light',
+
       setGridRef: (ref) =>
         set((store) => ({
           gridRef: ref,
@@ -234,27 +238,24 @@ export const useStore = create<zustandStoreInterface>()(
         }),
       addRowsByProps: (columns, rows) =>
         set((store) => {
-          const [newState, patches, inversePatches] = produceWithPatches(
-            store,
-            (draft) => {
-              draft.colDefs = [];
-            }
-          );
           const newColDefs: any = deepClone(store.colDefs);
           newColDefs[1].children = [];
           columns.map((header) => {
-            const id = uuid();
+            // const id = uuid();
+            const headerName = header.name;
+            const headerType = header.type ? header.type : 'None';
+            const id = header.key;
             const updated = {
               id: id,
-              headerName: header,
+              headerName: headerName,
               field: id,
-              dataType: 'None',
-              sortable: true,
+              dataType: headerType,
+
               isPinned: false,
               headerComponent: () => (
                 <CustomHeaderCell
-                  label={header}
-                  dataType="None"
+                  label={headerName}
+                  dataType={headerType}
                   id={id}
                   column="when"
                 />
@@ -262,28 +263,31 @@ export const useStore = create<zustandStoreInterface>()(
               cellRendererFramework: CustomCell,
               cellRendererParams: (params: any) => ({
                 cellValue: params.value,
+                columnId: params.column.colId,
+                colDataType: params?.column?.colDef?.dataType,
+                rowIndex: params.rowIndex,
+                button: params.data.button,
               }),
               headerClass: 'column-header',
             };
 
             newColDefs[1].children.push(updated);
-            return null;
           });
           const newRowData = [...store.rowData];
 
-          for (let i = 0; i < rows.length; i++) {
-            const newRowData = Object.fromEntries(
-              newColDefs.map((header: any, index: number) => {
-                if (header.id === 'hit') {
-                  return ['any', store.rowData.length];
-                }
-                return [header.field, ''];
-              })
-            );
+          // for (let i = 0; i < rows.length; i++) {
+          //   const newRowData = Object.fromEntries(
+          //     newColDefs.map((header: any, index: number) => {
+          //       if (header.id === 'hit') {
+          //         return ['any', store.rowData.length];
+          //       }
+          //       return [header.field, ''];
+          //     })
+          //   );
 
-            // Inserting the new row at the second-to-last position
-            newRowData.splice(newRowData.length - 1, 0, newRowData);
-          }
+          //   // Inserting the new row at the second-to-last position
+          //   newRowData?.splice(newRowData.length - 1, 0, newRowData);
+          // }
 
           return {
             rowData: newRowData,
@@ -335,53 +339,6 @@ export const useStore = create<zustandStoreInterface>()(
             // currentState: newState,
           }; // Return the new state instead of creating a shallow copy
         }),
-      // addWhenColumnDefs: () =>
-      //   set((store) => {
-      //     const newIndex = uuid();
-      //     const newColDefs: any[] = deepClone(store.colDefs); // Creating a deep copy of store.colDefs
-
-      //     const updated = {
-      //       id: newIndex,
-      //       headerName: '',
-      //       field: newIndex,
-      //       dataType: '',
-
-      //       isPinned: false,
-      //       headerComponent: () => (
-      //         <CustomHeaderCell
-      //           label=""
-      //           dataType=""
-      //           id={newIndex}
-      //           column="when"
-      //         />
-      //       ),
-      //       cellRendererFramework: CustomCell,
-      //       cellRendererParams: (params: any) => ({
-      //         cellValue: params.value,
-      //         columnId: params.column.colId,
-      //         colDataType: params?.column?.colDef?.dataType,
-      //         rowIndex: params.rowIndex,
-      //         button: params.data.button,
-      //       }),
-      //       headerClass: 'column-header',
-      //     };
-      //     newColDefs[1].children.push(updated);
-      //     const [newState, patches, inversePatches] = produceWithPatches(
-      //       store,
-      //       (draft) => {
-      //         console.log('Patches:');
-      //         console.log(patches);
-      //         console.log('Inverse Patches:');
-      //         console.log(inversePatches);
-      //       }
-      //     );
-      //     return {
-      //       // ...store,
-      //       past: [...store.past, deepClone(store)], // Saving the previous state to past
-      //       future: [],
-      //       colDefs: newColDefs,
-      //     };
-      //   }),
       // Function used to add columns in then block
       // In this function, the first thing we do is add a new column with an unique id common for id and field, and rest of the properties as empty.
       // After that, the handleEditCol function will be activated when the user clicks on that column once more to edit the column header information.
@@ -431,7 +388,12 @@ export const useStore = create<zustandStoreInterface>()(
             index: store.index + 1,
           };
         }),
-
+      setColDefs: (colDefs) =>
+        set((store) => {
+          return {
+            colDefs: colDefs,
+          };
+        }),
       // Function used when we want to edit the details of column header
       handleEditCol: (colId, newHeaderName, newTypeName) =>
         set((store) => {
@@ -511,25 +473,33 @@ export const useStore = create<zustandStoreInterface>()(
       addCsvImportColumns: (columnHeaders, columnRows) =>
         set((store) => {
           const newColDefs: any = deepClone(store.colDefs);
+          const uniqId = uuid();
           columnHeaders.map((data) => {
+            const headerName = data.name;
+            const headerType = data.type ? data.type : 'None';
+            const id = data.key ? data.key : uniqId;
             const updated = {
-              id: data.id,
-              headerName: data.headerName,
-              field: data.id,
-              dataType: data.dataType,
+              id: id,
+              headerName: headerName,
+              field: id,
+              dataType: headerType,
               sortable: true,
               isPinned: data.isPinned,
               headerComponent: () => (
                 <CustomHeaderCell
-                  label={data.headerName}
-                  dataType={data.dataType}
-                  id={data.id}
+                  label={headerName}
+                  dataType={headerType}
+                  id={id}
                   column="when"
                 />
               ),
               cellRendererFramework: CustomCell,
               cellRendererParams: (params: any) => ({
                 cellValue: params.value,
+                columnId: params.column.colId,
+                colDataType: params?.column?.colDef?.dataType,
+                rowIndex: params.rowIndex,
+                button: params.data.button,
               }),
               headerClass: 'column-header',
             };
@@ -558,149 +528,148 @@ export const useStore = create<zustandStoreInterface>()(
             colDefs: newColDefs,
           };
         }),
-
-      handleOptions: (id, typeOfOperation) =>
+      deleteColumn: (id) =>
         set((store) => {
-          if (typeOfOperation.includes('remove')) {
-            const [newState, patches, inversePatches] = produceWithPatches(
-              store,
-              (draft) => {
-                const updatedCols: any = deepClone(store.colDefs);
-                let whenCol = updatedCols[1].children;
-                let thenCol = updatedCols[2].children;
-                const whenColIndex = whenCol.findIndex(
-                  (col: any) => col.id === id
-                );
-                const thenColIndex = thenCol.findIndex(
-                  (col: any) => col.id === id
-                );
+          const [newState, patches, inversePatches] = produceWithPatches(
+            store,
+            (draft) => {
+              const updatedCols: any = deepClone(store.colDefs);
+              let whenCol = updatedCols[1].children;
+              let thenCol = updatedCols[2].children;
+              const whenColIndex = whenCol.findIndex(
+                (col: any) => col.id === id
+              );
+              const thenColIndex = thenCol.findIndex(
+                (col: any) => col.id === id
+              );
 
-                if (whenColIndex !== -1) {
-                  if (whenColIndex !== 0) {
+              if (whenColIndex !== -1) {
+                if (whenColIndex !== 0) {
+                  whenCol = whenCol.filter((col: any) => col.id !== id);
+                } else {
+                  if (whenCol.length > 1) {
                     whenCol = whenCol.filter((col: any) => col.id !== id);
-                  } else {
-                    if (whenCol.length > 1) {
-                      whenCol = whenCol.filter((col: any) => col.id !== id);
-                    }
                   }
                 }
+              }
 
-                if (thenColIndex !== -1) {
-                  if (thenColIndex !== 0) {
+              if (thenColIndex !== -1) {
+                if (thenColIndex !== 0) {
+                  thenCol = thenCol.filter((col: any) => col.id !== id);
+                } else {
+                  if (thenCol.length > 1) {
                     thenCol = thenCol.filter((col: any) => col.id !== id);
-                  } else {
-                    if (thenCol.length > 1) {
-                      thenCol = thenCol.filter((col: any) => col.id !== id);
-                    }
                   }
                 }
-
-                updatedCols[1].children = whenCol;
-                updatedCols[2].children = thenCol;
-                draft.colDefs = updatedCols;
-                return draft;
               }
-            );
-            const newHistory = store.history.slice(0, store.index + 1);
-            newHistory.push({ patches, inversePatches });
-            return {
-              ...newState,
-              history: newHistory,
-              index: store.index + 1,
-            };
-          } else if (typeOfOperation.includes('a-z')) {
-            const columnState =
-              store.gridRef.current?.columnApi?.getColumnState();
 
-            const sortedColumns = columnState?.map((column: any) => {
-              if (column.colId === id) {
-                return { ...column, sort: 'asc' }; // Apply ascending sorting to the specified column
-              } else {
-                return { ...column, sort: null }; // Remove sorting from other columns
+              updatedCols[1].children = whenCol;
+              updatedCols[2].children = thenCol;
+              draft.colDefs = updatedCols;
+              return draft;
+            }
+          );
+          const newHistory = store.history.slice(0, store.index + 1);
+          newHistory.push({ patches, inversePatches });
+          return {
+            ...newState,
+            history: newHistory,
+            index: store.index + 1,
+          };
+        }),
+      duplicateColumn: (id) =>
+        set((store) => {
+          const [newState, patches, inversePatches] = produceWithPatches(
+            store,
+            (draft) => {
+              // const updatedColDefs: any = [...prevData];
+              const updatedColDefs = deepClone(store.colDefs);
+              const whenCol = updatedColDefs[1].children;
+              const thenCol = updatedColDefs[2].children;
+              const whenColIndex = whenCol.findIndex(
+                (col: any) => col.id === id
+              );
+              const thenColIndex = thenCol.findIndex(
+                (col: any) => col.id === id
+              );
+
+              if (whenColIndex !== -1) {
+                const newid = uuid();
+                const existingHeaderComponent =
+                  whenCol[whenColIndex].headerComponent;
+
+                const selectedColumn = {
+                  ...whenCol[whenColIndex],
+                  id: newid,
+                  field: newid,
+                  headerComponent: (props: any) => (
+                    <CustomHeaderCell
+                      {...existingHeaderComponent().props} // Pass the previous props
+                      id={newid}
+                    />
+                  ),
+                };
+                updatedColDefs[1].children.push(selectedColumn);
               }
-            });
+              if (thenColIndex !== -1) {
+                const newid = uuid();
+                const existingHeaderComponent =
+                  thenCol[thenColIndex].headerComponent;
 
-            store.gridRef.current?.columnApi?.applyColumnState({
-              state: sortedColumns,
-            });
-            return {
-              colDefs: { ...store.colDefs },
-            };
-          } else if (typeOfOperation.includes('z-a')) {
-            store.gridRef.current?.columnApi?.applyColumnState({
-              state: [{ colId: id, sort: 'desc' }],
-              defaultState: { sort: null },
-            });
-            return {
-              colDefs: { ...store.colDefs },
-            };
-          } else if (typeOfOperation.includes('duplicate')) {
-            const [newState, patches, inversePatches] = produceWithPatches(
-              store,
-              (draft) => {
-                // const updatedColDefs: any = [...prevData];
-                const updatedColDefs = deepClone(store.colDefs);
-                const whenCol = updatedColDefs[1].children;
-                const thenCol = updatedColDefs[2].children;
-                const whenColIndex = whenCol.findIndex(
-                  (col: any) => col.id === id
-                );
-                const thenColIndex = thenCol.findIndex(
-                  (col: any) => col.id === id
-                );
-
-                if (whenColIndex !== -1) {
-                  const newid = uuid();
-                  const existingHeaderComponent =
-                    whenCol[whenColIndex].headerComponent;
-
-                  const selectedColumn = {
-                    ...whenCol[whenColIndex],
-                    id: newid,
-                    field: newid,
-                    headerComponent: (props: any) => (
-                      <CustomHeaderCell
-                        {...existingHeaderComponent().props} // Pass the previous props
-                        id={newid}
-                      />
-                    ),
-                  };
-                  updatedColDefs[1].children.push(selectedColumn);
-                }
-                if (thenColIndex !== -1) {
-                  const newid = uuid();
-                  const existingHeaderComponent =
-                    thenCol[thenColIndex].headerComponent;
-
-                  const selectedColumn = {
-                    ...thenCol[thenColIndex],
-                    id: newid,
-                    field: newid,
-                    headerComponent: (props: any) => (
-                      <CustomHeaderCell
-                        {...existingHeaderComponent().props} // Pass the previous props
-                        id={newid}
-                      />
-                    ),
-                  };
-                  updatedColDefs[2].children.push(selectedColumn);
-                }
-                draft.colDefs = updatedColDefs;
-                return draft;
+                const selectedColumn = {
+                  ...thenCol[thenColIndex],
+                  id: newid,
+                  field: newid,
+                  headerComponent: (props: any) => (
+                    <CustomHeaderCell
+                      {...existingHeaderComponent().props} // Pass the previous props
+                      id={newid}
+                    />
+                  ),
+                };
+                updatedColDefs[2].children.push(selectedColumn);
               }
-            );
-            const newHistory = store.history.slice(0, store.index + 1);
-            newHistory.push({ patches, inversePatches });
-            return {
-              ...newState,
-              history: newHistory,
-              index: store.index + 1,
-            };
-          } else {
-            return {
-              colDefs: store.colDefs,
-            };
-          }
+              draft.colDefs = updatedColDefs;
+              return draft;
+            }
+          );
+          const newHistory = store.history.slice(0, store.index + 1);
+          newHistory.push({ patches, inversePatches });
+          return {
+            ...newState,
+            history: newHistory,
+            index: store.index + 1,
+          };
+        }),
+      sortAToZ: (id) =>
+        set((store) => {
+          const columnState =
+            store.gridRef.current?.columnApi?.getColumnState();
+
+          const sortedColumns = columnState?.map((column: any) => {
+            if (column.colId === id) {
+              return { ...column, sort: 'asc' }; // Apply ascending sorting to the specified column
+            } else {
+              return { ...column, sort: null }; // Remove sorting from other columns
+            }
+          });
+
+          store.gridRef.current?.columnApi?.applyColumnState({
+            state: sortedColumns,
+          });
+          return {
+            colDefs: { ...store.colDefs },
+          };
+        }),
+      sortZToA: (id) =>
+        set((store) => {
+          store.gridRef.current?.columnApi?.applyColumnState({
+            state: [{ colId: id, sort: 'desc' }],
+            defaultState: { sort: null },
+          });
+          return {
+            colDefs: { ...store.colDefs },
+          };
         }),
       // function used to pin a column
       handlePin: (id) =>
@@ -932,4 +901,14 @@ export const useStore = create<zustandStoreInterface>()(
         }),
     }))
   )
+  // {
+  //   name: 'Decision',
+  //   // storage: createJSONStorage(() => sessionStorage),
+  //   partialize: (state) => {
+  //     return {
+  //       colDefs: state.colDefs,
+  //     };
+  //   },
+  // }
+  // )
 );

@@ -7,10 +7,11 @@ import { AgGridReact } from 'ag-grid-react';
 // import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 // import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
-import { rowsAndCols, Column, Row } from '../constants/interfaces';
-const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
-  const { rowData, mode, rowDataType, editRowData, colDefs, addRowsByProps } =
-    useStore((store) => store);
+import { DecisionTableDataType, Row, Column } from '../constants/interfaces';
+const Table: React.FC<DecisionTableDataType<Column, Row>> = (props) => {
+  const { rowData, mode, rowDataType, colDefs, addRowsByProps } = useStore(
+    (store) => store
+  );
   const gridRef: React.MutableRefObject<any> = useRef(null);
 
   //default options for each column, For the column, it has some predefined properties related to their behaviour.
@@ -42,61 +43,29 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
   const isFullWidthRow = useCallback((params: any) => {
     return params.rowNode.data.fullWidth;
   }, []);
-
-  const gridOptions = {
-    // other grid options...
-    suppressDragLeaveHidesColumns: true,
-  };
   useEffect(() => {
-    document.body.className = mode + '-theme';
-  }, [mode]);
-  // using this to stop re-render of this below use effect
-
-  //  converts the data available in the table to excel and then it downloads it
-  // const onBtExport = useCallback(() => {
-  //   gridRef.current.api.exportDataAsExcel({
-  //     fileName: 'exported_table.xlsx',
-  //     processCellCallback: (params: any) => {
-  //       if (params.value && typeof params.value === 'object') {
-  //         return params.value.value; // for type params.value.type
-  //       }
-  //       return params.value;
-  //     },
-  //   });
-  // }, []);
-
-  // const csvDownload = useCallback(() => {
-  //   gridRef.current.api.exportDataAsCsv({
-  //     fileName: 'exported_table.csv',
-  //     processCellCallback: (params: any) => {
-  //       if (params.value && typeof params.value === 'object') {
-  //         return params.value.value; // for type params.value.type
-  //       }
-  //       return params.value;
-  //     },
-  //   });
-  // }, []);
-
+    document.body.className = props.mode + '-theme';
+  }, [props.mode]);
   useEffect(() => {
     const whenCol = colDefs[1].children.map((item, index) => {
       return {
-        id: item.id,
-        name: item.headerName,
+        key: item.id,
+        name: item.headerName ? item.headerName : '',
         type: item.dataType,
         isPinned: item.isPinned,
       };
     });
     const thenCol = colDefs[2].children.map((item, index) => {
       return {
-        id: item.id,
-        name: item.headerName,
+        key: item.id,
+        name: item.headerName ? item.headerName : '',
         type: item.dataType,
         isPinned: item.isPinned,
       };
     });
     const allCols = [...whenCol, ...thenCol];
 
-    const newData: rowsAndCols<Column, Row> = {
+    const newData: DecisionTableDataType<Column, Row> = {
       initialValues: {
         rows: rowDataType,
         columns: allCols,
@@ -116,7 +85,6 @@ const Table: React.FC<rowsAndCols<Column, Row>> = (props) => {
               columnDefs={colDefs}
               defaultColDef={defaultColDef}
               className={`ag-theme-alpine`}
-              gridOptions={gridOptions}
               // onCellValueChanged={handleCellValueChanged} - property is used to specify a callback function that will be triggered when the value of a cell in the data grid or table is changed.
               rowDragManaged={true}
               animateRows={true}
