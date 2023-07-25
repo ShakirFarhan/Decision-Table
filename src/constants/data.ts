@@ -93,9 +93,9 @@ export const headerTypes = [
     type: 'String',
     options: [
       { id: 'any', value: 'Any', regex: '' },
-      { id: 'capital', value: 'Capital', regex: '^[A-Z]+$' },
-      { id: 'small', value: 'Small', regex: '^[a-z]+$' },
-      { id: 'alphanumeric', value: 'Alpha Numeric', regex: '^[A-Za-z0-9]+$' },
+      { id: 'capital', value: 'isCapital', regex: '^[A-Z]+$' },
+      { id: 'small', value: 'isSmall', regex: '^[a-z]+$' },
+      { id: 'alphanumeric', value: 'isAlphaNumeric', regex: '^[A-Za-z0-9]+$' },
     ],
   },
   {
@@ -110,7 +110,7 @@ export const headerTypes = [
     id: 4,
     type: 'Number',
     options: [
-      { id: 'equal', value: 'Equal', regex: '' },
+      { id: 'equal', value: 'isEqual', regex: '' },
       { id: 'doesnotequal', value: 'Does not equal', regex: '' },
       { id: 'greaterthan', value: 'Greater than', regex: '' },
       { id: 'lessthan', value: 'Less than', regex: '' },

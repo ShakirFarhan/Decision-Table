@@ -8,6 +8,8 @@ import TypesOptions from './TypesOptions';
 import { hitRatioOptions } from '../../constants/data';
 import { Popover } from 'antd';
 import '../css/customCell.scss';
+import '../css/common.scss';
+
 import { useStore } from '../../store';
 const AnyCol = () => {
   return (
@@ -37,7 +39,6 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
 }) => {
   const { handlePin, addWhenColumnDefs } = useStore((store) => store);
   const [pinned, setPinned] = useState(true);
-  const [hover, setHover] = useState(false);
   const [modelOpen, setModelOpen] = useState(false);
 
   const handlePinning = () => {
@@ -47,13 +48,6 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
     handlePin(id);
   };
 
-  const handleMouseEnter = () => {
-    setHover(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHover(false);
-  };
   const handleClick = () => {
     if (label !== '' || label) {
       setModelOpen((prev) => !prev);
@@ -70,15 +64,12 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
     };
     handleopen();
   }, [addWhenColumnDefs]);
+
   if (column === 'when' || column === 'then' || column === 'annotations') {
     if (label !== 'annotations') {
       return (
         <>
-          <div
-            className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[var(--primary-border)] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[var(--secondary-color)] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[var(--secondary-bg)] custom-header"
-            // onMouseEnter={handleMouseEnter}
-            // onMouseLeave={handleMouseLeave}
-          >
+          <div className="w-[100%] h-[100%] border-x-[1px] border-x-transparent box-border border-y-2 border-[var(--primary-border)] hover:border-x-[1px] hover:border-y-[0.1px] hover:border-[var(--secondary-color)] flex items-center px-3 bg-[rgba(0, 0, 0, 0.06)] hover:bg-[var(--secondary-bg)] custom-header">
             <Popover
               placement="bottomLeft"
               overlayClassName="custom-popover"
@@ -108,20 +99,22 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
               </div>
             </Popover>
           </div>
-          {hover && label && (
-            <div className="absolute top-[6px] right-[5px] flex items-center gap-x-[7.5px]">
-              <RxHamburgerMenu className="h-[17px] w-[14px]" />
-              <BsPinAngleFill
-                onClick={handlePinning}
-                className={
-                  pinned
-                    ? 'h-[13.5px] w-[15px] fill-[grey]'
-                    : 'h-[13.5px] w-[15px] fill-[var(--secondary-color)]'
-                }
-              />
-              {id !== 'id' ? <ColOptions id={id} /> : null}
-            </div>
-          )}
+          <div
+            className={`absolute top-[6px] right-[5px] flex items-center gap-x-[7.5px] ${
+              !pinned ? '' : 'options'
+            }`}
+          >
+            <RxHamburgerMenu className="h-[17px] w-[14px]" />
+            <BsPinAngleFill
+              onClick={handlePinning}
+              className={
+                pinned
+                  ? 'h-[13.5px] w-[15px] fill-[grey]'
+                  : 'h-[13.5px] w-[15px] fill-[var(--secondary-color)]'
+              }
+            />
+            {id !== 'id' ? <ColOptions id={id} /> : null}
+          </div>
         </>
       );
     }

@@ -123,16 +123,16 @@ export const checkValidity = (type: any, value: any) => {
     const findRegex = forString.find((value) => value.id === maintype);
     if (maintype === 'any') {
       return true;
-    } else if (maintype === 'capital') {
+    } else if (maintype === 'iscapital') {
       const pattern = new RegExp(findRegex!.regex);
       return pattern.test(value);
-    } else if (maintype === 'small') {
+    } else if (maintype === 'issmall') {
       const pattern = new RegExp(findRegex!.regex);
       return pattern.test(value);
-    } else if (maintype === 'alpha numeric') {
+    } else if (maintype === 'isalphanumeric') {
       const pattern = new RegExp(findRegex!.regex);
       return pattern.test(value);
-    } else if (maintype === 'equal') {
+    } else if (maintype === 'isequal') {
       return type.value.value.firstval === value;
     } else if (maintype === 'does not equal') {
       return type.value.value.firstval !== value;
@@ -268,7 +268,7 @@ export function inputValidation(cellDataType: string, cellValue: string) {
   var numberRegex = /\d/;
   if (cellValue && cellDataType) {
     const cellDataTypeLower = cellDataType.toLowerCase();
-    if (cellDataTypeLower === 'capital') {
+    if (cellDataTypeLower === 'iscapital') {
       if (
         cellValue === cellValue.toUpperCase() &&
         !numberRegex.test(cellValue)
@@ -277,7 +277,7 @@ export function inputValidation(cellDataType: string, cellValue: string) {
       } else {
         return false;
       }
-    } else if (cellDataTypeLower === 'small') {
+    } else if (cellDataTypeLower === 'issmall') {
       if (
         cellValue === cellValue.toLowerCase() &&
         !numberRegex.test(cellValue)
@@ -286,7 +286,7 @@ export function inputValidation(cellDataType: string, cellValue: string) {
       } else {
         return false;
       }
-    } else if (cellDataTypeLower === 'alpha numeric') {
+    } else if (cellDataTypeLower === 'isalphanumeric') {
       return alphanumbericRegex.test(cellValue);
     } else {
       return true;
