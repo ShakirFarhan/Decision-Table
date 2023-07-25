@@ -8,7 +8,7 @@ const FileModal: React.FC = () => {
   const { addCsvImportColumns } = useStore((store) => store);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [columnHeaders, setColumnHeaders] = useState<Column[]>([]);
-  const [columnsRows, setColumnRows] = useState<any[]>([]);
+  const [columnsRows] = useState<any[]>([]);
 
   const showModal = () => {
     setIsModalOpen(true);

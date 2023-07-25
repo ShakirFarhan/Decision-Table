@@ -12,7 +12,7 @@ import {
   formatDate,
 } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
-import { Row, customCellProps } from '../../constants/interfaces';
+import { Rule, customCellProps } from '../../constants/interfaces';
 
 type editingValue = {
   firstval: string;
@@ -35,7 +35,7 @@ const CustomCell: React.FC<customCellProps> = ({
   // if clicked is true it will display a popup where we can input the values to the cells
   const [clicked, setClicked] = useState<boolean>(false);
   // This contains the individual cell data
-  const [cellData, setCellData] = useState<Row>();
+  const [cellData, setCellData] = useState<Rule>();
   const [loading, setLoading] = useState<boolean>(false);
   // this contains the selectedOption of a cell eg: if cell value has [equals 20]. here the selectedOption is equals. In short selected options can be any value from cellDatatype which is selected
   const [activeSelectedOption, setActiveSelectedOption] = useState<string>('');
@@ -118,7 +118,7 @@ const CustomCell: React.FC<customCellProps> = ({
     setTimeout(() => {
       setLoading(false);
     }, 10);
-    let newtype: Row | undefined = rowDataType.find(
+    let newtype: Rule | undefined = rowDataType.find(
       (value) => value.key === columnId && value.rowIndex === rowIndex
     );
     if (newtype) setCellData(newtype);

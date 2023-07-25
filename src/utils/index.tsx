@@ -1,6 +1,5 @@
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
-import { Row } from '../constants/interfaces';
 function isDate(value: any): boolean {
   return new Date(value) instanceof Date;
 }

@@ -7,8 +7,8 @@ import { AgGridReact } from 'ag-grid-react';
 // import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 // import { CsvExportModule } from '@ag-grid-community/csv-export';
 import DashBoardLayout from './layout/indext';
-import { DecisionTableDataType, Row, Column } from '../constants/interfaces';
-const Table: React.FC<DecisionTableDataType<Column, Row>> = (props) => {
+import { DecisionTableDataType, Rule, Column } from '../constants/interfaces';
+const Table: React.FC<DecisionTableDataType<Column, Rule>> = (props) => {
   const { rowData, mode, rowDataType, colDefs, addRowsByProps } = useStore(
     (store) => store
   );
@@ -65,7 +65,7 @@ const Table: React.FC<DecisionTableDataType<Column, Row>> = (props) => {
     });
     const allCols = [...whenCol, ...thenCol];
 
-    const newData: DecisionTableDataType<Column, Row> = {
+    const newData: DecisionTableDataType<Column, Rule> = {
       initialValues: {
         rows: rowDataType,
         columns: allCols,

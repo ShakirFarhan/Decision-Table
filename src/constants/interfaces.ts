@@ -6,7 +6,7 @@ interface CellRendererParams {
 type CellRendererParamsInterface = (params: any) => CellRendererParams;
 export interface zustandStoreInterface {
   rowData: any[];
-  rowDataType: Row[];
+  rowDataType: Rule[];
   // it tracks the patches and inversePatche of the changes made for undo redo
   history: any;
   // This helps us is undo redo to find out what state to change
@@ -30,8 +30,8 @@ export interface zustandStoreInterface {
   addThenColumnDefs: () => void;
   // add columns in when block
   addWhenColumnDefs: () => void;
-  editRowData: (rowIndex: number, colId: string, value: cellValue) => void;
-  editRowDataType: (rowIndex: number, colId: string, value: cellValue) => void;
+  editRowData: (rowIndex: number, colId: string, value: Condition) => void;
+  editRowDataType: (rowIndex: number, colId: string, value: Condition) => void;
 
   addRow: (
     whenColData: columnInterface[],
@@ -42,9 +42,9 @@ export interface zustandStoreInterface {
   clearRule: (id: number) => void;
   clearColumn: (id: string) => void;
   setMode: (mode: 'light' | 'dark') => void;
-  addRowsByProps: (columns: Column[], rows: Row[]) => void;
+  addRowsByProps: (columns: Column[], rows: Rule[]) => void;
   setGridRef: (ref: any) => void;
-  addCsvImportColumns: (columnHeaders: Column[], columnRows: Row[]) => void;
+  addCsvImportColumns: (columnHeaders: Column[], columnRows: Rule[]) => void;
   //  handle what operation to perform on the column like delete,duplicate...
   deleteColumn: (id: string) => void;
   duplicateColumn: (id: string) => void;
@@ -77,13 +77,13 @@ export interface Column {
   parent?: string;
 }
 // Row or Rule
-export interface Row {
+export interface Rule {
   key: string;
   rowIndex: number;
-  value: cellValue;
+  value: Condition;
   columnName?: string;
 }
-export interface cellValue {
+export interface Condition {
   // cell datatype eg: between,isEven...
   type: string;
   value: {
