@@ -95,26 +95,22 @@ function InputTypes({
     );
   } else if (getTypeOfInput(dataType, selectedOption) === 'date-inputs') {
     return (
-      <></>
-      // <StartEndDate
-      //   firstval={firstval}
-      //   setFirstVal={setFirstVal}
-      //   // secondval={secondval}
-      //   // setSecondVal={setSecondVal}
-      // />
+      <StartEndDate
+        firstval={inputValues[0]}
+        secondval={inputValues[1]}
+        setInputValues={setInputValues}
+      />
     );
   } else if (
     getTypeOfInput(dataType, selectedOption) === 'time-inputs' ||
     getTypeOfInput(dataType, selectedOption) === 'day-time-inputs'
   ) {
     return (
-      <></>
-      // <StartEndTime
-      //   firstval={firstval}
-      //   setFirstVal={setFirstVal}
-      //   // secondval={secondval}
-      //   // setSecondVal={setSecondVal}
-      // />
+      <StartEndTime
+        firstval={inputValues[0]}
+        secondval={inputValues[1]}
+        setInputValues={setInputValues}
+      />
     );
   } else if (
     getTypeOfInput(dataType, selectedOption) === 'month-month-inputs'
@@ -122,13 +118,11 @@ function InputTypes({
     return <MonthToMonth />;
   } else if (getTypeOfInput(dataType, selectedOption) === 'year-year-inputs') {
     return (
-      <></>
-      // <YearToYear
-      //   firstval={firstval}
-      //   setFirstVal={setFirstVal}
-      //   // secondval={secondval}
-      //   // setSecondVal={setSecondVal}
-      // />
+      <YearToYear
+        firstval={inputValues[0]}
+        secondval={inputValues[1]}
+        setInputValues={setInputValues}
+      />
     );
   } else if (getTypeOfInput(dataType, selectedOption) === 'date-time-inputs') {
     return <DateTimePicker />;

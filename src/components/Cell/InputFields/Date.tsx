@@ -4,8 +4,7 @@ import { useState } from 'react';
 interface IProps {
   firstval?: any;
   secondval?: any;
-  setFirstVal: (value: any) => void;
-  setSecondVal: (value: any) => void;
+  setInputValues: (value: any) => void;
 }
 
 export const StartEndDate: React.FC<IProps> = (props) => {
@@ -13,12 +12,12 @@ export const StartEndDate: React.FC<IProps> = (props) => {
   const [endDate, setEndDate] = useState(props.secondval);
   const handleStartDateChange = (date: any) => {
     setStartDate(date);
-    props.setFirstVal(date);
+    props.setInputValues([date, props.secondval]);
   };
 
   const handleEndDateChange = (date: any) => {
     setEndDate(date);
-    props.setSecondVal(date);
+    props.setInputValues([props.firstval, date]);
   };
   return (
     <>
@@ -49,12 +48,13 @@ export const StartEndTime: React.FC<IProps> = (props) => {
 
   const handleStartTimeChange = (time: any) => {
     setStartTime(time);
-    props.setFirstVal(time);
+    props.setInputValues([time, props.secondval]);
+    // props.setFirstVal(time);
   };
 
   const handleEndTimeChange = (time: any) => {
     setEndTime(time);
-    props.setSecondVal(time);
+    props.setInputValues([props.firstval, time]);
   };
   return (
     <>
@@ -118,12 +118,14 @@ export const YearToYear: React.FC<IProps> = (props) => {
 
   const handleStartYearChange = (date: any) => {
     setStartYear(date);
-    props.setFirstVal(date);
+    props.setInputValues([date, props.secondval]);
+    // props.setFirstVal(date);
   };
 
   const handleEndYearChange = (date: any) => {
     setEndYear(date);
-    props.setSecondVal(date);
+    props.setInputValues([props.firstval, date]);
+    // props.setSecondVal(date);
   };
   return (
     <>
