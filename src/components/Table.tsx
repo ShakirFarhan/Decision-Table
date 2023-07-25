@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 // import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 // import { CsvExportModule } from '@ag-grid-community/csv-export';
-import DashBoardLayout from './layout/indext';
 import { DecisionTableDataType, Row, Column } from '../constants/interfaces';
 const Table: React.FC<DecisionTableDataType<Column, Row>> = (props) => {
   const { rowData, mode, rowDataType, colDefs, addRowsByProps } = useStore(
@@ -71,11 +70,10 @@ const Table: React.FC<DecisionTableDataType<Column, Row>> = (props) => {
         columns: allCols,
       },
     };
-    props && props.callbackfunc !== undefined && props.callbackfunc(newData);
+    props && props.onChange !== undefined && props.onChange(newData);
   }, [rowDataType, colDefs]);
 
   return (
-    <DashBoardLayout downloadCSV={() => {}} downloadExcel={() => {}}>
       <div className="flex flex-col max-w-[130%] bg-[var(--secondary-bg)] h-full">
         <div className="scroll-wrapper flex w-full mt-5 border-t-[1px] border-[var(--primary-border)]">
           <div className="flex-1 w-full h-[400px]">
@@ -97,7 +95,6 @@ const Table: React.FC<DecisionTableDataType<Column, Row>> = (props) => {
           </div>
         </div>
       </div>
-    </DashBoardLayout>
   );
 };
 export default Table;

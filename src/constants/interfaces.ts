@@ -60,7 +60,7 @@ export interface DecisionTableDataType<Column, rule> {
     rows: rule[];
     columns: Column[];
   };
-  callbackfunc?: Function;
+  onChange?: Function;
   mode?: 'light' | 'dark';
 }
 

@@ -70,6 +70,9 @@ const CustomHeaderCell: React.FC<columnHeaderProps> = ({
     };
     handleopen();
   }, [addWhenColumnDefs]);
+
+
+
   if (column === 'when' || column === 'then' || column === 'annotations') {
     if (label !== 'annotations') {
       return (
