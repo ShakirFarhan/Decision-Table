@@ -23,9 +23,6 @@ function InputTypes({
       : ['', '']
   );
 
-  // const [secondval, setSecondVal] = useState<string>(
-  //   editingValue && editingValue.secondval
-  // );
   useEffect(() => {
     console.log(inputValues);
 
