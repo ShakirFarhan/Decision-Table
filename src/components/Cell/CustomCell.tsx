@@ -136,7 +136,7 @@ const CustomCell: React.FC<customCellProps> = ({
             checkValidity(cellData, collCellValue) === false
               ? 'border-x-[1px] border-red-500 border-y-[1px]'
               : 'border-r-[1px] border-y-[1.5px] border-y-transparent border-[var(--primary-border)]'
-          }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer `}
+          }  bg-[var(--primary-bg)] hover:bg-[var(--secondary-bg)] hover:border-[1px] hover:border-[var(--secondary-color)] hover:cursor-pointer cell-container`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -241,7 +241,9 @@ const CustomCell: React.FC<customCellProps> = ({
                 className="absolute right-4 w-[18px] h-[18px]"
               >
                 {hovering || clicked ? (
-                  <AiOutlineEdit color="var(--secondary-color)" />
+                  <div className="edit-icon">
+                    <AiOutlineEdit color="var(--secondary-color)" />
+                  </div>
                 ) : (
                   ''
                 )}

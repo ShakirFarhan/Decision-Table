@@ -173,6 +173,7 @@ export interface history {
 
 // Cell Related Interfaces
 export interface customCellProps {
+  parentColumn?: string;
   collCellValue: string;
   columnId: string;
   colDataType: string;

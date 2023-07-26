@@ -1,4 +1,10 @@
-// for custom cell 
+// for custom cell
+// .edit-icon {
+//   opacity: 0;
+// }
+// .cell-container:hover .edit-icon {
+//   opacity: 1;
+// }
 .customCell {
   &:hover {
     .cellType {
@@ -24,7 +30,7 @@
 
 .custom-popover {
   .ant-popover-inner {
-    padding: 0
+    padding: 0;
   }
 
   .ant-popover-inner-content {
@@ -36,7 +42,6 @@
   position: absolute;
   top: 300px;
 }
-
 
 .select {
   .ant-select-selector {

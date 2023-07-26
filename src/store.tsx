@@ -176,6 +176,7 @@ export const useStore = create<zustandStoreInterface>()(
                 colDataType: params?.column?.colDef?.dataType,
                 rowIndex: params.rowIndex,
                 button: params.data.button,
+                parentColumn: 'then',
               }),
               headerClass: 'column-header',
             },
