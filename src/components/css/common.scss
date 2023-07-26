@@ -1,0 +1,9 @@
+.options {
+  display: none;
+}
+.custom-header:hover ~ .options {
+  display: flex;
+}
+.options:hover {
+  display: flex;
+}

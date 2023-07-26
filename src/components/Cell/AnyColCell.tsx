@@ -13,8 +13,10 @@ const AnyColCell: React.FC<anyColCellProps> = ({ cellValue, button, id }) => {
   const { duplicateRule, deleteRule, clearRule, colDefs, addRow } = useStore(
     (store) => store
   );
-  const [hovering, setHovering] = useState<boolean>(false); // checks if the Any-column cell is hovered
-  const [clicked, setClicked] = useState<boolean>(false); // if clicked is true then it will show a modal to perform operation on rules. Like delete,duplicate...
+  // checks if the Any-column cell is hovered
+  const [hovering, setHovering] = useState<boolean>(false);
+  // if clicked is true then it will show a modal to perform operation on rules. Like delete,duplicate...
+  const [clicked, setClicked] = useState<boolean>(false);
   const handleMouseEnter = () => {
     setHovering(true);
     setClicked(false);
@@ -25,8 +27,6 @@ const AnyColCell: React.FC<anyColCellProps> = ({ cellValue, button, id }) => {
       setHovering(false);
     }
   };
-
-  // Adds a rule
   const handleAddRow = () => {
     addRow(colDefs, colDefs);
   };

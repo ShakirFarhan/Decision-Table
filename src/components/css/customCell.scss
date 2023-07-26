@@ -1,24 +1,50 @@
-.customCell:hover .cellType {
-  background-color: var(--cell-hover);
-  color: var(--foreground-color);
+// for custom cell
+// .edit-icon {
+//   opacity: 0;
+// }
+// .cell-container:hover .edit-icon {
+//   opacity: 1;
+// }
+.customCell {
+  &:hover {
+    .cellType {
+      background-color: var(--cell-hover);
+      color: var(--foreground-color);
+    }
+  }
 }
-.addRuleDiv:hover span {
-  color: var(--secondary-color);
-  fill: var(--secondary-color);
+
+// for pop over rule dev
+.addRuleDiv {
+  &:hover {
+    span {
+      color: var(--secondary-color);
+      fill: var(--secondary-color);
+    }
+
+    .plusIcon {
+      color: var(--secondary-color);
+    }
+  }
 }
-.addRuleDiv:hover .plusIcon {
-  color: var(--secondary-color);
+
+.custom-popover {
+  .ant-popover-inner {
+    padding: 0;
+  }
+
+  .ant-popover-inner-content {
+    padding: 0;
+  }
 }
+
 .overlay {
   position: absolute;
   top: 300px;
 }
-.custom-popover .ant-popover-inner-content {
-  padding: 0;
-}
-.custom-popover .ant-popover-inner {
-  padding: 0;
-}
-.select .ant-select-selector {
-  border-radius: 0;
+
+.select {
+  .ant-select-selector {
+    border-radius: 0;
+  }
 }

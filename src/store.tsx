@@ -2,10 +2,10 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import {
-  Row,
+  Rule,
   decisionTableColumns,
   columnInterface,
-  cellValue,
+  Condition,
   zustandStoreInterface,
 } from './constants/interfaces';
 import {
@@ -176,6 +176,7 @@ export const useStore = create<zustandStoreInterface>()(
                 colDataType: params?.column?.colDef?.dataType,
                 rowIndex: params.rowIndex,
                 button: params.data.button,
+                parentColumn: 'then',
               }),
               headerClass: 'column-header',
             },
@@ -372,6 +373,7 @@ export const useStore = create<zustandStoreInterface>()(
                   rowIndex: params.rowIndex,
                   button: params.data.button,
                 }),
+
                 headerClass: 'column-header',
               };
 
@@ -715,8 +717,6 @@ export const useStore = create<zustandStoreInterface>()(
 
           return {
             colDefs: updatedColumnDefs,
-            // past: [...store.past, deepClone(store)], // Save current state to past
-            // future: [],
           };
         }),
       setMode: (mode) =>
