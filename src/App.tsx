@@ -24,14 +24,14 @@ function App() {
             // },
           ],
           columns: [
-            {
-              name: 'Id',
-              key: 'susbsb56sgsbsh',
-            },
-            {
-              name: 'Phone Number',
-              key: 'shgs6sysbs99nns',
-            },
+            // {
+            //   name: 'Id',
+            //   key: 'susbsb56sgsbsh',
+            // },
+            // {
+            //   name: 'Phone Number',
+            //   key: 'shgs6sysbs99nns',
+            // },
           ],
         }}
         onChange={handleInputValues}

@@ -12,16 +12,14 @@ import {
   formatDate,
 } from '../../utils';
 import InputTypes from './InputFields/InputTypes';
-import { Rule, customCellProps } from '../../constants/interfaces';
+import { Condition, ConditionValue, Rule, customCellProps } from '../../constants/interfaces';
 
-type editingValue = {
-  firstval: string;
-  secondval: string;
-};
-let defaultEditingValue: editingValue = {
-  firstval: '',
-  secondval: '',
-};
+
+let defaultEditingValue: ConditionValue[] = [{
+  type:'',
+  defaultValue:'',
+  description:''
+}];
 const CustomCell: React.FC<customCellProps> = ({
   colDataType, // this is the datatype of the column like string,number,date...
   columnId, // the unique id of the column
@@ -41,14 +39,16 @@ const CustomCell: React.FC<customCellProps> = ({
   const [activeSelectedOption, setActiveSelectedOption] = useState<string>('');
   // Stores the handlechange function values of the cell input popup
   const [editingValue, setEditingValue] =
-    useState<editingValue>(defaultEditingValue);
+    useState<ConditionValue[]>(defaultEditingValue);
   // checks if the input value doesn't suit the cell datatype. eg: for string type columm, we have a cell value of [capital test]. here the cell value(test) doesn't suit the cell type(capital) because cell value is of small letter. it will set error to true
   const [inputError, setInputError] = useState<boolean>(false);
   // if this is true then pen icon will get displayed in cell. to edit the cell data
   const [hovering, setHovering] = useState<boolean>(false);
-  const handleChange = (value: editingValue) => {
+  const handleChange = (value: ConditionValue[]) => {
     setEditingValue(value);
   };
+
+  // this function detects changes inside popover and update the activeSelectedOption state
   const handleChangeOption = (value: string) => {
     setActiveSelectedOption(value);
   };
@@ -59,16 +59,15 @@ const CustomCell: React.FC<customCellProps> = ({
     setHovering(false);
   };
   // cell data has cell type(between,equals,...) and cell values, and cell values has first value and second value
-  let cellDataFirstValue: string | undefined = cellData?.value?.value?.firstval;
-  let cellDataSecondValue: string | undefined =
-    cellData?.value?.value?.secondval;
+  let cellDataFirstValue: ConditionValue['type'] | undefined = cellData?.value?.value?.[0].type;
+  let cellDataSecondValue: ConditionValue['type'] | undefined = cellData?.value?.value?.[1].type;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (colDataType.toLowerCase() === 'string') {
       // checks if the input value satisfies cellDataType
       const isValid: boolean = inputValidation(
         activeSelectedOption,
-        editingValue.firstval
+        editingValue[0].type.toString()
       );
 
       setInputError(!isValid);
@@ -158,14 +157,14 @@ const CustomCell: React.FC<customCellProps> = ({
                     {typeof cellDataFirstValue == 'string'
                       ? cellDataFirstValue
                       : cellDataFirstValue !== undefined &&
-                        formatDate(new Date(cellDataFirstValue))}
+                        formatDate(new Date(cellDataFirstValue.toString()))}
                   </span>
                   <span className="text-[13px] font-medium text-[var(--primary-color)] ms-1">
                     -{' '}
                     {typeof cellDataSecondValue == 'string'
                       ? cellDataSecondValue
                       : cellDataSecondValue !== undefined &&
-                        formatDate(new Date(cellDataSecondValue))}
+                        formatDate(new Date(cellDataSecondValue.toString()))}
                   </span>
                   ]
                 </div>
@@ -175,7 +174,7 @@ const CustomCell: React.FC<customCellProps> = ({
                 {typeof cellDataFirstValue == 'string'
                   ? cellDataFirstValue
                   : cellDataFirstValue !== undefined &&
-                    formatDate(new Date(cellDataFirstValue))}
+                    formatDate(new Date(cellDataFirstValue.toString()))}
               </span>
             )}
             <Popover
@@ -204,6 +203,7 @@ const CustomCell: React.FC<customCellProps> = ({
                             ? cellData.value.type
                             : 'Default'
                         }
+                        // at this point if someone change anything it will occure in the state
                         onChange={handleChangeOption}
                         options={headerTypes
                           .find((value) => value.type === colDataType)

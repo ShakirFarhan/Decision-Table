@@ -4,12 +4,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-// import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
-// import { CsvExportModule } from '@ag-grid-community/csv-export';
-import DashBoardLayout from './layout/indext';
-import { DecisionTableDataType, Rule, Column } from '../constants/interfaces';
-const Table: React.FC<DecisionTableDataType<Column, Rule>> = (props) => {
-  const { rowData, mode, rowDataType, colDefs, addRowsByProps } = useStore(
+import { DecisionTableDataType, Rule, Column, DataTableProps } from '../constants/interfaces';
+const Table: React.FC<DataTableProps> = (props) => {
+  const { rowData, mode, rowDataType, colDefs, addRowsByProps, setColDefs } = useStore(
     (store) => store
   );
   const gridRef: React.MutableRefObject<any> = useRef(null);
@@ -31,7 +28,7 @@ const Table: React.FC<DecisionTableDataType<Column, Rule>> = (props) => {
   );
 
   const renderPropsRows = useCallback(() => {
-    if (props.initialValues.columns?.length) {
+    if (props.initialValues?.columns.length) {
       addRowsByProps(props.initialValues.columns, props.initialValues.rows);
     }
   }, [props]);
@@ -46,7 +43,12 @@ const Table: React.FC<DecisionTableDataType<Column, Rule>> = (props) => {
   useEffect(() => {
     document.body.className = props.mode + '-theme';
   }, [props.mode]);
+
+
+  // this hook works to get the updated or newly created columns and rows data to send them back to the root component
   useEffect(() => {
+    
+    // getting all when column data
     const whenCol = colDefs[1].children.map((item, index) => {
       return {
         key: item.id,
@@ -55,6 +57,8 @@ const Table: React.FC<DecisionTableDataType<Column, Rule>> = (props) => {
         isPinned: item.isPinned,
       };
     });
+
+    // getting all then column data
     const thenCol = colDefs[2].children.map((item, index) => {
       return {
         key: item.id,
@@ -63,15 +67,19 @@ const Table: React.FC<DecisionTableDataType<Column, Rule>> = (props) => {
         isPinned: item.isPinned,
       };
     });
+
+    // merging them all into a single one
     const allCols = [...whenCol, ...thenCol];
 
-    const newData: DecisionTableDataType<Column, Rule> = {
-      initialValues: {
+    const newData: DecisionTableDataType<Rule,Column> = {
         rows: rowDataType,
         columns: allCols,
-      },
     };
     props && props.onChange !== undefined && props.onChange(newData);
+
+    // this point we are storing existing columns and rows data inside our session storage to show while reload
+    // sessionStorage.setItem("colDefs", JSON.stringify(colDefs));
+    // sessionStorage.setItem("rowDataType", JSON.stringify(rowDataType));
   }, [rowDataType, colDefs]);
 
   return (

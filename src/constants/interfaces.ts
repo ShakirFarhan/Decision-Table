@@ -54,14 +54,19 @@ export interface zustandStoreInterface {
   // duplicateColumn:(id:string)=>void
 }
 
+
 // Decision Table data types for column and rules
-export interface DecisionTableDataType<Column, rule> {
-  initialValues: {
-    rows: rule[];
+export interface DecisionTableDataType<Rule, Column> {
+    rows: Rule[];
     columns: Column[];
-  };
+}
+
+// this is for Table component props
+export interface DataTableProps {
+  initialValues?: DecisionTableDataType<Rule, Column>,
   onChange?: Function;
   mode?: 'light' | 'dark';
+
 }
 
 export interface Column {
@@ -86,11 +91,19 @@ export interface Rule {
 export interface Condition {
   // cell datatype eg: between,isEven...
   type: string;
-  value: {
-    firstval: string;
-    secondval: string;
-  };
+  value?: ConditionValue[];
 }
+
+// this interface is declared for the condition
+export interface ConditionValue{
+  type: string | number | boolean,
+  defaultValue?: string | number | boolean,
+  description?: string
+}
+
+
+
+
 export interface decisionTableColumns {
   // should be unique for very column
   id: string;

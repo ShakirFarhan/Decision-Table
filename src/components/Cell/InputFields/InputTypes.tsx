@@ -8,6 +8,7 @@ import {
   StartEndTime,
   YearToYear,
 } from './Date';
+import { ConditionValue } from '../../../constants/interfaces';
 
 function InputTypes({
   editingValue,
@@ -24,13 +25,13 @@ function InputTypes({
   );
 
   useEffect(() => {
-    console.log(inputValues);
-
-    // If you want to construct an object with firstval and secondval
-    const value = {
-      firstval: inputValues[0],
-      secondval: inputValues[1],
-    };
+    const value: ConditionValue[] = []
+    value.push({
+      type: inputValues[0],
+    })
+    value.push({
+      type: inputValues[1]
+    })
 
     handleChange(value);
   }, [inputValues]);
