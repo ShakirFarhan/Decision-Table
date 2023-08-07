@@ -63,7 +63,9 @@ const CustomCell: React.FC<customCellProps> = ({
   let cellDataSecondValue: ConditionValue['type'] | undefined = cellData?.value?.value?.[1].type;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    if (colDataType.toLowerCase() === 'string') {
+    // getting first two characters to check the string containes 'is'
+    const firstChars = activeSelectedOption.slice(0,2);
+    if (colDataType.toLowerCase() === 'string' && firstChars.toLowerCase() !== 'is') {
       // checks if the input value satisfies cellDataType
       const isValid: boolean = inputValidation(
         activeSelectedOption,
@@ -112,6 +114,9 @@ const CustomCell: React.FC<customCellProps> = ({
       setActiveSelectedOption(activeSelectedOption);
     }
   };
+
+
+
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
@@ -126,6 +131,12 @@ const CustomCell: React.FC<customCellProps> = ({
       newtype?.value?.value ? newtype.value.value : defaultEditingValue
     );
   }, [rowDataType]);
+
+
+  // to capture all events
+  document.addEventListener('mousemove', (event) => {
+    console.log("hovering the cell",columnId,rowIndex)
+  });
 
   if (button !== 'Add Rule' && id !== 'any-col' && !loading) {
     return (
